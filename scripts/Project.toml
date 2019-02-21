@@ -1,0 +1,6 @@
+[deps]
+ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
+BioCore = "37cfa864-2cd6-5c12-ad9e-b6597d696c81"
+BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+SequencingSim = "5fa9f68e-f4b0-11e8-18b8-fb82dd3c6483"
