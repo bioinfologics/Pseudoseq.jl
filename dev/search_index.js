@@ -149,7 +149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Long single end reads",
     "title": "Create a universe",
     "category": "section",
-    "text": "Let\'s start with a univers just as we did for the paired-end reads walkthrough:universe = makeuniverse(\"mygenome.fasta\", 5000)"
+    "text": "Let\'s start with a universe just as we did for the paired-end reads walkthrough:universe = makeuniverse(\"mygenome.fasta\", 5000)"
 },
 
 {
@@ -165,7 +165,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Long single end reads",
     "title": "Creating the reads",
     "category": "section",
-    "text": "Ok now we\'ve come to creating the reads, we do this with the make_reads function. By only specifying the read type, and the sample of our universe, and omitting the read length we want. Make reads will generate reads from the entire length of each molecule in our sample. We elected to do this to emulate what nanopore seuqncing is supposed to do: It takes an entire DNA fragment, feeds it through an electrically charged pore, producing a read for the entire fragment. se_reads = make_reads(SingleEnd, uni_sample)Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.We do this using the mark_errors function. The function requires an error rate.se_w_errs = mark_errors(se_reads, 0.1)We\'ve marked many more positions as errors than we did for the paired end tutorial, this is because current long read sequencing technology has a much higher error rate and short read sequencing technologies, in general.Ok, now we have marked the errors, we can generate a FASTQ file with these reads:generate(\"longreads.fastq\", se_w_errs)And thats all there is to it!"
+    "text": "Ok now we\'ve come to creating the reads, we do this with the make_reads function. By only specifying the read type, and the sample of our universe, and omitting the read length we want. Make reads will generate reads from the entire length of each molecule in our sample. We elected to do this to emulate what Nanopore sequencing is supposed to do: It takes an entire DNA fragment, feeds it through an electrically charged pore, producing a read for the entire fragment. se_reads = make_reads(SingleEnd, uni_sample)Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.We do this using the mark_errors function. The function requires an error rate.se_w_errs = mark_errors(se_reads, 0.1)We\'ve marked many more positions as errors than we did for the paired end tutorial, this is because current long read sequencing technology has a much higher error rate and short read sequencing technologies, in general.Ok, now we have marked the errors, we can generate a FASTQ file with these reads:generate(\"longreads.fastq\", se_w_errs)And thats all there is to it!"
 },
 
 {
@@ -205,7 +205,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tagged paired end reads",
     "title": "Tag the large fragments",
     "category": "section",
-    "text": "Ok, now we will tag these large fragments randomly, using a pool of N distinct tags. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag. For example, if a DNA fragment in a universe is tagged, and then it is subsequently fragmented during a fragment transform, then all the smaller fragments derived from that long fragment will inherit that long fragments tag. This allows shorter fragments to possess longer range information in the form of these tags, and this is the basis of 10x and similar technologies.tagged_universe = tag(big_cut_universe, 1000000)Here I\'m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag."
+    "text": "Ok, now we will tag these large fragments randomly, using a pool of N distinct tags. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag. For example, if a DNA fragment in a universe is tagged, and then it is subsequently fragmented during a fragment transform, then all the smaller fragments derived from that long fragment will inherit that long fragment\'s tag. This allows shorter fragments to possess longer range information in the form of these tags, and this is the basis of 10x sequencing and similar technologies.tagged_universe = tag(big_cut_universe, 1000000)Here I\'m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag."
 },
 
 {
@@ -229,7 +229,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tagged paired end reads",
     "title": "Creating the reads",
     "category": "section",
-    "text": "We now want to create a set of paired-end reads. We want our reads to be 250bp in length.We use the make_reads function to achieve this:tagged_reads = make_reads(TaggedPairs, subsampled_universe, 250)Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.We do this using the mark_errors function. The function requires an error rate.tagged_w_errs = mark_errors(tagged_reads, 0.001)Currently, every position in every read is equally likely to be marked as an error."
+    "text": "We now want to create a set of paired-end reads. We want our reads to be 250bp in length.We use the make_reads function to achieve this:tagged_reads = make_reads(TaggedPairs, subsampled_universe, 250)Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.We do this using the mark_errors function. The function requires an error rate.tagged_w_errs = mark_errors(tagged_reads, 0.001)"
 },
 
 {
@@ -257,11 +257,35 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/universe/#Exported-functions-1",
+    "page": "Universe",
+    "title": "Exported functions",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "api/universe/#Pseudoseq.makeuniverse",
     "page": "Universe",
     "title": "Pseudoseq.makeuniverse",
     "category": "function",
     "text": "makeuniverse(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular::Bool = false)\n\nCreate a universe of ng copies of a genome defined by the gen vector of sequences.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakeuniverse(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)\n\nCreate a universe of ng copies of the genome read in from the FASTA.Reader.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakeuniverse(file::String, ng::Int, iscircular::Bool = false)\n\nCreate a universe of ng copies of the genome in the fasta formatted file.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/universe/#Making-a-universe-1",
+    "page": "Universe",
+    "title": "Making a universe",
+    "category": "section",
+    "text": "makeuniverse"
+},
+
+{
+    "location": "api/universe/#Universe-transformations-1",
+    "page": "Universe",
+    "title": "Universe transformations",
+    "category": "section",
+    "text": ""
 },
 
 {
@@ -273,6 +297,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/universe/#Fragment-1",
+    "page": "Universe",
+    "title": "Fragment",
+    "category": "section",
+    "text": "fragment(u::Pseudoseq.Universe, meansize::Int)"
+},
+
+{
     "location": "api/universe/#Pseudoseq.subsample-Tuple{Pseudoseq.Universe,Int64}",
     "page": "Universe",
     "title": "Pseudoseq.subsample",
@@ -281,11 +313,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/universe/#Exported-1",
+    "location": "api/universe/#Subsampling-1",
     "page": "Universe",
-    "title": "Exported",
+    "title": "Subsampling",
     "category": "section",
-    "text": "makeuniverse\nfragment(u::Pseudoseq.Universe, meansize::Int)\nsubsample(u::Pseudoseq.Universe, n::Int)"
+    "text": "subsample(u::Pseudoseq.Universe, n::Int)"
+},
+
+{
+    "location": "api/universe/#Pseudoseq.tag-Tuple{Pseudoseq.Universe,Int64}",
+    "page": "Universe",
+    "title": "Pseudoseq.tag",
+    "category": "method",
+    "text": "tag(u::Universe, ntags::Int)\n\nCreate a universe of tagged DNA molecules from some input universe.\n\nThe new tagged universe has the same DNA molecules as the input universe. However, each DNA molecule in the new tagged universe will be assigned a tag in the range of 1:ntags.\n\nFor any tagged molecules in a universe, any other molecules that are derived from that tagged molecule will inherit the same tag. For example, if a DNA fragment in a universe is tagged, and then it is subsequently fragmented during a fragment transform, then all the smaller fragments derived from that long fragment will inherit that long fragment\'s tag.\n\nnote: Note\nWhich fragment gets a certain tag is completely random. It is possible for two distinct DNA molecules in a universe to be assigned the same tag. The likelihood of that happening depends on the size of the tag pool (ntags), and the number of fragments in the universe.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/universe/#Tagging-1",
+    "page": "Universe",
+    "title": "Tagging",
+    "category": "section",
+    "text": "tag(u::Pseudoseq.Universe, ntags::Int)"
 },
 
 {
@@ -305,11 +353,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/reads/#Exported-functions-1",
+    "page": "Reads",
+    "title": "Exported functions",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "api/reads/#Pseudoseq.make_reads",
     "page": "Reads",
     "title": "Pseudoseq.make_reads",
     "category": "function",
-    "text": "make_reads(::Type{PairedEnd}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\nmake_reads(::Type{SingleEnd}, u::Universe, len::Int)\n\nCreate a set of single-end reads from a universe of DNA molecules u.\n\nlen sets the length of the reads.\n\nThe end (strand) from which the reading begins for each DNA molecule in the universe is determined at random for each molecule, with 50:50 probability.\n\nIf you don\'t provide a value for len, then the function will read each DNA molecule in it\'s entirety.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\nmake_reads(::Type{TaggedPairs}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of tagged paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\n"
+    "text": "make_reads(::Type{PairedEnd}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\nmake_reads(::Type{SingleEnd}, u::Universe, len::Int)\n\nCreate a set of single-end reads from a universe of DNA molecules u.\n\nlen sets the length of the reads.\n\nThe end (strand) from which the reading begins for each DNA molecule in the universe is determined at random for each molecule, with 50:50 probability.\n\nIf you don\'t provide a value for len, then the function will read each DNA molecule in it\'s entirety.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\nmake_reads(::Type{TaggedPairs}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of tagged paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nWhen a set of TaggedPairs is written to file, the tag information is contained in the R1 read of each read-pair. The first 16bp of each R1 read is a sequence that is the tag, and a following 7bp are a buffer between the 16bp tag, and the rest of the read sequence.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\n"
+},
+
+{
+    "location": "api/reads/#Making-reads-1",
+    "page": "Reads",
+    "title": "Making reads",
+    "category": "section",
+    "text": "make_reads"
 },
 
 {
@@ -321,11 +385,27 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/reads/#Exported-1",
+    "location": "api/reads/#Introducing-errors-1",
     "page": "Reads",
-    "title": "Exported",
+    "title": "Introducing errors",
     "category": "section",
-    "text": "make_reads\nmark_errors"
+    "text": "mark_errors"
+},
+
+{
+    "location": "api/reads/#Pseudoseq.generate",
+    "page": "Reads",
+    "title": "Pseudoseq.generate",
+    "category": "function",
+    "text": "generate(filename::String, reads::Reads)\n\nWrite the reads out to a FASTQ formatted file with the given filename.\n\nIf this method is used with a paired-end read type, then the FASTQ file will be interleaved; all R1 reads will be odd records, and all R2 reads will be even records in the file.\n\nnote: Note\nReads are named according to the sequence in the input genome they came from. e.g. @Reference_1_R1 means the first sequence in the genome, and @Reference_2_R1 means the second sequence in the genome.\n\n\n\n\n\ngenerate(R1name::String, R2name::String, reads::Reads{<:PairedReads})\n\nThis method only works for paired reads. Instead of interleaving R1 and R2 reads in a single FASTQ file, R1 and R2 reads are partitioned into two seperate FASTQ files.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/reads/#Generating-FASTQ-files-1",
+    "page": "Reads",
+    "title": "Generating FASTQ files",
+    "category": "section",
+    "text": "generate"
 },
 
 ]}
