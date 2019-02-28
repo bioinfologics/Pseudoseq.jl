@@ -317,7 +317,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reads",
     "title": "Pseudoseq.mark_errors",
     "category": "function",
-    "text": "mark_errors(reads::Reads, rate::Float64)\n\nCreate a new set of reads, with errors, from an input set of reads.\n\nWhen you first create a set of reads using a make_reads method, all the reads in that set are perfect reads. In real sequencing experiments, sequencers make errors when reading a DNA molecule, and are characterised by an error rate. This function lets you simulate this characteristic of sequencers by marking positions in the reads that are destined to be errors in the output FASTQ.\n\nnote: Note\nCurrently, every position in every read is equally likely to be marked as an error.\n\n\n\n\n\n"
+    "text": "mark_errors(reads::Reads, rate::Float64)\n\nCreate a new set of reads, with errors, from an input set of reads.\n\nWhen you first create a set of reads using a make_reads method, all the reads in that set are perfect reads. In real sequencing experiments, sequencers make errors when reading a DNA molecule, and are characterised by an error rate. This function lets you simulate this characteristic of sequencers, by marking (at random) positions in the reads that are destined to be errors in the output FASTQ.\n\nnote: Note\nCurrently, every position in every read is equally likely to be marked as an error.\n\nnote: Note\nThe number of errors introduced into the reads can be calculated.E = NRWhere E is the number of errors, N is the total number of bases in your set of reads, and R is the error rate you provide to this function.\n\n\n\n\n\n"
 },
 
 {
