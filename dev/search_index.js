@@ -109,7 +109,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Paired end reads",
     "title": "Determining the number of fragments to sample",
     "category": "section",
-    "text": "But how did I get to the number 463967?Prior to sampling, there is a universe of 33139992 DNA fragments, of on average 700bp in length. There is variation - some fragments are bigger, some are smaller.We can estimate how often a base position in the genome is represented in this universe of ~700bp fragments with a simple formula:C = fracLNGWhere C is the expected coverage, L is the average length of the fragments, and N is the number of fragments, and G is the number of bases in the genome.Given that L = 700, N = 33139992, and G = 4639675:C = frac700 times 331399924639675 = approx 5000Each base in the genome is represented 5000 times  (give or take) in the universe. This makes sense, because if you recall how we created our universe.....universe = makeuniverse(\"mygenome.fasta\", 5000).....we started with 5000 copies of the genome!Ok, so say I wanted to subsample the universe such that each base position in the genome is represented ~50 times. That is, I want to achieve 50x coverage, you can determine the number of fragments to subsample from the universe, by reversing the formula:N = fracCGLFilling in the relevant values:N = frac50 times 4639675700 = 331405So if I sample 331405 700bp fragments, from my universe of 33139992 700bp fragments. I can expect that subsample to represent each base in the genome approximately 50 times.But wait! It\'s not quite a simple as that! The answer of 331405 would be correct if we were to just pull those fragments out of the universe, and then sequence a complete read of each 700bp fragment in the subsample in its entirety.However, that\'s not what happens in short read sequencing. Instead, some sub-stretch of the fragment is read by the sequencer, and in the case of paired end sequencing, two sub-stretches of each fragment are read by the sequencer: one from each end of the fragment:Read 1\n------->\nTGAATAGCCCAAAGGTTTCGACA\n|||||||||||||||||||||||\nACTTATCGGGTTTCCAAAGCTGT\n              <--------\n                 Read 2And some of the fragment in the middle does not get read by the sequencer.So how did I get the answer 463967?First, I know that I want to simulate paired end sequencing, and that I want the length of each read to be 250bp.So I\'m going to be sampling fragments of 700bp, from the universe, and reading 250bp in from either end.I can estimate how many 700bp fragments I need to sample to achieve 50x coverage with a read length of 250bp, by using the formula with a revised L, setting it to the read length 250bp, instead of the fragment length of 700bp:N = frac50 times 4639675250This gives me an N of 927935, which I must divide by 2 (I\'m going to be reading two ends of each 700bp DNA fragment I sample), which gives me 463967.Pseudoseq provides a helper function that assists in this type of calculation:genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, readlength)\n\n# Divide by 2 as we\'re doing paired end sequencing.\ndiv(N, 2)So after all that, we have a subsample of a universe of 700bp fragments. The next step is to produce a set of reads from our universe sample."
+    "text": "But how did I get to the number 463967?Prior to sampling, there is a universe of 33139992 DNA fragments, of on average 700bp in length. There is variation - some fragments are bigger, some are smaller.We can estimate how often a base position in the genome is represented in this universe of ~700bp fragments with a simple formula:C = fracLNGWhere C is the expected coverage, L is the average length of the fragments, and N is the number of fragments, and G is the number of bases in the genome.Given that L = 700, N = 33139992, and G = 4639675:C = frac700 times 331399924639675 = 5000Each base in the genome is expected to be represented 5000 times (give or take) in the universe. This makes sense, because if you recall how we created our universe.....universe = makeuniverse(\"mygenome.fasta\", 5000).....we started with 5000 copies of the genome!Ok, so say I wanted to subsample the universe such that each base position in the genome is represented ~50 times. That is, to achieve 50x coverage, you can determine the number of fragments to subsample from the universe, by reversing the formula:N = fracCGLFilling in the relevant values:N = frac50 times 4639675700 = 331405So if 331405 700bp fragments were sampled from the universe of 33139992 700bp fragments, you can expect each base in the genome to be represented approximately 50 times.But wait! It\'s not quite a simple as that! The answer of 331405 would be correct if we were to just pull those fragments out of the universe, and then sequence a complete read of each 700bp fragment in the subsample in its entirety.However, that\'s not what happens in short read sequencing. Instead, some sub-stretch of the fragment is read by the sequencer, and in the case of paired end sequencing, two sub-stretches of each fragment are read by the sequencer: one from each end of the fragment:Read 1\n------->\nTGAATAGCCCAAAGGTTTCGACA\n|||||||||||||||||||||||\nACTTATCGGGTTTCCAAAGCTGT\n              <--------\n                 Read 2Some of the fragment in the middle does not get read by the sequencer.So how did I get the answer 463967 above?First, I know this simulation is of paired end sequencing, and that the length of each read will be 250bp when we get to that stage of the process. We\'re going to sample fragments of 700bp from the universe, and read 250bp in from either end.I can estimate how many 700bp fragments I need to sample to achieve 50x coverage with a read length of 250bp, by using the formula with a revised L, setting it to the read length 250bp, instead of the fragment length of 700bp:N = frac50 times 4639675250This gives me an N of 927935, which I must divide by 2 (I\'m going to be reading two ends of each 700bp DNA fragment I sample), which gives me 463967.Pseudoseq provides a helper function that assists in this type of calculation:genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, readlength)\n\n# Divide by 2 as we\'re doing paired end sequencing i.e 2 reads from one fragment.\ndiv(N, 2)So after all that, we have a subsample of a universe of 700bp fragments. The next step is to produce a set of reads from our universe sample."
 },
 
 {
@@ -249,11 +249,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/universe/#API:-Universe-1",
+    "page": "Universe",
+    "title": "API: Universe",
+    "category": "section",
+    "text": ""
+},
+
+{
     "location": "api/universe/#Pseudoseq.makeuniverse",
     "page": "Universe",
     "title": "Pseudoseq.makeuniverse",
     "category": "function",
-    "text": "makeuniverse(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular::Bool = false)\n\nCreate a universe of ng copies of a genome defined by the gen vector of sequences.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakeuniverse(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)\n\nCreate a universe of ng copies of the genome read in from the FASTA.Reader.\n\n\n\n\n\nmakeuniverse(file::String, ng::Int, iscircular::Bool = false)\n\nCreate a universe of ng copies of the genome in the fasta formatted file.\n\n\n\n\n\n"
+    "text": "makeuniverse(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular::Bool = false)\n\nCreate a universe of ng copies of a genome defined by the gen vector of sequences.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakeuniverse(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)\n\nCreate a universe of ng copies of the genome read in from the FASTA.Reader.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakeuniverse(file::String, ng::Int, iscircular::Bool = false)\n\nCreate a universe of ng copies of the genome in the fasta formatted file.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\n"
 },
 
 {
@@ -273,11 +281,43 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/universe/#API:-Universe-1",
+    "location": "api/universe/#Exported-1",
     "page": "Universe",
-    "title": "API: Universe",
+    "title": "Exported",
     "category": "section",
     "text": "makeuniverse\nfragment(u::Pseudoseq.Universe, meansize::Int)\nsubsample(u::Pseudoseq.Universe, n::Int)"
+},
+
+{
+    "location": "api/reads/#",
+    "page": "Reads",
+    "title": "Reads",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "api/reads/#API:-Reads-1",
+    "page": "Reads",
+    "title": "API: Reads",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "api/reads/#Pseudoseq.make_reads",
+    "page": "Reads",
+    "title": "Pseudoseq.make_reads",
+    "category": "function",
+    "text": "make_reads(::Type{PairedEnd}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\n"
+},
+
+{
+    "location": "api/reads/#Exported-1",
+    "page": "Reads",
+    "title": "Exported",
+    "category": "section",
+    "text": "make_reads"
 },
 
 ]}
