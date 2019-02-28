@@ -117,7 +117,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Paired end reads",
     "title": "Creating the reads",
     "category": "section",
-    "text": "We now want to create a set of paired-end reads. We want our reads to be 250bp in length.We use the make_reads function to achieve this:pe_reads = make_reads(PairedEnd, subsampled_universe, 250)The first argument to the function is the read type. Possible read types currently provided are PairedEnd, SingleEnd, and TaggedPairs.Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.We do this using the mark_errors function. The function requires an error rate.pe_w_errs = mark_errors(pe_reads, 0.001)note: Note\nCurrently, every position in every read is equally likely to be marked as an error."
+    "text": "We now want to create a set of paired-end reads. We want our reads to be 250bp in length.We use the make_reads function to achieve this:pe_reads = make_reads(PairedEnd, subsampled_universe, 250)The first argument to the function is the read type. Possible read types currently provided are PairedEnd, SingleEnd, and TaggedPairs.Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.We do this using the mark_errors function. The function requires an error rate.pe_w_errs = mark_errors(pe_reads, 0.001)"
 },
 
 {
@@ -181,7 +181,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Tagged paired end reads",
     "title": "Walkthrough: tagged paired end reads",
     "category": "section",
-    "text": "Let\'s see how you might simulate something like an 10x sequencing experiment.This experiment is simulated much in the same way as demonstrated in the paired-end sequencing walkthrough, except that there is an extra fragmentation step and a tagging step. Let\'s begin!"
+    "text": "Let\'s see how we might simulate something like an 10x sequencing experiment.This experiment is simulated much in the same way as demonstrated in the paired-end sequencing walkthrough, except that there is an extra fragmentation step and a tagging step. Let\'s begin!"
 },
 
 {
@@ -309,7 +309,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Reads",
     "title": "Pseudoseq.make_reads",
     "category": "function",
-    "text": "make_reads(::Type{PairedEnd}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\n"
+    "text": "make_reads(::Type{PairedEnd}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\nmake_reads(::Type{SingleEnd}, u::Universe, len::Int)\n\nCreate a set of single-end reads from a universe of DNA molecules u.\n\nlen sets the length of the reads.\n\nThe end (strand) from which the reading begins for each DNA molecule in the universe is determined at random for each molecule, with 50:50 probability.\n\nIf you don\'t provide a value for len, then the function will read each DNA molecule in it\'s entirety.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\nmake_reads(::Type{TaggedPairs}, u::Universe, flen::Int, rlen::Int = flen)\n\nCreate a set of tagged paired-end reads from a universe of DNA molecules u.\n\nflen sets the length of forward read, and rlen sets the length of the reverse read. If you only provide flen, then the function sets rlen = flen.\n\nnote: Note\nIf a molecule in the universe is not long enough to create a forward and/or reverse read, then that molecule will simply be skipped. \n\n\n\n\n\n"
+},
+
+{
+    "location": "api/reads/#Pseudoseq.mark_errors",
+    "page": "Reads",
+    "title": "Pseudoseq.mark_errors",
+    "category": "function",
+    "text": "mark_errors(reads::Reads, rate::Float64)\n\nCreate a new set of reads, with errors, from an input set of reads.\n\nWhen you first create a set of reads using a make_reads method, all the reads in that set are perfect reads. In real sequencing experiments, sequencers make errors when reading a DNA molecule, and are characterised by an error rate. This function lets you simulate this characteristic of sequencers by marking positions in the reads that are destined to be errors in the output FASTQ.\n\nnote: Note\nCurrently, every position in every read is equally likely to be marked as an error.\n\n\n\n\n\n"
 },
 
 {
@@ -317,7 +325,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Reads",
     "title": "Exported",
     "category": "section",
-    "text": "make_reads"
+    "text": "make_reads\nmark_errors"
 },
 
 ]}
