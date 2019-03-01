@@ -125,7 +125,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Paired end reads",
     "title": "Generate FASTQ files",
     "category": "section",
-    "text": "Now we have some paired end reads and have marked some positions as errors, we can generate FASTQ files. This is done with the generate function.generate(\"myreads.fastq\", pe_w_errs).... aaaand thats it! That\'s how to simulate paired end sequencing and generate read files using Pseudoseq."
+    "text": "Now we have some paired end reads and have marked some positions as errors, we can generate FASTQ files. This is done with the generate function.generate(\"myreads.fastq\", pe_w_errs)Thats it! That\'s how to simulate paired end sequencing and generate read files using Pseudoseq."
 },
 
 {
