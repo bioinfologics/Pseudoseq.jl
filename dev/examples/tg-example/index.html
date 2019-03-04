@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Tagged paired end reads · Pseudoseq.jl</title><link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link href="../../assets/documenter.css" rel="stylesheet" type="text/css"/></head><body><nav class="toc"><a href="../../index.html"><img class="logo" src="../../assets/logo.png" alt="Pseudoseq.jl logo"/></a><h1>Pseudoseq.jl</h1><select id="version-selector" onChange="window.location.href=this.value" style="visibility: hidden"></select><form class="search" id="search-form" action="../../search/"><input id="search-query" name="q" type="text" placeholder="Search docs"/></form><ul><li><a class="toctext" href="../../">Home</a></li><li><a class="toctext" href="../../workflow/">Core concepts &amp; workflow</a></li><li><span class="toctext">API</span><ul><li><a class="toctext" href="../../api/pool/">Universe</a></li><li><a class="toctext" href="../../api/reads/">Reads</a></li></ul></li><li><span class="toctext">Examples</span><ul><li><a class="toctext" href="../pe-example/">Paired end reads</a></li><li><a class="toctext" href="../se-example/">Long single end reads</a></li><li class="current"><a class="toctext" href>Tagged paired end reads</a><ul class="internal"></ul></li></ul></li></ul></nav><article id="docs"><header><nav><ul><li>Examples</li><li><a href>Tagged paired end reads</a></li></ul><a class="edit-page" href="https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/tg-example.jl"><span class="fa"></span> Edit on GitHub</a></nav><hr/><div id="topbar"><span>Tagged paired end reads</span><a class="fa fa-bars" href="#"></a></div></header><h1><a class="nav-anchor" id="Example:-tagged-paired-end-reads-1" href="#Example:-tagged-paired-end-reads-1">Example: tagged paired-end reads</a></h1><p>This is an example generated from this source file: <a href="https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/tg-example.jl"><code>tg-example.jl</code></a> You are seeing the online documentation version. The corresponding notebook can be found here: <a href="https://nbviewer.jupyter.org/github/bioinfologics/Pseudoseq.jl/blob/gh-pages/latest/generated/tg-example.ipynb"><code>tg-example.ipynb</code></a> and the script can be found here: <a href="../tg-example.jl"><code>tg-example.jl</code></a></p><p>Let&#39;s see how we might simulate something like an 10x sequencing experiment.</p><p>For this simulation script we will:</p><ol><li>Create a pool of 5000 copies of a reference genome.</li><li>Fragment the DNA molecules in the pool, to an average length of 40,000bp.</li><li>Tag the long molecules in the pool randomly with a set of 1,000,000 tags.</li><li>Fragment the molecules in the pool to an average length of 700bp.</li><li>Subsample the molecules in the pool to achieve approximatly 50x coverage.</li><li>Create a set of 250bp paired-end reads.</li><li>Apply errors to the paired-end reads at a rate of 0.001 (.1%).</li><li>Generate an output FASTQ file.</li></ol><div><pre><code class="language-julia">using Pseudoseq
+
+dnapool = makepool(&quot;ecoli-ref.fasta&quot;, 5000)
+cutpool = fragment(dnapool, 40000)</code></pre><pre><code class="language-none">[ Info: Reading FASTA file...
+[ Info: Creating pool...
+[ Info: Populating pool with 5000 copies of the genome...
+[ Info: Done
+[ Info: Fragmenting molecules in pool...
+[ Info: Done
+Pool of 575000 molecules:
+ Maximum molecule size: 457924
+ Average molecule size: 40345
+ Minimum molecule size: 1</code></pre></div><p>Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.</p><div><pre><code class="language-julia">taggedpool = tag(cutpool, 1000000)</code></pre><pre><code class="language-none">[ Info: Attaching 1000000 tags randomly to each molecule in pool...
+[ Info: Done
+Pool of 575000 molecules:
+ Maximum molecule size: 457924
+ Average molecule size: 40345
+ Minimum molecule size: 1
+ Number of distinct tags: 437462</code></pre></div><p>Here I&#39;m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we&#39;ll fragment the pool again</p><div><pre><code class="language-julia">taggedcutpool = fragment(taggedpool, 700)</code></pre><pre><code class="language-none">[ Info: Fragmenting molecules in pool...
+[ Info: Done
+Pool of 32863867 molecules:
+ Maximum molecule size: 13617
+ Average molecule size: 705
+ Minimum molecule size: 1
+ Number of distinct tags: 437462</code></pre></div><p>Subsample the pool of tagged molecules.</p><div><pre><code class="language-julia">genome_size = 4639675
+expected_coverage = 50
+read_length = 250
+
+N = needed_sample_size(expected_coverage, genome_size, read_length)
+N = div(N, 2) # Divide by 2 as we&#39;re doing paired end sequencing.
+
+sampledpool = subsample(taggedcutpool, N)</code></pre><pre><code class="language-none">[ Info: Subsampling molecules in pool...
+[ Info: Done
+Pool of 463967 molecules:
+ Maximum molecule size: 8131
+ Average molecule size: 705
+ Minimum molecule size: 1
+ Number of distinct tags: 226538</code></pre></div><p>Now let&#39;s make some 250bp tagged paired reads and generate some erroneous positions.</p><div><pre><code class="language-julia">tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
+tagged_w_errs = mark_errors(tagged_reads, 0.001)</code></pre><pre><code class="language-none">[ Info: Marking 163669 bases in the set of reads as errors...
+[ Info: Done...</code></pre></div><p>Output to FASTQ:</p><div><pre><code class="language-julia">generate(&quot;tagged_reads.fastq&quot;, tagged_w_errs)#-</code></pre><pre><code class="language-none">[ Info: Writing tagged paired end reads to FASTQ file...
+[ Info: Done</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../se-example/"><span class="direction">Previous</span><span class="title">Long single end reads</span></a></footer></article></body></html>
