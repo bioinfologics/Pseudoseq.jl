@@ -114,15 +114,15 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#",
-    "page": "Universe",
-    "title": "Universe",
+    "page": "Molecule Pool",
+    "title": "Molecule Pool",
     "category": "page",
     "text": ""
 },
 
 {
     "location": "api/pool/#API:-Universe-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "API: Universe",
     "category": "section",
     "text": ""
@@ -130,7 +130,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Exported-functions-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Exported functions",
     "category": "section",
     "text": ""
@@ -138,7 +138,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Pseudoseq.makepool",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Pseudoseq.makepool",
     "category": "function",
     "text": "makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular::Bool = false)\n\nCreate a pool of ng copies of a genome defined by the gen vector of sequences.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakepool(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)\n\nCreate a pool of ng copies of the genome read in from the FASTA.Reader.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakepool(file::String, ng::Int, iscircular::Bool = false)\n\nCreate a pool of ng copies of the genome in the fasta formatted file.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\n"
@@ -146,7 +146,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Making-a-pool-of-molecules-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Making a pool of molecules",
     "category": "section",
     "text": "makepool"
@@ -154,7 +154,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Molecule-pool-transformations-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Molecule pool transformations",
     "category": "section",
     "text": ""
@@ -162,7 +162,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Pseudoseq.fragment-Tuple{Pseudoseq.MoleculePool,Int64}",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Pseudoseq.fragment",
     "category": "method",
     "text": "fragment(p::MoleculePool, meansize::Int)\n\nCreate a new pool by breaking up the DNA fragments in an input pool.\n\nThis method breaks up a DNA molecule in a pool p, such that the average length of the fragments is approximately meansize.\n\nIt fragments a molecule by scattering an appropriate number of breakpoints across the molecule, before cutting the molecule at those breakpoints.\n\nnote: Note\nBreakpoints are scattered entirely at random across a molecule. No two or more breakpoints can fall in exactly the same place, as those positions are sampled without replacement.\n\nnote: Note\nThe appropriate number of breakpoints to scatter across a molecule is calculated as:fracLS - 1Where L is the length of the molecule being fragmented, and S is the desired expected fragment size. This calculation assumes breakpoints fall randomly across the molecule (see above note).\n\nnote: Note\nIf a DNA molecule being fragmented is smaller than the desired meansize, then it will not be broken, it will simply be included in the new pool.\n\n\n\n\n\n"
@@ -170,7 +170,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Fragment-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Fragment",
     "category": "section",
     "text": "fragment(p::Pseudoseq.MoleculePool, meansize::Int)"
@@ -178,7 +178,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Pseudoseq.subsample-Tuple{Pseudoseq.MoleculePool,Int64}",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Pseudoseq.subsample",
     "category": "method",
     "text": "subsample(p::MoleculePool, n::Int)\n\nCreate a new pool by sampling an input pool.\n\nnote: Note\nDNA molecules in the input pool p are selected according to the uniform distribution; no one molecule is more or less likely to be selected than another.\n\nnote: Note\nSampling is done without replacement, so it is impossible for the new pool that is created to recieve one molecule the input pool twice.\n\n\n\n\n\n"
@@ -186,7 +186,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Subsampling-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Subsampling",
     "category": "section",
     "text": "subsample(p::Pseudoseq.MoleculePool, n::Int)"
@@ -194,7 +194,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Pseudoseq.tag-Tuple{Pseudoseq.MoleculePool,Int64}",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Pseudoseq.tag",
     "category": "method",
     "text": "tag(u::MoleculePool, ntags::Int)\n\nCreate a pool of tagged DNA molecules from some input pool.\n\nThe new tagged pool has the same DNA molecules as the input pool. However, each DNA molecule in the new tagged pool will be assigned a tag in the range of 1:ntags.\n\nFor any tagged molecules in a pool, any other molecules that are derived from that tagged molecule will inherit the same tag. For example, if a DNA fragment in a pool is tagged, and then it is subsequently fragmented during a fragment transform, then all the smaller fragments derived from that long fragment will inherit that long fragment\'s tag.\n\nnote: Note\nWhich fragment gets a certain tag is completely random. It is possible for two distinct DNA molecules in a pool to be assigned the same tag. The likelihood of that happening depends on the size of the tag pool (ntags), and the number of fragments in the pool.\n\n\n\n\n\n"
@@ -202,7 +202,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/pool/#Tagging-1",
-    "page": "Universe",
+    "page": "Molecule Pool",
     "title": "Tagging",
     "category": "section",
     "text": "tag(p::Pseudoseq.MoleculePool, ntags::Int)"
