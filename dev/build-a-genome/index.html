@@ -11,9 +11,9 @@ Specification for a chromosome:
  Length of chromosomes: 100
  50bp available in the following stretches:</code></pre><p>There is a utility function <a href="../api/chromosome-blueprint/#Pseudoseq.suggest_regions"><code>suggest_regions</code></a> available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:</p><pre><code class="language-julia-repl">julia&gt; r = suggest_regions(chet, 5, 3)
 3-element Array{UnitRange{Int64},1}:
- 37:41
- 43:47
- 27:31</code></pre><h3><a class="nav-anchor" id=".-Fabricate-a-FASTA-from-chromosome-blueprints-1" href="#.-Fabricate-a-FASTA-from-chromosome-blueprints-1">3. Fabricate a FASTA from chromosome blueprints</a></h3><p>Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate a FASTA file containing the sequences of these chromosomes. To do that, use the <a href="@ref"><code>fabricate</code></a> method that accepts a filename, and a variable number of chromosome blueprints...</p><pre><code class="language-julia-repl">julia&gt; fabricate(&quot;mychrom.fasta&quot;, chet)
+ 58:62
+ 33:37
+ 22:26</code></pre><h3><a class="nav-anchor" id=".-Fabricate-a-FASTA-from-chromosome-blueprints-1" href="#.-Fabricate-a-FASTA-from-chromosome-blueprints-1">3. Fabricate a FASTA from chromosome blueprints</a></h3><p>Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate a FASTA file containing the sequences of these chromosomes. To do that, use the <a href="@ref"><code>fabricate</code></a> method that accepts a filename, and a variable number of chromosome blueprints...</p><pre><code class="language-julia-repl">julia&gt; fabricate(&quot;mychrom.fasta&quot;, chet)
 [ Info: Opening FASTA file at: mychrom.fasta
 [ Info: Fabricating 1 chromosomes and writing to file...
 [ Info: Done</code></pre><footer><hr/><a class="previous" href="../"><span class="direction">Previous</span><span class="title">Home</span></a><a class="next" href="../sequencing/"><span class="direction">Next</span><span class="title">Core concepts &amp; workflow</span></a></footer></article></body></html>
