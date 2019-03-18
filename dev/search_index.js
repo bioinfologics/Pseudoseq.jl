@@ -41,7 +41,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#",
+    "location": "build-a-genome/#",
     "page": "Core concepts & workflow",
     "title": "Core concepts & workflow",
     "category": "page",
@@ -49,15 +49,55 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#Core-concepts-and-basic-workflow-1",
+    "location": "build-a-genome/#Build-a-Genome:-*Core-concepts-and-basic-workflow*-1",
     "page": "Core concepts & workflow",
-    "title": "Core concepts & basic workflow",
+    "title": "Build-a-Genome: Core concepts & basic workflow",
+    "category": "section",
+    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to genomes with certain characteristics. But the core workflow, and important concepts are explained below."
+},
+
+{
+    "location": "build-a-genome/#.-Creating-chromosome-blueprints-1",
+    "page": "Core concepts & workflow",
+    "title": "1. Creating chromosome blueprints",
+    "category": "section",
+    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq. Chromosome blueprints determine what the nature of one chromosome in a genome. Depending on the genome, any given chromosome may be present in multiple copies. Diploids for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:c = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length."
+},
+
+{
+    "location": "build-a-genome/#.-Adding-planned-features-to-a-chromosome-blueprint-1",
+    "page": "Core concepts & workflow",
+    "title": "2. Adding planned features to a chromosome blueprint",
+    "category": "section",
+    "text": "Once you have one or more chromosome blueprints, you can add features to them.Currently the supported features, and the functions that add to a blueprint include:Repetitions: plan_repetition\nHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
+},
+
+{
+    "location": "build-a-genome/#.-Fabricate-a-FASTA-from-chromosome-blueprints-1",
+    "page": "Core concepts & workflow",
+    "title": "3. Fabricate a FASTA from chromosome blueprints",
+    "category": "section",
+    "text": "Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate a FASTA file containing the sequences of these chromosomes. To do that, use the fabricate method that accepts a filename, and a variable number of chromosome blueprints...fabricate(\"mychrom.fasta\", chet)"
+},
+
+{
+    "location": "sequencing/#",
+    "page": "Core concepts & workflow",
+    "title": "Core concepts & workflow",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "sequencing/#Sequencing:-*Core-concepts-and-basic-workflow*-1",
+    "page": "Core concepts & workflow",
+    "title": "Sequencing: Core concepts & basic workflow",
     "category": "section",
     "text": "Pseudoseq abstracts DNA sequencing experiments as sampling processes, because this is what they are from a statistical point of view. Just as a quadrat placed at random on the forest floor provides a small sample of it\'s species composition, so it is that a sequencing read provides a small sample of the composition of the motifs present in a genome.This manual includes several examples showing how to emulate various sequencing experiments using different technologies. But the core workflow, and important concepts are explained below."
 },
 
 {
-    "location": "workflow/#.-Create-a-pool-of-DNA-molecules-1",
+    "location": "sequencing/#.-Create-a-pool-of-DNA-molecules-1",
     "page": "Core concepts & workflow",
     "title": "1. Create a pool of DNA molecules",
     "category": "section",
@@ -65,7 +105,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#.-Process-the-DNA-molecule-pool-1",
+    "location": "sequencing/#.-Process-the-DNA-molecule-pool-1",
     "page": "Core concepts & workflow",
     "title": "2. Process the DNA molecule pool",
     "category": "section",
@@ -73,7 +113,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#Fragmenting-the-pool-1",
+    "location": "sequencing/#Fragmenting-the-pool-1",
     "page": "Core concepts & workflow",
     "title": "Fragmenting the pool",
     "category": "section",
@@ -81,7 +121,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#Subsampling-molecules-from-a-pool-1",
+    "location": "sequencing/#Subsampling-molecules-from-a-pool-1",
     "page": "Core concepts & workflow",
     "title": "Subsampling molecules from a pool",
     "category": "section",
@@ -89,7 +129,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#Determining-the-number-of-molecules-to-subsample-1",
+    "location": "sequencing/#Determining-the-number-of-molecules-to-subsample-1",
     "page": "Core concepts & workflow",
     "title": "Determining the number of molecules to subsample",
     "category": "section",
@@ -97,7 +137,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#Tagging-molecules-in-a-pool-1",
+    "location": "sequencing/#Tagging-molecules-in-a-pool-1",
     "page": "Core concepts & workflow",
     "title": "Tagging molecules in a pool",
     "category": "section",
@@ -105,11 +145,59 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "workflow/#.-Generating-reads-1",
+    "location": "sequencing/#.-Generating-reads-1",
     "page": "Core concepts & workflow",
     "title": "3. Generating reads",
     "category": "section",
     "text": "Next, you generate a set of reads from your transformed pool.  Pseudoseq allows you to create paired-end sequencing reads, single-end sequencing reads, and linked paired-end sequencing reads.You create a set of reads using the make_reads function.All sequencers have a certain error rate, and so after you\'ve created a set of reads, you can use the mark_errors function to randomly mark a set of bases in your reads that are destined to be errors in the output file.Finally, you use your set of reads to generate either an interleaved FASTQ file, or two FASTQ files (one for R1 reads, and one for R2 reads)."
+},
+
+{
+    "location": "examples/pe-example/#",
+    "page": "Paired end reads",
+    "title": "Paired end reads",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/pe-example.jl\""
+},
+
+{
+    "location": "examples/pe-example/#Example:-paired-end-sequencing-1",
+    "page": "Paired end reads",
+    "title": "Example: paired-end sequencing",
+    "category": "section",
+    "text": "This is an example generated from this source file: pe-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: pe-example.ipynb and the script can be found here: pe-example.jlFor the simulation we are going to:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 700bp.\nSubsample the molecules in the pool to achieve approximatly 50x coverage.\nCreate a set of 250bp paired-end reads.\nApply errors to the paired-end reads at a rate of 0.001 (.1%).\nGenerate an output FASTQ file.using PseudoseqStarting with a FASTA formatted file containing the genome we want to sequence, we create a pool with 5000 copies of the genome.pool = makepool(\"ecoli-ref.fasta\", 5000)Next we use the fragment function to make a pool of shorter DNA molecules.cutpool = fragment(pool, 700)We need to determine the number of molecules to sample, and subsample the pool:genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, read_length)\nN = div(N, 2) # Divide by 2 as we\'re doing paired end sequencing.\n\nsampledpool = subsample(cutpool, N)We now want to create a set of paired-end reads. We want our reads to be 250bp in length.pe_reads = make_reads(PairedEnd, sampledpool, 250)Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.pe_w_errs = mark_errors(pe_reads, 0.001)Now we have some paired end reads and have marked some positions as errors, we can generate FASTQ files.generate(\"pe-reads.fastq\", pe_w_errs)#-This page was generated using Literate.jl."
+},
+
+{
+    "location": "examples/se-example/#",
+    "page": "Long single end reads",
+    "title": "Long single end reads",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/se-example.jl\""
+},
+
+{
+    "location": "examples/se-example/#Example:-long,-single-end-reads-1",
+    "page": "Long single end reads",
+    "title": "Example: long, single end reads",
+    "category": "section",
+    "text": "This is an example generated from this source file: se-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: se-example.ipynb and the script can be found here: se-example.jlLet\'s see how you might simulate something like an Oxford Nanopore sequencing experiment.For the simulation we are going to:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nSubsample the molecules in the pool to achieve approximatly 30x coverage.\nCreate a set of single-end reads, the enitre length of each molecule.\nApply errors to the reads at a rate of 0.10 (1 error every 10bp).\nGenerate an output FASTQ file.using PseudoseqLet\'s start with a pool of 5000 copies of a genome contained in a FASTA file:pool = makepool(\"ecoli-ref.fasta\", 5000)Cut the pool of DNA into fragments of an average length of 40,000bpcutpool = fragment(pool, 40000)Now we\'ll estimate the number of fragments we need to sample from the pool to achieve 30x coverage.genome_size = 4639675\nexpected_coverage = 30\nreadlength = 40000\n\nN = needed_sample_size(expected_coverage, genome_size, readlength)\n\nsampledpool = subsample(cutpool, N)By using the make_reads function without specifying a read length, the function will generate reads from the entire length of each molecule in the pool. We do this to emulate what Nanopore sequencing is supposed to do: It takes an entire DNA fragment, feeds it through an electrically charged pore, producing a read for the entire fragment.se_reads = make_reads(SingleEnd, sampledpool)Long read sequencer have much higher error rates than short read sequencers so we use a error rate of 0.1.se_w_errs = mark_errors(se_reads, 0.1)Finally produce the ouput FASTQ file.generate(\"longreads.fastq\", se_w_errs)#-This page was generated using Literate.jl."
+},
+
+{
+    "location": "examples/tg-example/#",
+    "page": "Tagged paired end reads",
+    "title": "Tagged paired end reads",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/tg-example.jl\""
+},
+
+{
+    "location": "examples/tg-example/#Example:-tagged-paired-end-reads-1",
+    "page": "Tagged paired end reads",
+    "title": "Example: tagged paired-end reads",
+    "category": "section",
+    "text": "This is an example generated from this source file: tg-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: tg-example.ipynb and the script can be found here: tg-example.jlLet\'s see how we might simulate something like an 10x sequencing experiment.For this simulation script we will:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nTag the long molecules in the pool randomly with a set of 1,000,000 tags.\nFragment the molecules in the pool to an average length of 700bp.\nSubsample the molecules in the pool to achieve approximatly 50x coverage.\nCreate a set of 250bp paired-end reads.\nApply errors to the paired-end reads at a rate of 0.001 (.1%).\nGenerate an output FASTQ file.using Pseudoseq\n\ndnapool = makepool(\"ecoli-ref.fasta\", 5000)\ncutpool = fragment(dnapool, 40000)Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.taggedpool = tag(cutpool, 1000000)Here I\'m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we\'ll fragment the pool againtaggedcutpool = fragment(taggedpool, 700)Subsample the pool of tagged molecules.genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, read_length)\nN = div(N, 2) # Divide by 2 as we\'re doing paired end sequencing.\n\nsampledpool = subsample(taggedcutpool, N)Now let\'s make some 250bp tagged paired reads and generate some erroneous positions.tagged_reads = make_reads(TaggedPairs, sampledpool, 250)\ntagged_w_errs = mark_errors(tagged_reads, 0.001)Output to FASTQ:generate(\"tagged_reads.fastq\", tagged_w_errs)#-This page was generated using Literate.jl."
 },
 
 {
@@ -289,9 +377,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/chromosome-blueprint/#API:-ChromosomeBlueprint-1",
+    "location": "api/chromosome-blueprint/#API:-Build-a-Genome-1",
     "page": "Chromosome Blueprint",
-    "title": "API: ChromosomeBlueprint",
+    "title": "API: Build-a-Genome",
     "category": "section",
     "text": ""
 },
@@ -353,51 +441,19 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/pe-example/#",
-    "page": "Paired end reads",
-    "title": "Paired end reads",
-    "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/pe-example.jl\""
-},
-
-{
-    "location": "examples/pe-example/#Example:-paired-end-sequencing-1",
-    "page": "Paired end reads",
-    "title": "Example: paired-end sequencing",
+    "location": "api/chromosome-blueprint/#Fabricate-1",
+    "page": "Chromosome Blueprint",
+    "title": "Fabricate",
     "category": "section",
-    "text": "This is an example generated from this source file: pe-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: pe-example.ipynb and the script can be found here: pe-example.jlFor the simulation we are going to:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 700bp.\nSubsample the molecules in the pool to achieve approximatly 50x coverage.\nCreate a set of 250bp paired-end reads.\nApply errors to the paired-end reads at a rate of 0.001 (.1%).\nGenerate an output FASTQ file.using PseudoseqStarting with a FASTA formatted file containing the genome we want to sequence, we create a pool with 5000 copies of the genome.pool = makepool(\"ecoli-ref.fasta\", 5000)Next we use the fragment function to make a pool of shorter DNA molecules.cutpool = fragment(pool, 700)We need to determine the number of molecules to sample, and subsample the pool:genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, read_length)\nN = div(N, 2) # Divide by 2 as we\'re doing paired end sequencing.\n\nsampledpool = subsample(cutpool, N)We now want to create a set of paired-end reads. We want our reads to be 250bp in length.pe_reads = make_reads(PairedEnd, sampledpool, 250)Now we have some reads, we should mark positions in the reads that are destined to be errors in the output FASTQ.pe_w_errs = mark_errors(pe_reads, 0.001)Now we have some paired end reads and have marked some positions as errors, we can generate FASTQ files.generate(\"pe-reads.fastq\", pe_w_errs)#-This page was generated using Literate.jl."
+    "text": "fabricate"
 },
 
 {
-    "location": "examples/se-example/#",
-    "page": "Long single end reads",
-    "title": "Long single end reads",
-    "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/se-example.jl\""
-},
-
-{
-    "location": "examples/se-example/#Example:-long,-single-end-reads-1",
-    "page": "Long single end reads",
-    "title": "Example: long, single end reads",
+    "location": "api/chromosome-blueprint/#Utility-functions-1",
+    "page": "Chromosome Blueprint",
+    "title": "Utility functions",
     "category": "section",
-    "text": "This is an example generated from this source file: se-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: se-example.ipynb and the script can be found here: se-example.jlLet\'s see how you might simulate something like an Oxford Nanopore sequencing experiment.For the simulation we are going to:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nSubsample the molecules in the pool to achieve approximatly 30x coverage.\nCreate a set of single-end reads, the enitre length of each molecule.\nApply errors to the reads at a rate of 0.10 (1 error every 10bp).\nGenerate an output FASTQ file.using PseudoseqLet\'s start with a pool of 5000 copies of a genome contained in a FASTA file:pool = makepool(\"ecoli-ref.fasta\", 5000)Cut the pool of DNA into fragments of an average length of 40,000bpcutpool = fragment(pool, 40000)Now we\'ll estimate the number of fragments we need to sample from the pool to achieve 30x coverage.genome_size = 4639675\nexpected_coverage = 30\nreadlength = 40000\n\nN = needed_sample_size(expected_coverage, genome_size, readlength)\n\nsampledpool = subsample(cutpool, N)By using the make_reads function without specifying a read length, the function will generate reads from the entire length of each molecule in the pool. We do this to emulate what Nanopore sequencing is supposed to do: It takes an entire DNA fragment, feeds it through an electrically charged pore, producing a read for the entire fragment.se_reads = make_reads(SingleEnd, sampledpool)Long read sequencer have much higher error rates than short read sequencers so we use a error rate of 0.1.se_w_errs = mark_errors(se_reads, 0.1)Finally produce the ouput FASTQ file.generate(\"longreads.fastq\", se_w_errs)#-This page was generated using Literate.jl."
-},
-
-{
-    "location": "examples/tg-example/#",
-    "page": "Tagged paired end reads",
-    "title": "Tagged paired end reads",
-    "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/tg-example.jl\""
-},
-
-{
-    "location": "examples/tg-example/#Example:-tagged-paired-end-reads-1",
-    "page": "Tagged paired end reads",
-    "title": "Example: tagged paired-end reads",
-    "category": "section",
-    "text": "This is an example generated from this source file: tg-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: tg-example.ipynb and the script can be found here: tg-example.jlLet\'s see how we might simulate something like an 10x sequencing experiment.For this simulation script we will:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nTag the long molecules in the pool randomly with a set of 1,000,000 tags.\nFragment the molecules in the pool to an average length of 700bp.\nSubsample the molecules in the pool to achieve approximatly 50x coverage.\nCreate a set of 250bp paired-end reads.\nApply errors to the paired-end reads at a rate of 0.001 (.1%).\nGenerate an output FASTQ file.using Pseudoseq\n\ndnapool = makepool(\"ecoli-ref.fasta\", 5000)\ncutpool = fragment(dnapool, 40000)Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.taggedpool = tag(cutpool, 1000000)Here I\'m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we\'ll fragment the pool againtaggedcutpool = fragment(taggedpool, 700)Subsample the pool of tagged molecules.genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, read_length)\nN = div(N, 2) # Divide by 2 as we\'re doing paired end sequencing.\n\nsampledpool = subsample(taggedcutpool, N)Now let\'s make some 250bp tagged paired reads and generate some erroneous positions.tagged_reads = make_reads(TaggedPairs, sampledpool, 250)\ntagged_w_errs = mark_errors(tagged_reads, 0.001)Output to FASTQ:generate(\"tagged_reads.fastq\", tagged_w_errs)#-This page was generated using Literate.jl."
+    "text": "suggest_regions\nsuggest_alleles"
 },
 
 ]}
