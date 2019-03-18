@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "1. Creating chromosome blueprints",
     "category": "section",
-    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq. Chromosome blueprints determine what the nature of one chromosome in a genome. Depending on the genome, any given chromosome may be present in multiple copies. Diploids for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:c = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length."
+    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq. Chromosome blueprints determine what the nature of one chromosome in a genome. Depending on the genome, any given chromosome may be present in multiple copies. Diploids for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:using Pseudoseq\nc = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length."
 },
 
 {
@@ -69,7 +69,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "2. Adding planned features to a chromosome blueprint",
     "category": "section",
-    "text": "Once you have one or more chromosome blueprints, you can add features to them.Currently the supported features, and the functions that add to a blueprint include:Repetitions: plan_repetition\nHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:using Pseudoseq\nchet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
+    "text": "Once you have one or more chromosome blueprints, you can add features to them.Currently the supported features, and the functions that add to a blueprint include:Repetitions: plan_repetition\nHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
 },
 
 {
