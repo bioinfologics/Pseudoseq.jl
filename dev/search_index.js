@@ -121,9 +121,9 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "api/pool/#API:-Universe-1",
+    "location": "api/pool/#API:-MoleculePool-1",
     "page": "Molecule Pool",
-    "title": "API: Universe",
+    "title": "API: MoleculePool",
     "category": "section",
     "text": ""
 },
@@ -278,6 +278,70 @@ var documenterSearchIndex = {"docs": [
     "title": "Generating FASTQ files",
     "category": "section",
     "text": "generate"
+},
+
+{
+    "location": "api/chromosome-blueprint/#",
+    "page": "Chromosome Blueprint",
+    "title": "Chromosome Blueprint",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "api/chromosome-blueprint/#API:-ChromosomeBlueprint-1",
+    "page": "Chromosome Blueprint",
+    "title": "API: ChromosomeBlueprint",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "api/chromosome-blueprint/#Exported-functions-1",
+    "page": "Chromosome Blueprint",
+    "title": "Exported functions",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "api/chromosome-blueprint/#Making-an-empty-chromosome-blueprint-1",
+    "page": "Chromosome Blueprint",
+    "title": "Making an empty chromosome blueprint",
+    "category": "section",
+    "text": "plan_chrom"
+},
+
+{
+    "location": "api/chromosome-blueprint/#Pseudoseq.plan_repetition",
+    "page": "Chromosome Blueprint",
+    "title": "Pseudoseq.plan_repetition",
+    "category": "function",
+    "text": "plan_repetition(cb::ChromosomeBlueprint, from::UnitRange{Int}, to::UnitRange{Int})\n\nPlan a repetition in a chromosome, where the bases in the from region of the chromosome, are guaranteed to occur again in the to region of the chromosome.\n\nEvery copy of the chromosome will have this same repetition.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\nnote: Note\nIn the new blueprint, the from and to regions of the planned chromosome will be consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_het)\n\n\n\n\n\nplan_repetition(cb::ChromosomeBlueprint, from::Int, to::Int, size::Int)\n\nPlan a repetition in a chromosome, where the bases in the from:(from + size - 1) region of the chromosome, are guaranteed to occur again in the to:(to + size - 1) region of the chromosome.\n\nEvery copy of the chromosome will have this same repetition.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\nnote: Note\nIn the new blueprint, the from and to regions of the planned chromosome will be consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_het)\n\n\n\n\n\nplan_repetition(cb::ChromosomeBlueprint, intervals::Vector{UnitRange{Int}})\n\nPlan a series of repetitions in a chromosome.\n\nEvery copy of the chromosome will have these same repetitions.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_regions function to help decide on a set of sites to make heterozygous.\n\nnote: Note\nThe number of intervals provided must be an even number. This is because intervals 1 & 2  define the first repeat, intervals 3 & 4 define the second, and so on.\n\nnote: Note\nIn the new blueprint, the regions that were use to plan the repetitions, have been consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_het)\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/chromosome-blueprint/#Planning-motif-repetitions-along-chromosomes-1",
+    "page": "Chromosome Blueprint",
+    "title": "Planning motif repetitions along chromosomes",
+    "category": "section",
+    "text": "plan_repetition"
+},
+
+{
+    "location": "api/chromosome-blueprint/#Pseudoseq.plan_het",
+    "page": "Chromosome Blueprint",
+    "title": "Pseudoseq.plan_het",
+    "category": "function",
+    "text": "plan_het(cb::ChromosomeBlueprint, pos::Int, alleles::Vector{DNA})\n\nPlan heterozygosity between copies of a chromosome at position pos.\n\nThe alleles vector must contain a nucleotide for each copy of the chromosome.\n\nFor example if you provided a vector of [DNA_A, DNA_C], for the heterozygous site you\'re defining at pos, the first copy of the chromosome will have an A, and the second copy of the chromosome will have a C.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use.\n\nnote: Note\nIn the new blueprint, the positions that were use to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_repetition)\n\n\n\n\n\nplan_het(cb::ChromosomeBlueprint, pos, alleles::Vector{Vector{DNA}})\n\nPlan heterozygosity between copies of a chromosome at the positions defined by pos.\n\nThe alleles vector must contain a vector for every position in pos that  defines the base each copy of the chromosome has.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use. \n\ntip: Tip\nUse the suggest_regions function to help decide on a set of sites to make heterozygous.\n\nnote: Note\nIn the new blueprint, the positions that were use to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_repetition)\n\n\n\n\n\nplan_het(cb::ChromosomeBlueprint, pos, nalleles::Int)\n\nPlan heterozygosity between copies of a chromosome at the positions defined by pos.\n\nThis particular method of plan_het will generate a set of alleles for each position in pos for you automatically. You just have to specify how many possible alleles (nalleles) there are.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_regions function to help decide on a set of sites to make heterozygous.\n\nnote: Note\nThe maximum value nalleles can be is the number of chromosome copies your blueprint contains. If you try to give nalleles a higher number, then this method will behave as if nalleles is equal to the number of chromosome copies in the blueprint. This is because if you have say 2 copies of a chromosome, then those two copies can carry at maximum 2 different bases at a position.\n\nnote: Note\nIn the new blueprint, the positions that were use to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\nplan_het(cb::ChromosomeBlueprint, npos::Int, nalleles::Int)\n\nPlan heterozygosity between copies of a chromosome at npos positions, each heterozygous positions will have nalleles distict alleles.\n\nThis particular method of plan_het will decide on a set of available positions along the chromosome in the blueprint. For each postition it will then decide on a set of nalleles alleles that will be applied to each copy of the chromosome.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\nnote: Note\nThe maximum value nalleles can be is the number of chromosome copies your blueprint contains. If you try to give nalleles a higher number, then this method will behave as if nalleles is equal to the number of chromosome copies in the blueprint. This is because if you have say 2 copies of a chromosome, then those two copies can carry at maximum 2 different bases at a position.\n\nnote: Note\nIn the new blueprint, the positions that were use to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/chromosome-blueprint/#Planning-heterozygosity-between-chromosome-copies-1",
+    "page": "Chromosome Blueprint",
+    "title": "Planning heterozygosity between chromosome copies",
+    "category": "section",
+    "text": "plan_het"
 },
 
 {
