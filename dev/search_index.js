@@ -305,6 +305,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/chromosome-blueprint/#Pseudoseq.plan_chrom",
+    "page": "Chromosome Blueprint",
+    "title": "Pseudoseq.plan_chrom",
+    "category": "function",
+    "text": "Create an empty blueprint for n copies of a chromosome of len base pairs.\n\n\n\n\n\n"
+},
+
+{
     "location": "api/chromosome-blueprint/#Making-an-empty-chromosome-blueprint-1",
     "page": "Chromosome Blueprint",
     "title": "Making an empty chromosome blueprint",
