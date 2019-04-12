@@ -93,7 +93,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Sequencing: Core concepts & basic workflow",
     "category": "section",
-    "text": "Pseudoseq abstracts DNA sequencing experiments as sampling processes, because this is what they are from a statistical point of view. Just as a quadrat placed at random on the forest floor provides a small sample of it\'s species composition, so it is that a sequencing read provides a small sample of the composition of the motifs present in a genome.This manual includes several examples showing how to emulate various sequencing experiments using different technologies. But the core workflow, and important concepts are explained below."
+    "text": "Pseudoseq abstracts DNA sequencing experiments as sampling processes, because this is what they are from a statistical point of view. Just as a quadrat placed at random on the forest floor provides a small sample of it\'s species composition, so it is that a sequencing read provides a small sample of the composition of the motifs present in a genome.This manual includes several examples showing how to emulate various sequencing experiments using different technologies. But the core workflow, and important concepts are explained below.tip: Tip\nThe user can use Pseudoseq\'s API to script each stage of the flow outlined below themselves, or they can use the sequence function, which is the highest-level user facing function. Every example in this section of the manual, will show you how to use both options to achieve the same goal.Anyway, the core sequencing workflow in Pseudoseq is as follows..."
 },
 
 {
@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "1. Create a pool of DNA molecules",
     "category": "section",
-    "text": "In reality, all DNA sequencing experiments begin with a sample of tissue or cells. DNA is extracted from the sample in the laboratory, after the genomes of the cells exist as number of DNA molecules, suspended in a solution.In Pseudoseq, such a collection of DNA molecules is called the molecule pool.In the beginning of a Psueodseq simulation script you create a pool that is the totality of all copies of the genome that exist in your simulation.tip: Tip\nYou can think of the pool at this stage as containing many copies of the same genome sequence:   1. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n   2. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n   3. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n                                ...\n4999. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n5000. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC"
+    "text": "In reality, all DNA sequencing experiments begin with a sample of tissue or cells. DNA is extracted from the sample in the laboratory, after the genomes of the cells exist as number of DNA molecules, suspended in a solution.In Pseudoseq, such a collection of DNA molecules is called the molecule pool, it is created with the makepool function.In the beginning of a Psueodseq simulation script you create a pool that is the totality of all copies of the genome that exist in your simulation.tip: Tip\nYou can think of the pool at this stage as containing many copies of the same genome sequence:   1. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n   2. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n   3. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n                                ...\n4999. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC\n5000. CGGACTTGAATAGCCCAAAGGTTTCGACACGATCACGACACATAAATTGGCGGACTTGAATAGC"
 },
 
 {
@@ -198,6 +198,38 @@ var documenterSearchIndex = {"docs": [
     "title": "Example: tagged paired-end reads",
     "category": "section",
     "text": "This is an example generated from this source file: tg-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: tg-example.ipynb and the script can be found here: tg-example.jlLet\'s see how we might simulate something like an 10x sequencing experiment.For this simulation script we will:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nTag the long molecules in the pool randomly with a set of 1,000,000 tags.\nFragment the molecules in the pool to an average length of 700bp.\nSubsample the molecules in the pool to achieve approximatly 50x coverage.\nCreate a set of 250bp paired-end reads.\nApply errors to the paired-end reads at a rate of 0.001 (.1%).\nGenerate an output FASTQ file.using Pseudoseq\n\ndnapool = makepool(\"ecoli-ref.fasta\", 5000)\ncutpool = fragment(dnapool, 40000)Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.taggedpool = tag(cutpool, 1000000)Here I\'m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we\'ll fragment the pool againtaggedcutpool = fragment(taggedpool, 700)Subsample the pool of tagged molecules.genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, read_length)\nN = div(N, 2) # Divide by 2 as we\'re doing paired end sequencing.\n\nsampledpool = subsample(taggedcutpool, N)Now let\'s make some 250bp tagged paired reads and generate some erroneous positions.tagged_reads = make_reads(TaggedPairs, sampledpool, 250)\ntagged_w_errs = mark_errors(tagged_reads, 0.001)Output to FASTQ:generate(\"tagged_reads.fastq\", tagged_w_errs)#-This page was generated using Literate.jl."
+},
+
+{
+    "location": "api/sequence/#",
+    "page": "Sequencing",
+    "title": "Sequencing",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "api/sequence/#API:-sequence-1",
+    "page": "Sequencing",
+    "title": "API: sequence",
+    "category": "section",
+    "text": ""
+},
+
+{
+    "location": "api/sequence/#Pseudoseq.sequence",
+    "page": "Sequencing",
+    "title": "Pseudoseq.sequence",
+    "category": "function",
+    "text": "sequence(input, output = nothing; kwargs...)\n\nRun a sequencing experiment from start to finish.\n\nThis method is the highest-level function for running sequencing simulations with Pseudoseq. It runs the Pseudoseq sequencin worksflow described in the manual, tuned by the following keyword parameters:\n\nGlobal parameters:\n\ninput: A filename or FASTA.Reader providing the input genome.\noutput: A filename or FASTA.Writer providing a destination for the output reads.\n\nParameters for workflow step 1 (Create a pool of DNA molecules):\n\nng: Integer; the number of genomes the molecule pool is initialized with.\n\nParameters for step 2 (Processing the DNA molecule pool):\n\nflen: Integer; the desired average fragment length (default: 700bp).\ncov: Integer; the desired expected coverage (default: 30x coverage).\n\nParameters for step 3 (Generating reads):\n\npaired: true or false; Whether or not to sequence from both end of each molecule (default: true).\nrdlen: Integer; the desired read length (default: 250bp).\nerr: Float; the desired per-base error rate (default: 0.001).\n\n\n\n\n\n"
+},
+
+{
+    "location": "api/sequence/#Exported-functions-1",
+    "page": "Sequencing",
+    "title": "Exported functions",
+    "category": "section",
+    "text": "sequence"
 },
 
 {
