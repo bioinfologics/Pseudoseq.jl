@@ -3,19 +3,19 @@
 
 dnapool = makepool(&quot;ecoli-ref.fasta&quot;, 5000)
 cutpool = fragment(dnapool, 40000)</code></pre><pre><code class="language-none">Pool of 575000 molecules:
- Maximum molecule size: 553746
+ Maximum molecule size: 553738
  Average molecule size: 40345
  Minimum molecule size: 1</code></pre></div><p>Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.</p><div><pre><code class="language-julia">taggedpool = tag(cutpool, 1000000)</code></pre><pre><code class="language-none">[ Info: Attaching 1000000 tags randomly to each molecule in pool...
 [ Info: Done
 Pool of 575000 molecules:
- Maximum molecule size: 553746
+ Maximum molecule size: 553738
  Average molecule size: 40345
  Minimum molecule size: 1
- Number of distinct tags: 437524</code></pre></div><p>Here I&#39;m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we&#39;ll fragment the pool again</p><div><pre><code class="language-julia">taggedcutpool = fragment(taggedpool, 700)</code></pre><pre><code class="language-none">Pool of 32863574 molecules:
- Maximum molecule size: 11576
+ Number of distinct tags: 437039</code></pre></div><p>Here I&#39;m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we&#39;ll fragment the pool again</p><div><pre><code class="language-julia">taggedcutpool = fragment(taggedpool, 700)</code></pre><pre><code class="language-none">Pool of 32863217 molecules:
+ Maximum molecule size: 11220
  Average molecule size: 705
  Minimum molecule size: 1
- Number of distinct tags: 437524</code></pre></div><p>Subsample the pool of tagged molecules.</p><div><pre><code class="language-julia">genome_size = 4639675
+ Number of distinct tags: 437039</code></pre></div><p>Subsample the pool of tagged molecules.</p><div><pre><code class="language-julia">genome_size = 4639675
 expected_coverage = 50
 read_length = 250
 
@@ -23,8 +23,8 @@ N = needed_sample_size(expected_coverage, genome_size, read_length)
 N = div(N, 2) # Divide by 2 as we&#39;re doing paired end sequencing.
 
 sampledpool = subsample(taggedcutpool, N)</code></pre><pre><code class="language-none">Pool of 463967 molecules:
- Maximum molecule size: 8680
- Average molecule size: 707
+ Maximum molecule size: 8312
+ Average molecule size: 704
  Minimum molecule size: 1
- Number of distinct tags: 227231</code></pre></div><p>Now let&#39;s make some 250bp tagged paired reads and generate some erroneous positions.</p><div><pre><code class="language-julia">tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
-tagged_w_errs = mark_errors(tagged_reads, 0.001)</code></pre></div><p>Output to FASTQ:</p><div><pre><code class="language-julia">generate(&quot;tagged_reads.fastq&quot;, tagged_w_errs)#-</code></pre><pre><code class="language-none">[ Info: - ✔ Wrote 654794 tagged paired end reads to FASTQ file</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../se-example/"><span class="direction">Previous</span><span class="title">Long single end reads</span></a><a class="next" href="../../api/sequence/"><span class="direction">Next</span><span class="title">Sequencing</span></a></footer></article></body></html>
+ Number of distinct tags: 227066</code></pre></div><p>Now let&#39;s make some 250bp tagged paired reads and generate some erroneous positions.</p><div><pre><code class="language-julia">tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
+tagged_w_errs = mark_errors(tagged_reads, 0.001)</code></pre></div><p>Output to FASTQ:</p><div><pre><code class="language-julia">generate(&quot;tagged_reads.fastq&quot;, tagged_w_errs)#-</code></pre><pre><code class="language-none">[ Info: - ✔ Wrote 654530 tagged paired end reads to FASTQ file</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../se-example/"><span class="direction">Previous</span><span class="title">Long single end reads</span></a><a class="next" href="../../api/sequence/"><span class="direction">Next</span><span class="title">Sequencing</span></a></footer></article></body></html>

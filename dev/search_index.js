@@ -173,7 +173,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Paired end reads",
     "title": "Using the sequence method",
     "category": "section",
-    "text": "First, let\'s see how we do this with the sequence method. The first two parameters we give to the function will be the input genome we want to sequence, and the destination FASTQ file for output reads. Here we are setting:The number of genome copies in the molecule pool to 5000.\nThe average fragment size to 700bp.\nThe sampling coverage to 30x.\nThe read length to 250bp.\nThe per base read error rate to 0.001.\nThe fact we want paired-ends of fragments to be read (paired) to true.sequence(\"ecoli-ref.fasta\", \"pe-reads.fastq\"; ng = 5000, flen = 700, cov = 30, paired = true, rdlen = 250, err = 0.001)"
+    "text": "First, let\'s see how we do this with the sequence method. The first two parameters we give to the function will be the input genome we want to sequence, and the destination FASTQ file for output reads. Here we are setting:The number of genome copies in the molecule pool to 5000.\nThe average fragment size to 700bp.\nThe sampling coverage to 50x.\nThe read length to 250bp.\nThe per base read error rate to 0.001.\nThe fact we want paired-ends of fragments to be read (paired) to true.sequence(\"ecoli-ref.fasta\", \"pe-reads.fastq\"; ng = 5000, flen = 700, cov = 50, paired = true, rdlen = 250, err = 0.001)"
 },
 
 {
@@ -197,7 +197,23 @@ var documenterSearchIndex = {"docs": [
     "page": "Long single end reads",
     "title": "Example: long, single end reads",
     "category": "section",
-    "text": "This is an example generated from this source file: se-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: se-example.ipynb and the script can be found here: se-example.jlLet\'s see how you might simulate something like an Oxford Nanopore sequencing experiment.For the simulation we are going to:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nSubsample the molecules in the pool to achieve approximatly 30x coverage.\nCreate a set of single-end reads, the enitre length of each molecule.\nApply errors to the reads at a rate of 0.10 (1 error every 10bp).\nGenerate an output FASTQ file.using PseudoseqLet\'s start with a pool of 5000 copies of a genome contained in a FASTA file:pool = makepool(\"ecoli-ref.fasta\", 5000)Cut the pool of DNA into fragments of an average length of 40,000bpcutpool = fragment(pool, 40000)Now we\'ll estimate the number of fragments we need to sample from the pool to achieve 30x coverage.genome_size = 4639675\nexpected_coverage = 30\nreadlength = 40000\n\nN = needed_sample_size(expected_coverage, genome_size, readlength)\n\nsampledpool = subsample(cutpool, N)By using the make_reads function without specifying a read length, the function will generate reads from the entire length of each molecule in the pool. We do this to emulate what Nanopore sequencing is supposed to do: It takes an entire DNA fragment, feeds it through an electrically charged pore, producing a read for the entire fragment.se_reads = make_reads(SingleEnd, sampledpool)Long read sequencer have much higher error rates than short read sequencers so we use a error rate of 0.1.se_w_errs = mark_errors(se_reads, 0.1)Finally produce the ouput FASTQ file.generate(\"longreads.fastq\", se_w_errs)#-This page was generated using Literate.jl."
+    "text": "This is an example generated from this source file: se-example.jl You are seeing the online documentation version. The corresponding notebook can be found here: se-example.ipynb and the script can be found here: se-example.jlLet\'s see how you might simulate something like an Oxford Nanopore sequencing experiment.For the simulation we are going to:Create a pool of 5000 copies of a reference genome.\nFragment the DNA molecules in the pool, to an average length of 40,000bp.\nSubsample the molecules in the pool to achieve approximatly 30x coverage.\nCreate a set of single-end reads, the enitre length of each molecule.\nApply errors to the reads at a rate of 0.10 (1 error every 10bp).\nGenerate an output FASTQ file.using Pseudoseq"
+},
+
+{
+    "location": "examples/se-example/#Using-the-sequence-method-1",
+    "page": "Long single end reads",
+    "title": "Using the sequence method",
+    "category": "section",
+    "text": "First, let\'s see how we do this with the sequence method. The first two parameters we give to the function will be the input genome we want to sequence, and the destination FASTQ file for output reads. Here we are setting:The number of genome copies in the molecule pool to 5000.\nThe average fragment size to 40000bp.\nThe sampling coverage to 30x.\nThe read length to nothing, which will make the sequencer read the whole length of any DNA fragment.\nThe per base read error rate to 0.1.\nThe fact we want paired-ends of fragments to be read (paired) to false.sequence(\"ecoli-ref.fasta\", \"longreads.fastq\"; ng = 5000, flen = 40000, cov = 30, rdlen = nothing, err = 0.1, paired = false)"
+},
+
+{
+    "location": "examples/se-example/#Using-the-Pseudoseq-API-1",
+    "page": "Long single end reads",
+    "title": "Using the Pseudoseq API",
+    "category": "section",
+    "text": "Here\'s how to achieve the same thing, using the Pseudoseq API. It is nessecery to use the API if you want to do something that is not anticipated by the available functionality of the sequence method: the cost of conveinience is fewer options.Let\'s start with a pool of 5000 copies of a genome contained in a FASTA file:pool = makepool(\"ecoli-ref.fasta\", 5000)Cut the pool of DNA into fragments of an average length of 40,000bpcutpool = fragment(pool, 40000)Now we\'ll estimate the number of fragments we need to sample from the pool to achieve 30x coverage.genome_size = 4639675\nexpected_coverage = 30\nreadlength = 40000\n\nN = needed_sample_size(expected_coverage, genome_size, readlength)\n\nsampledpool = subsample(cutpool, N)By using the make_reads function without specifying a read length, the function will generate reads from the entire length of each molecule in the pool. We do this to emulate what Nanopore sequencing is supposed to do: It takes an entire DNA fragment, feeds it through an electrically charged pore, producing a read for the entire fragment.se_reads = make_reads(SingleEnd, sampledpool)Long read sequencer have much higher error rates than short read sequencers so we use a error rate of 0.1.se_w_errs = mark_errors(se_reads, 0.1)Finally produce the ouput FASTQ file.generate(\"longreads.fastq\", se_w_errs)#-This page was generated using Literate.jl."
 },
 
 {

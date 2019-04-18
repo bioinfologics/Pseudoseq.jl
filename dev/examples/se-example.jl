@@ -1,5 +1,7 @@
 using Pseudoseq
 
+sequence("ecoli-ref.fasta", "longreads.fastq"; ng = 5000, flen = 40000, cov = 30, rdlen = nothing, err = 0.1, paired = false)
+
 pool = makepool("ecoli-ref.fasta", 5000)
 
 cutpool = fragment(pool, 40000)

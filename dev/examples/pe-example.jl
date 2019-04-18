@@ -1,6 +1,6 @@
 using Pseudoseq
 
-sequence("ecoli-ref.fasta", "pe-reads.fastq"; ng = 5000, flen = 700, cov = 30, paired = true, rdlen = 250, err = 0.001)
+sequence("ecoli-ref.fasta", "pe-reads.fastq"; ng = 5000, flen = 700, cov = 50, paired = true, rdlen = 250, err = 0.001)
 
 pool = makepool("ecoli-ref.fasta", 5000)
 
