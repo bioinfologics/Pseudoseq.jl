@@ -1,6 +1,9 @@
 using Pseudoseq
 
+sequence("ecoli-ref.fasta", "tagged_reads.fastq"; ng = 5000, tusize = 1000000, taggedflen = 40000, flen = 700, cov = 50, rdlen = 250, err = 0.1)
+
 dnapool = makepool("ecoli-ref.fasta", 5000)
+
 cutpool = fragment(dnapool, 40000)
 
 taggedpool = tag(cutpool, 1000000)
