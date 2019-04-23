@@ -93,7 +93,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Build-a-Yeast",
     "title": "Example: Build-a-Yeast",
     "category": "section",
-    "text": "This is an example generated from this source file: build-a-yeast.jl You are seeing the online documentation version. The corresponding notebook can be found here: build-a-yeast.ipynb and the script can be found here: build-a-yeast.jlWe are going to use Pseudoseq to create a simple set of fake genomes, based on chromosome 1 of the reference genome for yeast.Load the sequence of chromosome 1 of the yeast reference from FASTA file.\nCreate blank chromosome blueprints for different genome designs.\nEdit the blueprints to achive a: a. Diploid chromosome b. Triploid chromosome c. Tetraploid chromosomeusing BioSequences, PseudoseqFirst load the sequence from FASTA file. This uses tools from BioSequences, which is a dependency of Pseudoseq and so the user should have it available.refseq = open(FASTA.Reader, \"yeast-chr1.fasta\") do rdr\n    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))\nend\n\nreflen = length(refseq)This results in a 230,218nt long sequence."
+    "text": "This is an example generated from this source file: build-a-yeast.jl You are seeing the online documentation version. The corresponding notebook can be found here: build-a-yeast.ipynb and the script can be found here: build-a-yeast.jlWe are going to use Pseudoseq to create a simple set of fake genomes, based on chromosome 1 of the reference genome for yeast.Load the sequence of chromosome 1 of the yeast reference from FASTA file.\nCreate blank chromosome blueprints for different genome designs.\nEdit the blueprints to achive a: a. Diploid chromosome b. Triploid chromosome c. Tetraploid chromosomeusing BioSequences, Pseudoseq"
+},
+
+{
+    "location": "examples/build-a-yeast/#Load-the-seed-sequence-1",
+    "page": "Build-a-Yeast",
+    "title": "Load the seed sequence",
+    "category": "section",
+    "text": "First load the sequence from FASTA file. This uses tools from BioSequences, which is a dependency of Pseudoseq and so the user should have it available, as julia\'s package manager would have installed any dependencies. The lines below open a fasta file, with a fasta reader, and load a single FASTA record, and get its sequence.refseq = open(FASTA.Reader, \"yeast-chr1.fasta\") do rdr\n    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))\nend\n\nreflen = length(refseq)This results in a 230,218nt long sequence called refseq."
 },
 
 {
