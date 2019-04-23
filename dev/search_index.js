@@ -81,6 +81,46 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "examples/build-a-yeast/#",
+    "page": "Build-a-Yeast",
+    "title": "Build-a-Yeast",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/build-a-yeast.jl\""
+},
+
+{
+    "location": "examples/build-a-yeast/#Example:-Build-a-Yeast-1",
+    "page": "Build-a-Yeast",
+    "title": "Example: Build-a-Yeast",
+    "category": "section",
+    "text": "This is an example generated from this source file: build-a-yeast.jl You are seeing the online documentation version. The corresponding notebook can be found here: build-a-yeast.ipynb and the script can be found here: build-a-yeast.jlWe are going to use Pseudoseq to create a simple set of fake genomes, based on chromosome 1 of the reference genome for yeast.Load the sequence of chromosome 1 of the yeast reference from FASTA file.\nCreate blank chromosome blueprints for different genome designs.\nEdit the blueprints to achive a: a. Diploid chromosome b. Triploid chromosome c. Tetraploid chromosomeusing BioSequences, PseudoseqFirst load the sequence from FASTA file. This uses tools from BioSequences, which is a dependency of Pseudoseq and so the user should have it available.refseq = open(FASTA.Reader, \"yeast-chr1.fasta\") do rdr\n    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))\nend\n\nreflen = length(refseq)This results in a 230,218nt long sequence."
+},
+
+{
+    "location": "examples/build-a-yeast/#Designing-a-diploid-1",
+    "page": "Build-a-Yeast",
+    "title": "Designing a diploid",
+    "category": "section",
+    "text": "First lets make a plan for a diploid genome with 1% heterozygosity. Pseudoseq has a lot of flexibilty in how you can define the heterozygosity, but for ease here I\'m going to let it decide where the sites should be, and what the alleles at each site should be, by calling plan_het, providing just the proportion of sites I want to be heterozygous, and the number of alleles I want at each of these heterozygous sites (2).dploid = plan_chrom(reflen, 2)\ndploidhet = plan_het(dploid, .01, 2)Now fabricate the FASTA, with fabricate, providing a filename, and then a series of blueprint => seed pairs. In this case we just give 1 blueprint-seed# pair.\n\nfabricate(\"build-a-yeast-di.fasta\", dploidhet => refseq)Thats it for the diploid genome."
+},
+
+{
+    "location": "examples/build-a-yeast/#Designing-a-triploid-1",
+    "page": "Build-a-Yeast",
+    "title": "Designing a triploid",
+    "category": "section",
+    "text": "Now let\'s make a triploid genome. This should also be simple enough. It\'s much like the process for making the diploid genome, but specifying 3 chromosome copies instead of 2.trploid = plan_chrom(reflen, 3)When I add some heterozygous sites, just like with the diploid case, I\'m going to simply ask for a proportion of heterozygous sites (and let Pseudoseq decide where they should occur. Like last time also I\'m going to make all the sites have 2 alleles, so for every heterozygous site, two of the three chromosome copies willl have the same base, and one of the copies will be different. There are other ways to define some heterozygous sites for example all 3 chromosome copies could have different basestrploidhet = plan_het(trploid, .01, 2)Now fabricate the FASTA, with fabricate, providing a filename, and then a series of blueprint => seed pairs. In this case we just give 1 blueprint-seed# pair.\n\nfabricate(\"build-a-yeast-tri.fasta\", trploidhet => refseq)That\'s it for the triploid genome."
+},
+
+{
+    "location": "examples/build-a-yeast/#Designing-a-tetraploid-genome-1",
+    "page": "Build-a-Yeast",
+    "title": "Designing a tetraploid genome",
+    "category": "section",
+    "text": "Lets make a tetraploid genome, that consists of two diploid genomes, an A genome and a B genome. First I\'m going to create a chromosome blueprint with 4 copies:tetploid = plan_chrom(reflen, 4)We want to plan the heterozygosity in this tetraploid such that the number of heterozygous sites within the A and B genomes is ~1%. But we want ~3% of sites to be heterozygous between the A and B genomes.First we will say copies 1 + 2 in our blueprint are the A genome, and copies 3 + 4 are the B genome. Next consider heterozygous sites with 2 different alleles, A and B, 6 different patterns are possible:Copy 1 Copy 2 Copy 3 Copy 4\nA A B B\nB B A A\nA B A B\nB A B A\nA B B A\nB A A BThe first 2 patterns in the table constitute fixed mutations between genomes A and B, but not polymorphism within genomes A and B. This is because Copy 1 and 3 differ, as do copies 2 and 4, yet copies 1 and 2 are the same, as are copies 3 and 4. To achieve a ~3% divergence between genomes A and B, let\'s plan some heterozygosity by grouping the copy numbers together:thet = plan_het(tetploid, 6907, [1, 2], [3, 4])By using the groups [1, 2] and [3, 4] we ensure chromosome copy 1 and 2 will have the same allele, as will chromosomes 3 and 4The next two patterns in the table constitute polymorphim within the A and B genomes, because copies 1 and 2 differ, as do copies 3 and 4, but copies 1 and 3, and 2 and 4 do not differ.The final two patterns in the table constitue both polymorphim within the A and B genomes, and between the A and B genomes, because copies 1 and 2 differ, as do copies 3 and 4, 1 and 3, and 2 and 4.One possible way therefore to achieve the desired levels of polymorphism is to Apply a number of these allele patterns, to achieve the 1% and 3% values.import Random\nRandom.seed!(1234)\np = suggest_regions(tetploid, 1, 6907)\na1 = suggest_alleles(length(p), [1, 2], [3, 4])\na1 = suggest_alleles(length(p), [1, 1, 2, 2])\nthet = plan_het(tetploid, 6907, [1, 2], [3, 4])This page was generated using Literate.jl."
+},
+
+{
     "location": "sequencing/#",
     "page": "Core concepts & workflow",
     "title": "Core concepts & workflow",
@@ -509,7 +549,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Chromosome Blueprint",
     "title": "Pseudoseq.plan_het",
     "category": "function",
-    "text": "plan_het(cb::ChromosomeBlueprint, pos::Int, alleles::Vector{DNA})\n\nPlan heterozygosity between copies of a chromosome at position pos.\n\nThe alleles vector must contain a nucleotide for each copy of the chromosome.\n\nFor example if you provided a vector of [DNA_A, DNA_C], for the heterozygous site you\'re defining at pos, the first copy of the chromosome will have an A, and the second copy of the chromosome will have a C.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use.\n\nnote: Note\nIn the new blueprint, the positions that were used to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\nplan_het(cb::ChromosomeBlueprint, pos, alleles::Vector{Vector{DNA}})\n\nA conveinience method of plan_het. Plans heterozygosity between copies of a chromosome at the many positions defined by pos.\n\nThe alleles vector must contain a vector for every position in pos that  defines the base each copy of the chromosome has.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use. \n\ntip: Tip\nUse the suggest_regions function to help decide on a set of sites to make heterozygous.\n\nnote: Note\nIn the new blueprint, the positions that were use to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_repetition)\n\n\n\n\n\n"
+    "text": "plan_het(cb::ChromosomeBlueprint, pos::Int, alleles::Vector{DNA})\n\nPlan heterozygosity between copies of a chromosome at position pos.\n\nThe alleles vector must contain a nucleotide for each copy of the chromosome.\n\nFor example if you provided a vector of [DNA_A, DNA_C], for the heterozygous site you\'re defining at pos, the first copy of the chromosome will have an A, and the second copy of the chromosome will have a C.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use.\n\nnote: Note\nIn the new blueprint, the positions that were used to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\nplan_het(cb::ChromosomeBlueprint, parg, aargs...)\n\nA generic method of plan_het. Plans heterozygosity between copies of a chromosome at the many positions defined by pos.\n\nThe alleles vector must contain a vector for every position in pos that  defines the base each copy of the chromosome has.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use. \n\ntip: Tip\nUse the suggest_regions function to help decide on a set of sites to make heterozygous.\n\nnote: Note\nIn the new blueprint, the positions that were use to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n(See also: plan_repetition)\n\n\n\n\n\n"
 },
 
 {
