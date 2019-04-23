@@ -169,7 +169,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/pe-example/#Using-the-sequence-method-1",
+    "location": "examples/pe-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Paired end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -201,7 +201,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/se-example/#Using-the-sequence-method-1",
+    "location": "examples/se-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Long single end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -233,7 +233,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/tg-example/#Using-the-sequence-method-1",
+    "location": "examples/tg-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Tagged paired end reads",
     "title": "Using the sequence method",
     "category": "section",
