@@ -569,6 +569,14 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
+    "location": "api/chromosome-blueprint/#Pseudoseq.fabricate",
+    "page": "Chromosome Blueprint",
+    "title": "Pseudoseq.fabricate",
+    "category": "function",
+    "text": "fabricate(file::String, cb...)\n\nFabricate the sequence(s) planned in a number chromosome blueprints.\n\nThe fabricated sequences will be written out to the FASTA formatted file file.\n\ncb... should be provided as a series of blueprint, seed-sequence pairs. E.g. fabricate(\"mygenome.fasta\", chr1plan => ch1seq, ch2plan => ch2seq).\n\n\n\n\n\nfabricate(fw::FASTA.Writer, cb...)\n\nFabricate the sequence(s) planned in a number chromosome blueprints.\n\nThe fabricated sequences will be written out to the FASTA formatted file fw.\n\ncb... should be provided as a series of blueprint, seed-sequence pairs. E.g. fabricate(\"mygenome.fasta\", chr1plan => ch1seq, ch2plan => ch2seq).\n\n\n\n\n\nfabricate(cb::ChromosomeBlueprint)\n\nFabricate the sequence(s) planned in the chromosome blueprint.\n\nA random DNA sequence will be generated to use as a seed sequence.\n\nA sequence will be built for each chromosome copy in the blueprint.\n\n\n\n\n\nfabricate(cb::ChromosomeBlueprint, seed::BioSequence{DNAAlphabet{2}})\n\nFabricate a DNA sequence by applying the planned features in a chromosome blueprint, to some initial starting seed sequence.\n\nA sequence will be built for each chromosome copy in the blueprint.\n\n\n\n\n\n"
+},
+
+{
     "location": "api/chromosome-blueprint/#Fabricate-1",
     "page": "Chromosome Blueprint",
     "title": "Fabricate",

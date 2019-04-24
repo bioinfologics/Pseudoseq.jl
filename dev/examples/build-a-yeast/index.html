@@ -7,7 +7,7 @@ reflen = length(refseq)</code></pre><pre><code class="language-none">230218</cod
 dploidhet = plan_het(dploid, .01, 2)</code></pre><pre><code class="language-none">Specification for a chromosome:
  Number of copies: 2
  Length of chromosomes: 230218
- 227916bp available in the following stretches:</code></pre></div><p>Now fabricate the FASTA, with <a href="examples/@ref"><code>fabricate</code></a>, providing a filename, and then a series of <code>blueprint =&gt; seed</code> pairs. In this case we just give 1 blueprint-seed</p><div><pre><code class="language-julia"># pair.
+ 227916bp available in the following stretches:</code></pre></div><p>Now fabricate the FASTA, with <a href="../../api/chromosome-blueprint/#Pseudoseq.fabricate"><code>fabricate</code></a>, providing a filename, and then a series of <code>blueprint =&gt; seed</code> pairs. In this case we just give 1 blueprint-seed</p><div><pre><code class="language-julia"># pair.
 
 fabricate(&quot;build-a-yeast-di.fasta&quot;, dploidhet =&gt; refseq)</code></pre><pre><code class="language-none">[ Info: Opening FASTA file at: build-a-yeast-di.fasta
 [ Info: Fabricated 1 chromosomes and written to file</code></pre></div><p>Thats it for the diploid genome.</p><h2><a class="nav-anchor" id="Designing-a-triploid-1" href="#Designing-a-triploid-1">Designing a triploid</a></h2><p>Now let&#39;s make a triploid genome. This should also be simple enough. It&#39;s much like the process for making the diploid genome, but specifying 3 chromosome copies instead of 2.</p><div><pre><code class="language-julia">trploid = plan_chrom(reflen, 3)</code></pre><pre><code class="language-none">Specification for a chromosome:
