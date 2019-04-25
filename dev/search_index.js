@@ -322,15 +322,15 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/sequence/#",
-    "page": "Sequencing",
-    "title": "Sequencing",
+    "page": "sequence",
+    "title": "sequence",
     "category": "page",
     "text": ""
 },
 
 {
     "location": "api/sequence/#API:-sequence-1",
-    "page": "Sequencing",
+    "page": "sequence",
     "title": "API: sequence",
     "category": "section",
     "text": ""
@@ -338,7 +338,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/sequence/#Pseudoseq.sequence",
-    "page": "Sequencing",
+    "page": "sequence",
     "title": "Pseudoseq.sequence",
     "category": "function",
     "text": "sequence(input, output = nothing; kwargs...)\n\nRun a sequencing experiment from start to finish.\n\nThis method is the highest-level function for running sequencing simulations with Pseudoseq. It runs the Pseudoseq sequencin worksflow described in the manual, tuned by the following keyword parameters:\n\nGlobal parameters:\n\ninput: A filename or FASTA.Reader providing the input genome.\noutput: A filename or FASTA.Writer providing a destination for the output reads.\n\nParameters for workflow step 1 (Create a pool of DNA molecules):\n\nng: Integer; the number of genomes the molecule pool is initialized with.\n\nParameters for step 2 (Processing the DNA molecule pool):\n\ntusize: Integer; the number of possible tags a DNA molecule may be tagged with (default: 0).\ntaggedflen: Integer; the desired average fragment length at which molecules are tagged (default: 0bp). \nflen: Integer; the desired average fragment length at which molecules are sampled (default: 700bp).\ncov: Integer; the desired expected coverage (default: 30x coverage).\n\nParameters for step 3 (Generating reads):\n\npaired: true or false; Whether or not to sequence from both end of each molecule (default: true).\nrdlen: Integer; the desired read length (default: 250bp).\nerr: Float; the desired per-base error rate (default: 0.001).\n\n\n\n\n\n"
@@ -346,7 +346,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/sequence/#Exported-functions-1",
-    "page": "Sequencing",
+    "page": "sequence",
     "title": "Exported functions",
     "category": "section",
     "text": "sequence"
@@ -522,15 +522,15 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#",
-    "page": "Chromosome Blueprint",
-    "title": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
+    "title": "Build-a-Genome",
     "category": "page",
     "text": ""
 },
 
 {
     "location": "api/chromosome-blueprint/#API:-Build-a-Genome-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "API: Build-a-Genome",
     "category": "section",
     "text": ""
@@ -538,7 +538,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Exported-functions-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Exported functions",
     "category": "section",
     "text": ""
@@ -546,7 +546,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Pseudoseq.plan_chrom",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Pseudoseq.plan_chrom",
     "category": "function",
     "text": "Create an empty blueprint for n copies of a chromosome of len base pairs.\n\n\n\n\n\n"
@@ -554,7 +554,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Making-an-empty-chromosome-blueprint-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Making an empty chromosome blueprint",
     "category": "section",
     "text": "plan_chrom"
@@ -562,7 +562,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Pseudoseq.plan_repetition",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Pseudoseq.plan_repetition",
     "category": "function",
     "text": "plan_repetition(cb::ChromosomeBlueprint, from::UnitRange{Int}, to::UnitRange{Int})\n\nPlan a repetition in a chromosome, where the bases in the from region of the chromosome, are guaranteed to occur again in the to region of the chromosome.\n\nEvery copy of the chromosome will have this same repetition.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\nnote: Note\nIn the new blueprint, the to region of the planned chromosome will be consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\nplan_repetition(cb::ChromosomeBlueprint, from::Int, to::Int, size::Int)\n\nPlan a repetition in a chromosome, where the bases in the from:(from + size - 1) region of the chromosome, are guaranteed to occur again in the to:(to + size - 1) region of the chromosome.\n\nEvery copy of the chromosome will have this same repetition.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\n\n\n\n\nplan_repetition(cb::ChromosomeBlueprint, intervals::Vector{UnitRange{Int}})\n\nA conveinience method of plan_repetition. Designed to ease the process of planing a series of repetitions in a chromosome.\n\nEvery copy of the chromosome will have these same repetitions.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_regions function to help decide on a set of sites to make heterozygous.\n\nnote: Note\nThe number of intervals provided must be an even number. This is because intervals 1 & 2  define the first repeat, intervals 3 & 4 define the second, and so on.\n\nnote: Note\nIn the new blueprint, the regions the repetitions occupy, have been consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\n"
@@ -570,7 +570,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Planning-motif-repetitions-along-chromosomes-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Planning motif repetitions along chromosomes",
     "category": "section",
     "text": "plan_repetition"
@@ -578,7 +578,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Pseudoseq.plan_het",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Pseudoseq.plan_het",
     "category": "function",
     "text": "plan_het(cb::ChromosomeBlueprint, pos::Int, alleles::Vector{DNA})\n\nPlan heterozygosity between copies of a chromosome at position pos.\n\nThe alleles vector must contain a nucleotide for each copy of the chromosome.\n\nFor example if you provided a vector of [DNA_A, DNA_C], for the heterozygous site you\'re defining at pos, the first copy of the chromosome will have an A, and the second copy of the chromosome will have a C.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\ntip: Tip\nUse the suggest_alleles function to help decide on a set of alleles to use.\n\nnote: Note\nIn the new blueprint, the positions that were used to plan the heterozygosity, have been consumed, and cannot be used to plan any other subsequently added features.\n\n\n\n\n\nplan_het(cb::ChromosomeBlueprint, pos, alle...)\n\nA generic method of plan_het.\n\nCreates a new chromosome blueprint, based on the input blueprint cb.\n\nThe pos argument determines which sites in a chromosome are made heterozygous, and depending on the type of argument provided, the behaviour differs slightly:\n\nIf pos is an integer, then that many available sites are selected at random to be heterozygous.\nIf pos is a float, then it is treated as a proportion of the length of the, chromosome, which is converted into an integer, and that many sites are selected at random to be heterozygous.\nIf pos is a vector of integers, it is trated as a list of positions the user wants to be heterozygous.\n\nThe alle... argument is a vararg argument which defines the how bases will be  allocated at each heterozygous site.\n\nDepending on the type of the argument provided, the behaviour differs slightly, based on the different methods of suggest_alleles:\n\nIf alle... is a single integer value. It is taken to mean the number of states each heterozygous site has. At a minumum this number must be two, as a site with only one state is not heterozygous by definition. For each site, which chromosome copies get which state is determined at random.\nIf alle... is a vector of integers (one integer for every chromosome copy), then the nth value in the vector dictates the group the nth chromosome copy belongs to. For example for a triploid, the vector [2, 1, 2] means that there are two groups (group 1 and group 2), and that the second chromosome copy of the three belongs to group 1, and the other two copies belong to group\nChromosome copies that belong to the same group will get the same base at\neach heterozygous site. In our example, copies 1 and 3 will get the same base, as they have been given the same group number. Chromosome copy 2 will end up with a different base. Which base corresponds to which group number will be determined at random.\nIf alle... is multiple vectors of integers, then each vector constitutes a group, and each value in the vector determines which copies are in that group. It is alternative way to giving the same information as you can with a single vector (as above). E.g. consider the example of [2, 1, 2] from the previous point. This can be expressed as two vectors of [2] and [1, 3]: The first vector contains a number indicating the second chromosome copy, and the second vector contains numbers representing the first and third chromosome copy.\nIf alle... is a vector of nucleotide vectors, then the nth vector of nucleotides determines which chromosome copy recieves which base at the nth heterozygous position. For example, for a triploid, [[DNA_A, DNA_A, DNA_T], [DNA_G, DNA_C, DNA_C]] would mean that at the first heterozygous site, the first and second copies of the chromosome would recieve an DNA_A base, and the third copy would recieve a DNA_T base. For the second heterozygous position, the first copy of the chromosome would recieve a DNAG base, and the other two copies will recieve a `DNAC` base.\n\n(See also: plan_repetition)\n\n\n\n\n\n"
@@ -586,7 +586,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Planning-heterozygosity-between-chromosome-copies-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Planning heterozygosity between chromosome copies",
     "category": "section",
     "text": "plan_het"
@@ -594,7 +594,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Pseudoseq.fabricate",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Pseudoseq.fabricate",
     "category": "function",
     "text": "fabricate(file::String, cb...)\n\nFabricate the sequence(s) planned in a number chromosome blueprints.\n\nThe fabricated sequences will be written out to the FASTA formatted file file.\n\ncb... should be provided as a series of blueprint, seed-sequence pairs. E.g. fabricate(\"mygenome.fasta\", chr1plan => ch1seq, ch2plan => ch2seq).\n\n\n\n\n\nfabricate(fw::FASTA.Writer, cb...)\n\nFabricate the sequence(s) planned in a number chromosome blueprints.\n\nThe fabricated sequences will be written out to the FASTA formatted file fw.\n\ncb... should be provided as a series of blueprint, seed-sequence pairs. E.g. fabricate(\"mygenome.fasta\", chr1plan => ch1seq, ch2plan => ch2seq).\n\n\n\n\n\nfabricate(cb::ChromosomeBlueprint)\n\nFabricate the sequence(s) planned in the chromosome blueprint.\n\nA random DNA sequence will be generated to use as a seed sequence.\n\nA sequence will be built for each chromosome copy in the blueprint.\n\n\n\n\n\nfabricate(cb::ChromosomeBlueprint, seed::BioSequence{DNAAlphabet{2}})\n\nFabricate a DNA sequence by applying the planned features in a chromosome blueprint, to some initial starting seed sequence.\n\nA sequence will be built for each chromosome copy in the blueprint.\n\n\n\n\n\n"
@@ -602,7 +602,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Fabricate-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Fabricate",
     "category": "section",
     "text": "fabricate"
@@ -610,7 +610,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Pseudoseq.suggest_regions",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Pseudoseq.suggest_regions",
     "category": "function",
     "text": "suggest_regions(cp::ChromosomeBlueprint, size::Int, n::Int)\n\nA useful utility function to assist planning features in a chromosome blueprint.\n\nThis method returns a vector of non-overlapping, regions of the chromosome planned represented by the ChromosomeBlueprint cb.\n\nThese regions are free regions: they are untouched by any other planned features, and so may be used when planning other features (See also: plan_repetition, plan_het).\n\nThe regions will be sizebp in length.\n\nwarning: Warning\nThis function was designed for use interactively in a julia session.If this method cannot find n free regions of the size you\'ve asked for, it will still give an output vector containing the regions it did manage to find, but it will issue a warning to the terminal. This will get increasingly likely as you fill the chromosome blueprint up with features.If you are using this method in a script or program where you depend on a reliable number of regions, either add a check to make sure you got the number of regions you need, or use this method interactively, and hard code an appropriate output into your script.\n\n\n\n\n\n"
@@ -618,7 +618,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Pseudoseq.suggest_alleles",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Pseudoseq.suggest_alleles",
     "category": "function",
     "text": "suggest_alleles(groups::Vector{Int})\n\nSuggest an allele pattern for a single heterozygous site.\n\nThe groups vector should have a number of  The nth value in the groups designates a group to the nth chromosome copy.\n\nE.g. consider for a triploid, the vector [2, 1, 2] means that there are two groups (group 1 and group 2), and that the second chromosome copy of the three belongs to group 1, and the other two copies belong to group 2.\n\nChromosome copies that belong to the same group will get the same base at each heterozygous site.\n\nFor the vector [2, 1, 2], this method might return a suggested allele pattern such as [DNA_A, DNA_G, DNA_A].\n\nnote: Note\nWhich base corresponds to which group number will be determined at random.\n\n\n\n\n\nsuggest_alleles(groups::Vector{Int}...)\n\nSuggest an allele pattern for a single heterozygous site.\n\nMultiple integer vectors make up groups.\n\nEach vector defines a group, and each value in a vector determines which copies are allocated to that group.\n\nE.g. consider for a triploid, two vectors of [2] and [1, 3] passed as arguments to groups. They define two groups, the first vector contains a number denoting the second chromosome copy, and he second vector contains numbers representing the first and third chromosome copy.\n\nFor the vectors [2] and [1, 3], this method might return a suggested allele pattern such as [DNA_A, DNA_G, DNA_A].\n\nnote: Note\nWhich base corresponds to which group number will be determined at random.\n\n\n\n\n\nsuggest_alleles(ncopies::Int, ngroups::Int)\n\nSuggest an allele pattern for a single heterozygous site.\n\nBy providing a number representing the number of copies of a chromosome, and a number representing the number of groups (which at a minimum must be 2). This method of suggest_alleles will randomly allocate the ncopies of the chromosome into the ngroups groups.\n\nFor example, if you ask for a suggested allele pattern for 3 copies of a chromosome, and 2 groups, this method might return a suggested pattern of [DNA_G, DNA_A, DNA_G].\n\nnote: Note\nWhich base corresponds to which group number will be determined at random.\n\n\n\n\n\nsuggest_alleles(npositions::Int, args...)\n\nSuggest allele patterns for numerous heterozygous sites.\n\nThis method of suggest_alleles calls another suggest_alleles with args... npositions times, and returns a vector of the results of each call.\n\n\n\n\n\n"
@@ -626,7 +626,7 @@ var documenterSearchIndex = {"docs": [
 
 {
     "location": "api/chromosome-blueprint/#Utility-functions-1",
-    "page": "Chromosome Blueprint",
+    "page": "Build-a-Genome",
     "title": "Utility functions",
     "category": "section",
     "text": "suggest_regions\nsuggest_alleles"
