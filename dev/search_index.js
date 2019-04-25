@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "1. Creating chromosome blueprints",
     "category": "section",
-    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq. Chromosome blueprints determine what the nature of one chromosome in a genome. Depending on the genome, any given chromosome may be present in multiple copies. Diploids for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:using Pseudoseq\nc = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length."
+    "text": "ChromosomeBlueprint"
 },
 
 {
@@ -69,7 +69,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "2. Adding planned features to a chromosome blueprint",
     "category": "section",
-    "text": "Once you have one or more chromosome blueprints, you can add features to them.Currently the supported features, and the functions that add to a blueprint include:Repetitions: plan_repetition\nHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
+    "text": "Once you have one or more chromosome blueprints, you can add features to them.Currently the supported features, and the functions that add to a blueprint include:"
+},
+
+{
+    "location": "build-a-genome/#Repetitions-1",
+    "page": "Core concepts & workflow",
+    "title": "Repetitions",
+    "category": "section",
+    "text": "RepetitionBlueprintHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
 },
 
 {
@@ -141,7 +149,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Sequencing: Core concepts & basic workflow",
     "category": "section",
-    "text": "Pseudoseq abstracts DNA sequencing experiments as sampling processes, because this is what they are from a statistical point of view. Just as a quadrat placed at random on the forest floor provides a small sample of it\'s species composition, so it is that a sequencing read provides a small sample of the composition of the motifs present in a genome.This manual includes several examples showing how to emulate various sequencing experiments using different technologies. But the core workflow, and important concepts are explained below.tip: Tip\nThe user can use Pseudoseq\'s API to script each stage of the flow outlined below themselves, or they can use the sequence function, which is the highest-level user facing function. Every example in this section of the manual, will show you how to use both options to achieve the same goal.Anyway, the core sequencing workflow in Pseudoseq is as follows..."
+    "text": "Pseudoseq abstracts DNA sequencing experiments as sampling processes, because this is what they are from a statistical point of view. Just as a quadrat placed at random on the forest floor provides a small sample of it\'s species composition, so it is that a sequencing read provides a small sample of the composition of the motifs present in a genome.This manual includes several examples showing how to emulate various sequencing experiments using different technologies. But the core workflow, and important concepts are outlined below.tip: Tip\nThe user can use Pseudoseq\'s API to script each stage of the flow outlined below themselves, or they can use the sequence function, which is the highest-level user facing function. Every example in this section of the manual, will show you how to use both options to achieve the same goal.Anyway, the core sequencing workflow in Pseudoseq is as follows..."
 },
 
 {
