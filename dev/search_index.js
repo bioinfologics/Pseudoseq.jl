@@ -41,118 +41,6 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#",
-    "page": "Core concepts & workflow",
-    "title": "Core concepts & workflow",
-    "category": "page",
-    "text": ""
-},
-
-{
-    "location": "build-a-genome/#Build-a-Genome:-*Core-concepts-and-basic-workflow*-1",
-    "page": "Core concepts & workflow",
-    "title": "Build-a-Genome: Core concepts & basic workflow",
-    "category": "section",
-    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to plan genomes with certain characteristics. But the core workflow, and important concepts are explained below, in 3 steps."
-},
-
-{
-    "location": "build-a-genome/#.-Creating-chromosome-blueprints-1",
-    "page": "Core concepts & workflow",
-    "title": "1. Creating chromosome blueprints",
-    "category": "section",
-    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq.Chromosome blueprints determine the nature of one chromosome in a genome.You can think of chromosome blueprints in Pseudoseq as: a collection of operations which, when applied to some seed sequence, result in a set of N homologous sequences.note: Note\nChromosome blueprints are immutable: Adding an operation to a chromosome blueprint creates a new blueprint, which is a copy of the old blueprint with the addition of the new operation.note: Note\nIdeally, for any chromosome blueprint you construct with Pseudoseq, for each operation is possesses, it must be possible (at least in principle) to be able to intuit what the effect of that operation will be on:The Khmer distribution produced by sequencing reads of the fabricated chromosome.\nThe structure of a sequence graph produced by sequencing reads of the fabricated chromosome.Therefore, we have made the design decision that no two operations in a chromosome blueprint may affect the same position(s) of the genome in a conflicting manner. To meet this requirement, certain operations \"consume\" a region of the chromosome planned in a blueprint. If a region is consumed, another operation that would also affect that region cannot be added to the blueprint.Depending on the genome, any given chromosome may be present in multiple copies. Diploids, for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:using Pseudoseq\nc = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length. From the output you can see that it prints for you the number of chromosome copies, the length of the chromosomes, and a list of available, unconsumed regions of the chromosome (see note above)."
-},
-
-{
-    "location": "build-a-genome/#.-Adding-planned-features-to-a-chromosome-blueprint-1",
-    "page": "Core concepts & workflow",
-    "title": "2. Adding planned features to a chromosome blueprint",
-    "category": "section",
-    "text": "After creating a fresh chromosome blueprint, no plans (operations) have been added yet.If you were to fabricate this blank blueprint, you would get N identical DNA sequences as output, where N is the number of copies the blueprint was planning.Once you have one or more chromosome blueprints, you can add features to them.This is done with a series of consistently named plan_* functions.note: Note\nRemember; blueprints are immutable, so every time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.Currently the supported features include:"
-},
-
-{
-    "location": "build-a-genome/#Repetitions-1",
-    "page": "Core concepts & workflow",
-    "title": "Repetitions",
-    "category": "section",
-    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.In Pseudoseq, to plan a repetition, you specify a region the repetition will copy, sometimes called the from region. You also specify a region where the motif in the from region will be replicated, called the to region.So you might find it helpful to imagine a planned repetition as a kind of copy-paste operation that occurs during fabricate.note: Note\nRepetitions consume the to region of the chromosome blueprint to which they are added. Repetitions do not consume the from region, so other operations are free to affect the motif in the from region. Just remember that the repetition will replicate anything in the from region, including other features such as heterozygosity that occur in from.Repetitions are added to a genome blueprint using the plan_repetition function."
-},
-
-{
-    "location": "build-a-genome/#Heterozygosity-1",
-    "page": "Core concepts & workflow",
-    "title": "Heterozygosity",
-    "category": "section",
-    "text": "A heterozygosity describes a base position at which the copies of the chromosome in the blueprint differ.For a blueprint with 2 copies, both copies will differ at a given position.For a triploid, at a heterozygous position, all 3 copies might differ from each other. Alternatively, it is possible that 2 copies are the same, but they differ from a 3rd copy. This applies for blueprints with higher copy numbers too: at a heterozygous position some copies will differ from each other at that position, but some of the copies might be the same.note: Note\nHeterozygosity operations consume the position at which they are defined.Heterozygous positions are planned using the plan_het function.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:using Pseudoseq\nc = plan_chrom(100, 2)\nchet = plan_het(c, .50, 2)The above use of plan_het allows the function to choose which sites in the blueprint are heterozygous, and how to allocate the bases at the heterozygous sites. We only instruct the function that 50% of the genome should be heterozygous, and that there should be 2 possible bases at each position (the only option really: the blueprint plans for a diploid - 2 chromosome copies).You can also take more fine-grained control:using Pseudoseq, BioSequences\nc = plan_chrom(100, 2)\nchet = plan_het(c, 20, [DNA_T, DNA_A])Here I planned a heterozygous position, at one site in the chromosome (20), and I set the state of the first copy to DNA_T, and the state of the second copy to DNA_A.So as you can see, plan_het is very flexible. Check it\'s API documentation, and the \"Build-A-Yeast\" example walkthrough to see more examples of plan_het use."
-},
-
-{
-    "location": "build-a-genome/#Utility-functions-1",
-    "page": "Core concepts & workflow",
-    "title": "Utility functions",
-    "category": "section",
-    "text": "There is a utility function suggest_regions available to help you plan where to place features.Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 6)So now you have 6 5bp regions, every 2 regions defining a from and a to region for a single repetition. You can provide r as an input to plan_repetition.crep = plan_repetition(chet, r)"
-},
-
-{
-    "location": "build-a-genome/#.-Fabricate-a-FASTA-from-chromosome-blueprints-1",
-    "page": "Core concepts & workflow",
-    "title": "3. Fabricate a FASTA from chromosome blueprints",
-    "category": "section",
-    "text": "Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate the sequences of these chromosomes.To do that, use the fabricate method.You can simply fabricate the sequences, for use in the interactive session:fabricate(chet)Or have the sequences output to a FASTA formatted file.fabricate(\"mychrom.fasta\", chet)A randomly generated seed sequence is used to start the fabrication process unless you provide one. See the API docs for fabricate for more details.And that\'s all there is to building a chromosome with Pseudoseq. To build a genome with more than one chromosome, simply build a set of chromosome blueprints.Now check out the examples to see how various genomes can be built with Pseudoseq."
-},
-
-{
-    "location": "examples/build-a-yeast/#",
-    "page": "Build-a-Yeast",
-    "title": "Build-a-Yeast",
-    "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/build-a-yeast.jl\""
-},
-
-{
-    "location": "examples/build-a-yeast/#Example:-Build-a-Yeast-1",
-    "page": "Build-a-Yeast",
-    "title": "Example: Build-a-Yeast",
-    "category": "section",
-    "text": "This is an example generated from this source file: build-a-yeast.jl You are seeing the online documentation version. The corresponding notebook can be found here: build-a-yeast.ipynb and the script can be found here: build-a-yeast.jlWe are going to use Pseudoseq to create a simple set of fake genomes, based on chromosome 1 of the reference genome for yeast.Load the sequence of chromosome 1 of the yeast reference from FASTA file.\nCreate blank chromosome blueprints for different genome designs.\nEdit the blueprints to achive a: a. Diploid chromosome b. Triploid chromosome c. Tetraploid chromosomeusing BioSequences, Pseudoseq"
-},
-
-{
-    "location": "examples/build-a-yeast/#Load-the-seed-sequence-1",
-    "page": "Build-a-Yeast",
-    "title": "Load the seed sequence",
-    "category": "section",
-    "text": "First load the sequence from FASTA file. This uses tools from BioSequences, which is a dependency of Pseudoseq and so the user should have it available, as julia\'s package manager would have installed any dependencies. The lines below open a fasta file, with a fasta reader, and load a single FASTA record, and get its sequence.refseq = open(FASTA.Reader, \"yeast-chr1.fasta\") do rdr\n    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))\nend\n\nreflen = length(refseq)This results in a 230,218nt long sequence called refseq."
-},
-
-{
-    "location": "examples/build-a-yeast/#Designing-a-diploid-1",
-    "page": "Build-a-Yeast",
-    "title": "Designing a diploid",
-    "category": "section",
-    "text": "First lets make a plan for a diploid genome with 1% heterozygosity. Pseudoseq has a lot of flexibilty in how you can define the heterozygosity, but for ease here I\'m going to let it decide where the sites should be, and what the alleles at each site should be, by calling plan_het, providing just the proportion of sites I want to be heterozygous, and the number of alleles I want at each of these heterozygous sites (2).dploid = plan_chrom(reflen, 2)\ndploidhet = plan_het(dploid, .01, 2)Now fabricate the FASTA, with fabricate, providing a filename, and then a series of blueprint => seed pairs. In this case we just give 1 blueprint-seed# pair.\n\nfabricate(\"build-a-yeast-di.fasta\", dploidhet => refseq)Thats it for the diploid genome."
-},
-
-{
-    "location": "examples/build-a-yeast/#Designing-a-triploid-1",
-    "page": "Build-a-Yeast",
-    "title": "Designing a triploid",
-    "category": "section",
-    "text": "Now let\'s make a triploid genome. This should also be simple enough. It\'s much like the process for making the diploid genome, but specifying 3 chromosome copies instead of 2.trploid = plan_chrom(reflen, 3)When I add some heterozygous sites, just like with the diploid case, I\'m going to simply ask for a proportion of heterozygous sites (and let Pseudoseq decide where they should occur. Like last time also I\'m going to make all the sites have 2 alleles, so for every heterozygous site, two of the three chromosome copies willl have the same base, and one of the copies will be different. There are other ways to define some heterozygous sites for example all 3 chromosome copies could have different basestrploidhet = plan_het(trploid, .01, 2)Now fabricate the FASTA, with fabricate, providing a filename, and then a series of blueprint => seed pairs. In this case we just give 1 blueprint-seed# pair.\n\nfabricate(\"build-a-yeast-tri.fasta\", trploidhet => refseq)That\'s it for the triploid genome."
-},
-
-{
-    "location": "examples/build-a-yeast/#Designing-a-tetraploid-genome-1",
-    "page": "Build-a-Yeast",
-    "title": "Designing a tetraploid genome",
-    "category": "section",
-    "text": "Lets make a tetraploid genome, that consists of two diploid genomes, an A genome and a B genome. First I\'m going to create a chromosome blueprint with 4 copies:tetploid = plan_chrom(reflen, 4)We want to plan the heterozygosity in this tetraploid such that the number of heterozygous sites within the A and B genomes is ~1%. But we want ~3% of sites to be heterozygous between the A and B genomes.First we will say copies 1 + 2 in our blueprint are the A genome, and copies 3 + 4 are the B genome. Next consider heterozygous sites with 2 different alleles, A and B, 6 different patterns are possible:Copy 1 Copy 2 Copy 3 Copy 4\nA A B B\nB B A A\nA B A B\nB A B A\nA B B A\nB A A BThe first 2 patterns in the table constitute fixed mutations between genomes A and B, but not polymorphism within genomes A and B. This is because Copy 1 and 3 differ, as do copies 2 and 4, yet copies 1 and 2 are the same, as are copies 3 and 4. To achieve a ~3% divergence between genomes A and B, let\'s plan some heterozygosity by grouping the copy numbers together:thet = plan_het(tetploid, 6907, [1, 2], [3, 4])By using the groups [1, 2] and [3, 4] we ensure chromosome copy 1 and 2 will have the same allele, as will chromosomes 3 and 4The next two patterns in the table constitute polymorphim within the A and B genomes, because copies 1 and 2 differ, as do copies 3 and 4, but copies 1 and 3, and 2 and 4 do not differ.The final two patterns in the table constitue both polymorphim within the A and B genomes, and between the A and B genomes, because copies 1 and 2 differ, as do copies 3 and 4, 1 and 3, and 2 and 4.One possible way therefore to achieve the desired levels of polymorphism is to Apply a number of these allele patterns, to achieve the 1% and 3% values.import Random\nRandom.seed!(1234)\np = suggest_regions(tetploid, 1, 6907)\na1 = suggest_alleles(length(p), [1, 2], [3, 4])\na1 = suggest_alleles(length(p), [1, 1, 2, 2])\nthet = plan_het(tetploid, 6907, [1, 2], [3, 4])This page was generated using Literate.jl."
-},
-
-{
     "location": "sequencing/#",
     "page": "Core concepts & workflow",
     "title": "Core concepts & workflow",
@@ -225,15 +113,15 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/pe-example/#",
+    "location": "examples/sequencing/pe-example/#",
     "page": "Paired end reads",
     "title": "Paired end reads",
     "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/pe-example.jl\""
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/sequencing/pe-example.jl\""
 },
 
 {
-    "location": "examples/pe-example/#Example:-paired-end-sequencing-1",
+    "location": "examples/sequencing/pe-example/#Example:-paired-end-sequencing-1",
     "page": "Paired end reads",
     "title": "Example: paired-end sequencing",
     "category": "section",
@@ -241,7 +129,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/pe-example/#Using-the-[sequence](@ref)-method-1",
+    "location": "examples/sequencing/pe-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Paired end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -249,7 +137,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/pe-example/#Using-the-Pseudoseq-API-1",
+    "location": "examples/sequencing/pe-example/#Using-the-Pseudoseq-API-1",
     "page": "Paired end reads",
     "title": "Using the Pseudoseq API",
     "category": "section",
@@ -257,15 +145,15 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/se-example/#",
+    "location": "examples/sequencing/se-example/#",
     "page": "Long single end reads",
     "title": "Long single end reads",
     "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/se-example.jl\""
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/sequencing/se-example.jl\""
 },
 
 {
-    "location": "examples/se-example/#Example:-long,-single-end-reads-1",
+    "location": "examples/sequencing/se-example/#Example:-long,-single-end-reads-1",
     "page": "Long single end reads",
     "title": "Example: long, single end reads",
     "category": "section",
@@ -273,7 +161,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/se-example/#Using-the-[sequence](@ref)-method-1",
+    "location": "examples/sequencing/se-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Long single end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -281,7 +169,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/se-example/#Using-the-Pseudoseq-API-1",
+    "location": "examples/sequencing/se-example/#Using-the-Pseudoseq-API-1",
     "page": "Long single end reads",
     "title": "Using the Pseudoseq API",
     "category": "section",
@@ -289,15 +177,15 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/tg-example/#",
+    "location": "examples/sequencing/tg-example/#",
     "page": "Tagged paired end reads",
     "title": "Tagged paired end reads",
     "category": "page",
-    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/tg-example.jl\""
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/sequencing/tg-example.jl\""
 },
 
 {
-    "location": "examples/tg-example/#Example:-tagged-paired-end-reads-1",
+    "location": "examples/sequencing/tg-example/#Example:-tagged-paired-end-reads-1",
     "page": "Tagged paired end reads",
     "title": "Example: tagged paired-end reads",
     "category": "section",
@@ -305,7 +193,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/tg-example/#Using-the-[sequence](@ref)-method-1",
+    "location": "examples/sequencing/tg-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Tagged paired end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -313,11 +201,123 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/tg-example/#Using-the-Pseudoseq-API-1",
+    "location": "examples/sequencing/tg-example/#Using-the-Pseudoseq-API-1",
     "page": "Tagged paired end reads",
     "title": "Using the Pseudoseq API",
     "category": "section",
     "text": "Here\'s how to achieve the same thing, using the Pseudoseq API. It is nessecery to use the API if you want to do something that is not anticipated by the available functionality of the sequence method: the cost of conveinience is fewer options.Let\'s start with a pool of 5000 copies of a genome contained in a FASTA file:dnapool = makepool(\"ecoli-ref.fasta\", 5000)Now let\'s cut up the molecules to an average length of 40,000bpcutpool = fragment(dnapool, 40000)Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.taggedpool = tag(cutpool, 1000000)Here I\'m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we\'ll fragment the pool againtaggedcutpool = fragment(taggedpool, 700)Subsample the pool of tagged molecules.genome_size = 4639675\nexpected_coverage = 50\nread_length = 250\n\nN = needed_sample_size(expected_coverage, genome_size, read_length)\nN = div(N, 2) # Divide by 2 as we\'re doing paired end sequencing.\n\nsampledpool = subsample(taggedcutpool, N)Now let\'s make some 250bp tagged paired reads and generate some erroneous positions.tagged_reads = make_reads(TaggedPairs, sampledpool, 250)\ntagged_w_errs = mark_errors(tagged_reads, 0.001)Output to FASTQ:generate(\"tagged_reads.fastq\", tagged_w_errs)#-This page was generated using Literate.jl."
+},
+
+{
+    "location": "build-a-genome/#",
+    "page": "Core concepts & workflow",
+    "title": "Core concepts & workflow",
+    "category": "page",
+    "text": ""
+},
+
+{
+    "location": "build-a-genome/#Build-a-Genome:-*Core-concepts-and-basic-workflow*-1",
+    "page": "Core concepts & workflow",
+    "title": "Build-a-Genome: Core concepts & basic workflow",
+    "category": "section",
+    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to plan genomes with certain characteristics. But the core workflow, and important concepts are explained below, in 3 steps."
+},
+
+{
+    "location": "build-a-genome/#.-Creating-chromosome-blueprints-1",
+    "page": "Core concepts & workflow",
+    "title": "1. Creating chromosome blueprints",
+    "category": "section",
+    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq.Chromosome blueprints determine the nature of one chromosome in a genome.You can think of chromosome blueprints in Pseudoseq as: a collection of operations which, when applied to some seed sequence, result in a set of N homologous sequences.note: Note\nChromosome blueprints are immutable: Adding an operation to a chromosome blueprint creates a new blueprint, which is a copy of the old blueprint with the addition of the new operation.note: Note\nIdeally, for any chromosome blueprint you construct with Pseudoseq, for each operation is possesses, it must be possible (at least in principle) to be able to intuit what the effect of that operation will be on:The Khmer distribution produced by sequencing reads of the fabricated chromosome.\nThe structure of a sequence graph produced by sequencing reads of the fabricated chromosome.Therefore, we have made the design decision that no two operations in a chromosome blueprint may affect the same position(s) of the genome in a conflicting manner. To meet this requirement, certain operations \"consume\" a region of the chromosome planned in a blueprint. If a region is consumed, another operation that would also affect that region cannot be added to the blueprint.Depending on the genome, any given chromosome may be present in multiple copies. Diploids, for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:using Pseudoseq\nc = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length. From the output you can see that it prints for you the number of chromosome copies, the length of the chromosomes, and a list of available, unconsumed regions of the chromosome (see note above)."
+},
+
+{
+    "location": "build-a-genome/#.-Adding-planned-features-to-a-chromosome-blueprint-1",
+    "page": "Core concepts & workflow",
+    "title": "2. Adding planned features to a chromosome blueprint",
+    "category": "section",
+    "text": "After creating a fresh chromosome blueprint, no plans (operations) have been added yet.If you were to fabricate this blank blueprint, you would get N identical DNA sequences as output, where N is the number of copies the blueprint was planning.Once you have one or more chromosome blueprints, you can add features to them.This is done with a series of consistently named plan_* functions.note: Note\nRemember; blueprints are immutable, so every time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.Currently the supported features include:"
+},
+
+{
+    "location": "build-a-genome/#Repetitions-1",
+    "page": "Core concepts & workflow",
+    "title": "Repetitions",
+    "category": "section",
+    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.In Pseudoseq, to plan a repetition, you specify a region the repetition will copy, sometimes called the from region. You also specify a region where the motif in the from region will be replicated, called the to region.So you might find it helpful to imagine a planned repetition as a kind of copy-paste operation that occurs during fabricate.note: Note\nRepetitions consume the to region of the chromosome blueprint to which they are added. Repetitions do not consume the from region, so other operations are free to affect the motif in the from region. Just remember that the repetition will replicate anything in the from region, including other features such as heterozygosity that occur in from.Repetitions are added to a genome blueprint using the plan_repetition function."
+},
+
+{
+    "location": "build-a-genome/#Heterozygosity-1",
+    "page": "Core concepts & workflow",
+    "title": "Heterozygosity",
+    "category": "section",
+    "text": "A heterozygosity describes a base position at which the copies of the chromosome in the blueprint differ.For a blueprint with 2 copies, both copies will differ at a given position.For a triploid, at a heterozygous position, all 3 copies might differ from each other. Alternatively, it is possible that 2 copies are the same, but they differ from a 3rd copy. This applies for blueprints with higher copy numbers too: at a heterozygous position some copies will differ from each other at that position, but some of the copies might be the same.note: Note\nHeterozygosity operations consume the position at which they are defined.Heterozygous positions are planned using the plan_het function.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:using Pseudoseq\nc = plan_chrom(100, 2)\nchet = plan_het(c, .50, 2)The above use of plan_het allows the function to choose which sites in the blueprint are heterozygous, and how to allocate the bases at the heterozygous sites. We only instruct the function that 50% of the genome should be heterozygous, and that there should be 2 possible bases at each position (the only option really: the blueprint plans for a diploid - 2 chromosome copies).You can also take more fine-grained control:using Pseudoseq, BioSequences\nc = plan_chrom(100, 2)\nchet = plan_het(c, 20, [DNA_T, DNA_A])Here I planned a heterozygous position, at one site in the chromosome (20), and I set the state of the first copy to DNA_T, and the state of the second copy to DNA_A.So as you can see, plan_het is very flexible. Check it\'s API documentation, and the \"Build-A-Yeast\" example walkthrough to see more examples of plan_het use."
+},
+
+{
+    "location": "build-a-genome/#Utility-functions-1",
+    "page": "Core concepts & workflow",
+    "title": "Utility functions",
+    "category": "section",
+    "text": "There is a utility function suggest_regions available to help you plan where to place features.Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 6)So now you have 6 5bp regions, every 2 regions defining a from and a to region for a single repetition. You can provide r as an input to plan_repetition.crep = plan_repetition(chet, r)"
+},
+
+{
+    "location": "build-a-genome/#.-Fabricate-a-FASTA-from-chromosome-blueprints-1",
+    "page": "Core concepts & workflow",
+    "title": "3. Fabricate a FASTA from chromosome blueprints",
+    "category": "section",
+    "text": "Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate the sequences of these chromosomes.To do that, use the fabricate method.You can simply fabricate the sequences, for use in the interactive session:fabricate(chet)Or have the sequences output to a FASTA formatted file.fabricate(\"mychrom.fasta\", chet)A randomly generated seed sequence is used to start the fabrication process unless you provide one. See the API docs for fabricate for more details.And that\'s all there is to building a chromosome with Pseudoseq. To build a genome with more than one chromosome, simply build a set of chromosome blueprints.Now check out the examples to see how various genomes can be built with Pseudoseq."
+},
+
+{
+    "location": "examples/build-a-genome/build-a-yeast/#",
+    "page": "Build-a-Yeast",
+    "title": "Build-a-Yeast",
+    "category": "page",
+    "text": "EditURL = \"https://github.com/bioinfologics/Pseudoseq.jl/blob/master/examples/build-a-genome/build-a-yeast.jl\""
+},
+
+{
+    "location": "examples/build-a-genome/build-a-yeast/#Example:-Build-a-Yeast-1",
+    "page": "Build-a-Yeast",
+    "title": "Example: Build-a-Yeast",
+    "category": "section",
+    "text": "This is an example generated from this source file: build-a-yeast.jl You are seeing the online documentation version. The corresponding notebook can be found here: build-a-yeast.ipynb and the script can be found here: build-a-yeast.jlWe are going to use Pseudoseq to create a simple set of fake genomes, based on chromosome 1 of the reference genome for yeast.Load the sequence of chromosome 1 of the yeast reference from FASTA file.\nCreate blank chromosome blueprints for different genome designs.\nEdit the blueprints to achive a: a. Diploid chromosome b. Triploid chromosome c. Tetraploid chromosomeusing BioSequences, Pseudoseq"
+},
+
+{
+    "location": "examples/build-a-genome/build-a-yeast/#Load-the-seed-sequence-1",
+    "page": "Build-a-Yeast",
+    "title": "Load the seed sequence",
+    "category": "section",
+    "text": "First load the sequence from FASTA file. This uses tools from BioSequences, which is a dependency of Pseudoseq and so the user should have it available, as julia\'s package manager would have installed any dependencies. The lines below open a fasta file, with a fasta reader, and load a single FASTA record, and get its sequence.refseq = open(FASTA.Reader, \"yeast-chr1.fasta\") do rdr\n    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))\nend\n\nreflen = length(refseq)This results in a 230,218nt long sequence called refseq."
+},
+
+{
+    "location": "examples/build-a-genome/build-a-yeast/#Designing-a-diploid-1",
+    "page": "Build-a-Yeast",
+    "title": "Designing a diploid",
+    "category": "section",
+    "text": "First lets make a plan for a diploid genome with 1% heterozygosity. Pseudoseq has a lot of flexibilty in how you can define the heterozygosity, but for ease here I\'m going to let it decide where the sites should be, and what the alleles at each site should be, by calling plan_het, providing just the proportion of sites I want to be heterozygous, and the number of alleles I want at each of these heterozygous sites (2).dploid = plan_chrom(reflen, 2)\ndploidhet = plan_het(dploid, .01, 2)Now fabricate the FASTA, with fabricate, providing a filename, and then a series of blueprint => seed pairs. In this case we just give 1 blueprint-seed# pair.\n\nfabricate(\"build-a-yeast-di.fasta\", dploidhet => refseq)Thats it for the diploid genome."
+},
+
+{
+    "location": "examples/build-a-genome/build-a-yeast/#Designing-a-triploid-1",
+    "page": "Build-a-Yeast",
+    "title": "Designing a triploid",
+    "category": "section",
+    "text": "Now let\'s make a triploid genome. This should also be simple enough. It\'s much like the process for making the diploid genome, but specifying 3 chromosome copies instead of 2.trploid = plan_chrom(reflen, 3)When I add some heterozygous sites, just like with the diploid case, I\'m going to simply ask for a proportion of heterozygous sites (and let Pseudoseq decide where they should occur. Like last time also I\'m going to make all the sites have 2 alleles, so for every heterozygous site, two of the three chromosome copies willl have the same base, and one of the copies will be different. There are other ways to define some heterozygous sites for example all 3 chromosome copies could have different basestrploidhet = plan_het(trploid, .01, 2)Now fabricate the FASTA, with fabricate, providing a filename, and then a series of blueprint => seed pairs. In this case we just give 1 blueprint-seed# pair.\n\nfabricate(\"build-a-yeast-tri.fasta\", trploidhet => refseq)That\'s it for the triploid genome."
+},
+
+{
+    "location": "examples/build-a-genome/build-a-yeast/#Designing-a-tetraploid-genome-1",
+    "page": "Build-a-Yeast",
+    "title": "Designing a tetraploid genome",
+    "category": "section",
+    "text": "Lets make a tetraploid genome, that consists of two diploid genomes, an A genome and a B genome. First I\'m going to create a chromosome blueprint with 4 copies:tetploid = plan_chrom(reflen, 4)We want to plan the heterozygosity in this tetraploid such that the number of heterozygous sites within the A and B genomes is ~1%. But we want ~3% of sites to be heterozygous between the A and B genomes.First we will say copies 1 + 2 in our blueprint are the A genome, and copies 3 + 4 are the B genome. Next consider heterozygous sites with 2 different alleles, A and B, 6 different patterns are possible:Copy 1 Copy 2 Copy 3 Copy 4\nA A B B\nB B A A\nA B A B\nB A B A\nA B B A\nB A A BThe first 2 patterns in the table constitute fixed mutations between genomes A and B, but not polymorphism within genomes A and B. This is because Copy 1 and 3 differ, as do copies 2 and 4, yet copies 1 and 2 are the same, as are copies 3 and 4. To achieve a ~3% divergence between genomes A and B, let\'s plan some heterozygosity by grouping the copy numbers together:thet = plan_het(tetploid, 6907, [1, 2], [3, 4])By using the groups [1, 2] and [3, 4] we ensure chromosome copy 1 and 2 will have the same allele, as will chromosomes 3 and 4The next two patterns in the table constitute polymorphim within the A and B genomes, because copies 1 and 2 differ, as do copies 3 and 4, but copies 1 and 3, and 2 and 4 do not differ.The final two patterns in the table constitue both polymorphim within the A and B genomes, and between the A and B genomes, because copies 1 and 2 differ, as do copies 3 and 4, 1 and 3, and 2 and 4.One possible way therefore to achieve the desired levels of polymorphism is to Apply a number of these allele patterns, to achieve the 1% and 3% values.import Random\nRandom.seed!(1234)\np = suggest_regions(tetploid, 1, 6907)\na1 = suggest_alleles(length(p), [1, 2], [3, 4])\na1 = suggest_alleles(length(p), [1, 1, 2, 2])\nthet = plan_het(tetploid, 6907, [1, 2], [3, 4])This page was generated using Literate.jl."
 },
 
 {
