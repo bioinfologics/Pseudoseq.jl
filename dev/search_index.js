@@ -101,7 +101,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "3. Fabricate a FASTA from chromosome blueprints",
     "category": "section",
-    "text": "Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate a FASTA file containing the sequences of these chromosomes. To do that, use the fabricate method that accepts a filename, and a variable number of chromosome blueprints...fabricate(\"mychrom.fasta\", chet)"
+    "text": "Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate the sequences of these chromosomes.To do that, use the fabricate method.You can simply fabricate the sequences, for use in the interactive session:fabricate(chet)Or have the sequences output to a FASTA formatted file.fabricate(\"mychrom.fasta\", chet)A randomly generated seed sequence is used to start the fabrication process unless you provide one. See the API docs for fabricate for more details.And that\'s all there is to building a chromosome with Pseudoseq. To build a genome with more than one chromosome, simply build a set of chromosome blueprints.Now check out the examples to see how various genomes can be built with Pseudoseq."
 },
 
 {
