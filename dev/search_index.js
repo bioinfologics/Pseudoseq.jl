@@ -53,7 +53,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Build-a-Genome: Core concepts & basic workflow",
     "category": "section",
-    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to genomes with certain characteristics. But the core workflow, and important concepts are explained below, in 3 steps."
+    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to plan genomes with certain characteristics. But the core workflow, and important concepts are explained below, in 3 steps."
 },
 
 {
@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Repetitions",
     "category": "section",
-    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.In Pseudoseq, to plan a repetition, you specify a region the repetition will copy, sometimes called the from region. You also specify a region where the motif in the from region will be replicated, called the to region.So you might even find it helpful to imagine a planned repetition as a kind of copy-paste operation that occurs during fabricate.note: Note\nRepetitions consume the to region of the chromosome blueprint to which they are added. Repetitions do not consume the from region, so other operations are free to affect the motif in the from region. Just remember that the repetition will replicate anything in the from region, including other features such as heterozygosity that occur in from.Repetitions are added to a genome blueprint using the plan_repetition function."
+    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.In Pseudoseq, to plan a repetition, you specify a region the repetition will copy, sometimes called the from region. You also specify a region where the motif in the from region will be replicated, called the to region.So you might find it helpful to imagine a planned repetition as a kind of copy-paste operation that occurs during fabricate.note: Note\nRepetitions consume the to region of the chromosome blueprint to which they are added. Repetitions do not consume the from region, so other operations are free to affect the motif in the from region. Just remember that the repetition will replicate anything in the from region, including other features such as heterozygosity that occur in from.Repetitions are added to a genome blueprint using the plan_repetition function."
 },
 
 {
@@ -85,7 +85,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Heterozygosity",
     "category": "section",
-    "text": "Heterozygosity: plan_hetnote: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
+    "text": "A heterozygosity describes a base position at which the copies of the chromosome in the blueprint differ.For a blueprint with 2 copies, both copies will differ at a given position.For a triploid, at a heterozygous position, all 3 copies might differ from each other. Alternatively, it is possible that 2 copies are the same, but they differ from a 3rd copy. This applies for blueprints with higher copy numbers too: at a heterozygous position some copies will differ from each other at that position, but some of the copies might be the same.note: Note\nHeterozygosity operations consume the position at which they are defined.Heterozygous positions are planned using the plan_het function.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:using Pseudoseq\nc = plan_chrom(100, 2)\nchet = plan_het(c, .50, 2)The above use of plan_het allows the function to choose which sites in the blueprint are heterozygous, and how to allocate the bases at the heterozygous sites. We only instruct the function that 50% of the genome should be heterozygous, and that there should be 2 possible bases at each position (the only option really: the blueprint plans for a diploid - 2 chromosome copies).You can also take more fine-grained control:using Pseudoseq\nc = plan_chrom(100, 2)\nchet = plan_het(c, 20, [DNA_T, DNA_A])Here I planned a heterozygous position, at one site in the chromosome (20), and I set the state of the first copy to DNA_T, and the state of the second copy to DNA_A.So as you can see, plan_het is very flexible. Check it\'s API documentation, and the \"Build-A-Yeast\" example walkthrough to see more examples of plan_het use."
+},
+
+{
+    "location": "build-a-genome/#Utility-functions-1",
+    "page": "Core concepts & workflow",
+    "title": "Utility functions",
+    "category": "section",
+    "text": "There is a utility function suggest_regions available to help you plan where to place features.Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 6)So now you have 6 5bp regions, every 2 regions defining a from and a to region for a single repetition. You can provide r as an input to plan_repetition.crep = plan_repetition(chet, r)"
 },
 
 {
