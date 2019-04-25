@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "1. Creating chromosome blueprints",
     "category": "section",
-    "text": "ChromosomeBlueprint"
+    "text": "Pseudoseq.ChromosomeBlueprint"
 },
 
 {
@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Repetitions",
     "category": "section",
-    "text": "RepetitionBlueprintHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
+    "text": "Pseudoseq.RepetitionBlueprintHeterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
 },
 
 {
