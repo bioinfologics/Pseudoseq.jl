@@ -61,7 +61,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "1. Creating chromosome blueprints",
     "category": "section",
-    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq.Chromosome blueprints determine the nature of one chromosome in a genome.You can think of chromosome blueprints in Pseudoseq as: a collection of operations which, when applied to some seed sequence, result in a set of N homologous sequences.note: Note\nChromosome blueprints are immutable: Adding an operation to a chromosome blueprint creates a new blueprint, which is a copy of the old blueprint with the addition of the new operation.note: Note\nIdeally, for any chromosome blueprint you construct with Pseudoseq, for each operation is possesses, it must be possible (at least in principle) to be able to intuit what the effect of that operation will be on:The Khmer distribution produced by sequencing reads of the fabricated chromosome.\nThe structure of a sequence graph produced by sequencing reads of the fabricated chromosome.Therefore, we have made the design decision that no two operations in a chromosome blueprint may affect the same position(s) of the genome in a conflicting manner. To meet this requirement, certain operations \"consume\" a region of the chromosome planned in a blueprint. If a region is consumed, another operation that would region cannot be added to the blueprint.Depending on the genome, any given chromosome may be present in multiple copies. Diploids, for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:using Pseudoseq\nc = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length."
+    "text": "Chromosome blueprints are the backbone of simulating genomes with Pseudoseq.Chromosome blueprints determine the nature of one chromosome in a genome.You can think of chromosome blueprints in Pseudoseq as: a collection of operations which, when applied to some seed sequence, result in a set of N homologous sequences.note: Note\nChromosome blueprints are immutable: Adding an operation to a chromosome blueprint creates a new blueprint, which is a copy of the old blueprint with the addition of the new operation.note: Note\nIdeally, for any chromosome blueprint you construct with Pseudoseq, for each operation is possesses, it must be possible (at least in principle) to be able to intuit what the effect of that operation will be on:The Khmer distribution produced by sequencing reads of the fabricated chromosome.\nThe structure of a sequence graph produced by sequencing reads of the fabricated chromosome.Therefore, we have made the design decision that no two operations in a chromosome blueprint may affect the same position(s) of the genome in a conflicting manner. To meet this requirement, certain operations \"consume\" a region of the chromosome planned in a blueprint. If a region is consumed, another operation that would also affect that region cannot be added to the blueprint.Depending on the genome, any given chromosome may be present in multiple copies. Diploids, for example have two copies of every chromosome.The first step in simulating any artificial genome is to create one or more blank chromosome blueprints. The plan_chrom function is used for this.For example, this:using Pseudoseq\nc = plan_chrom(100, 2)will create a blank blueprint for 2 copies of a chromosome of 100bp length. From the output you can see that it prints for you the number of chromosome copies, the length of the chromosomes, and a list of available, unconsumed regions of the chromosome (see note above)."
 },
 
 {
@@ -69,7 +69,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "2. Adding planned features to a chromosome blueprint",
     "category": "section",
-    "text": "Once you have one or more chromosome blueprints, you can add features to them.Currently the supported features, and the functions that add to a blueprint include:"
+    "text": "After creating a fresh chromosome blueprint, no plans (operations) have been added yet.If you were to fabricate this blank blueprint, you would get N identical DNA sequences as output, where N is the number of copies the blueprint was planning.Once you have one or more chromosome blueprints, you can add features to them.This is done with a series of consistently named plan_* functions.note: Note\nRemember; blueprints are immutable, so every time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.Currently the supported features, and the functions that add to a blueprint include:"
 },
 
 {
@@ -77,7 +77,15 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Repetitions",
     "category": "section",
-    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.They are added to a genome blueprint using the plan_repetition function.Heterozygosity: plan_hetnote: Note\nEvery time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.note: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
+    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.They are added to a genome blueprint using the plan_repetition function."
+},
+
+{
+    "location": "build-a-genome/#Heterozygosity-1",
+    "page": "Core concepts & workflow",
+    "title": "Heterozygosity",
+    "category": "section",
+    "text": "Heterozygosity: plan_hetnote: Note\nIf a region of a chromosome is used to plan some feature. E.g. position 5 is used to create some heterozygosity, that same position cannot be used for a second feature, it is consumed and cannot be used again.For example, below will make it so as about 50% of the two chromosome copies  are heterozygous:chet = plan_het(c, 50, 2)There is a utility function suggest_regions available to help plan features. Say you wanted to see where you could place 3 5bp repetitions, you could do the following:r = suggest_regions(chet, 5, 3)"
 },
 
 {
