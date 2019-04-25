@@ -53,7 +53,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Build-a-Genome: Core concepts & basic workflow",
     "category": "section",
-    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to genomes with certain characteristics. But the core workflow, and important concepts are explained below."
+    "text": "Pseudoseq allows you to plan and build genomes and chromosomes that have a certain set of features and peculiarities. The purpose for doing this is not to recreate biology perfectly. The purpose is to create genomes you understand fully (where the repeated content is, which positions are heterozygous and so on).Using such genomes can help you both understand and develop an intuition of what current genome assembly tools are doing, and also to help design assembly tools, and perhaps even plan sequencing experiments and form hypotheses.This manual includes several examples showing how to genomes with certain characteristics. But the core workflow, and important concepts are explained below, in 3 steps."
 },
 
 {
@@ -69,7 +69,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "2. Adding planned features to a chromosome blueprint",
     "category": "section",
-    "text": "After creating a fresh chromosome blueprint, no plans (operations) have been added yet.If you were to fabricate this blank blueprint, you would get N identical DNA sequences as output, where N is the number of copies the blueprint was planning.Once you have one or more chromosome blueprints, you can add features to them.This is done with a series of consistently named plan_* functions.note: Note\nRemember; blueprints are immutable, so every time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.Currently the supported features, and the functions that add to a blueprint include:"
+    "text": "After creating a fresh chromosome blueprint, no plans (operations) have been added yet.If you were to fabricate this blank blueprint, you would get N identical DNA sequences as output, where N is the number of copies the blueprint was planning.Once you have one or more chromosome blueprints, you can add features to them.This is done with a series of consistently named plan_* functions.note: Note\nRemember; blueprints are immutable, so every time one of these plan_* functions is used to add a feature to a chromosome blueprint, a new chromosome blueprint is created.Currently the supported features include:"
 },
 
 {
@@ -77,7 +77,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Core concepts & workflow",
     "title": "Repetitions",
     "category": "section",
-    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.They are added to a genome blueprint using the plan_repetition function."
+    "text": "A repetition is a segment of a sequence, that has the exact same motif, as  another segment of the sequence.In Pseudoseq, to plan a repetition, you specify a region the repetition will copy, sometimes called the from region. You also specify a region where the motif in the from region will be replicated, called the to region.So you might even find it helpful to imagine a planned repetition as a kind of copy-paste operation that occurs during fabricate.note: Note\nRepetitions consume the to region of the chromosome blueprint to which they are added. Repetitions do not consume the from region, so other operations are free to affect the motif in the from region. Just remember that the repetition will replicate anything in the from region, including other features such as heterozygosity that occur in from.Repetitions are added to a genome blueprint using the plan_repetition function."
 },
 
 {
