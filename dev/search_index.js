@@ -29,7 +29,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Install",
     "category": "section",
-    "text": "You can install Pseudoseq from the julia REPL:using Pkg\nadd(\"https://github.com/bioinfologics/Pseudoseq.jl.git\")"
+    "text": "Pseudoseq is built with BioJulia, and is designed with compatibility with the BioJulia ecosystem of tools in mind. Pseudoseq is made available to install through BioJulia\'s package registry.Julia by default only watches the \"General\" package registry, so before you start, you should add the BioJulia package registry.Start a julia terminal, hit the ] key to enter pkg mode (you should see the prompt change from julia> to pkg>), then enter the following command:registry add https://github.com/BioJulia/BioJuliaRegistry.gitAfter you\'ve added the registry, you can install Pseudoseq from the julia REPL. Press ] to enter pkg mode again, and enter the following:add Pseudoseq"
 },
 
 {
