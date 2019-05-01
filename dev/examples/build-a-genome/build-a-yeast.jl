@@ -23,14 +23,11 @@ fabricate("build-a-yeast-tri.fasta", trploidhet => refseq)
 
 tetploid = plan_chrom(reflen, 4)
 
-thet = plan_het(tetploid, 6907, [1, 2], [3, 4])
+thet = plan_het(tetploid, .03, [1, 2], [3, 4])
 
-import Random
-Random.seed!(1234)
-p = suggest_regions(tetploid, 1, 6907)
-a1 = suggest_alleles(length(p), [1, 2], [3, 4])
-a1 = suggest_alleles(length(p), [1, 1, 2, 2])
-thet = plan_het(tetploid, 6907, [1, 2], [3, 4])
+thet = plan_het(thet, .01, [1, 3], [2, 4])
+
+fabricate("build-a-yeast-tet.fasta", thet => refseq)
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
