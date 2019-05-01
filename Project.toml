@@ -1,0 +1,11 @@
+name = "Pseudoseq"
+uuid = "5fa9f68e-f4b0-11e8-18b8-fb82dd3c6483"
+authors = ["Ben J. Ward <benjward@protonmail.com>"]
+version = "0.1.0"
+
+[deps]
+BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[compat]
+BioSequences = "1.1.0"
