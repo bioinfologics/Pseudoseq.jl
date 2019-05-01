@@ -7,15 +7,14 @@ SEQ_EXAMPLES = [joinpath("examples/sequencing", f) for f in ("pe-example.jl",
 BAG_EXAMPLES = [joinpath("examples/build-a-genome", f) for f in ("build-a-yeast.jl",)]
 
 
-OUTPUT = joinpath(@__DIR__, "src/examples")
-SEQ_OUTPUT = joinpath(OUTPUT, "sequencing")
-BAG_OUTPUT = joinpath(OUTPUT, "build-a-genome")
-mkdir(OUTPUT)
+OUTPUT = joinpath(@__DIR__, "src/man")
+SEQ_OUTPUT = joinpath(OUTPUT, "sequencing/examples")
+BAG_OUTPUT = joinpath(OUTPUT, "build-a-genome/examples")
 mkdir(SEQ_OUTPUT)
 mkdir(BAG_OUTPUT)
 
-cp("examples/sequencing/ecoli-ref.fasta", "docs/src/examples/sequencing/ecoli-ref.fasta")
-cp("examples/build-a-genome/yeast-chr1.fasta", "docs/src/examples/build-a-genome/yeast-chr1.fasta")
+cp("examples/sequencing/ecoli-ref.fasta", "docs/src/man/sequencing/examples/ecoli-ref.fasta")
+cp("examples/build-a-genome/yeast-chr1.fasta", "docs/src/man/build-a-genome/examples/yeast-chr1.fasta")
 
 for ex in SEQ_EXAMPLES
     Literate.markdown(ex, SEQ_OUTPUT)
@@ -37,21 +36,22 @@ makedocs(
     strict = false,
     pages = [
         "Home" => "index.md",
-        "Sequencing" => [
-            "Core concepts & workflow" => "sequencing.md",
-            "Examples" => [
-                "Paired end reads" => "examples/sequencing/pe-example.md",
-                "Long single end reads" => "examples/sequencing/se-example.md",
-                "Tagged paired end reads" => "examples/sequencing/tg-example.md"
+        "Manual" => [
+            "Sequencing" => [
+                "Core concepts & workflow" => "man/sequencing/concepts.md",
+                "Examples" => [
+                    "Paired end reads" => "man/sequencing/examples/pe-example.md",
+                    "Long single end reads" => "man/sequencing/examples/se-example.md",
+                    "Tagged paired end reads" => "man/sequencing/examples/tg-example.md"
+                ]
+            ],
+            "Build-a-Genome" => [
+                "Core concepts & workflow" => "man/build-a-genome/concepts.md",
+                "Examples" => [
+                    "Build-a-Yeast" => "man/build-a-genome/examples/build-a-yeast.md",
+                ]
             ]
         ],
-        "Build-a-Genome" => [
-            "Core concepts & workflow" => "build-a-genome.md",
-            "Examples" => [
-                "Build-a-Yeast" => "examples/build-a-genome/build-a-yeast.md",
-            ]
-        ],
-        
         "API" => [
             "Sequencing" => [
                 "sequence" => "api/sequence.md",
