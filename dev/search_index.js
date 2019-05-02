@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Pseudoseq",
     "category": "section",
-    "text": "Fake genomes, fake sequencing, real insights.(Image: Latest Release) (Image: MIT license) (Image: Stable) (Image: Latest) (Image: Pkg Status)"
+    "text": "Fake genomes, fake sequencing, real insights.(Image: Latest Release) (Image: MIT license) (Image: Stable) (Image: Latest) (Image: Pkg Status) (Image: DOI)"
 },
 
 {
