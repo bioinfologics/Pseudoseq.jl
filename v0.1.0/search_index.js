@@ -13,7 +13,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Home",
     "title": "Pseudoseq",
     "category": "section",
-    "text": "Fake genomes, fake sequencing, real insights.(Image: Latest Release) (Image: MIT license) (Image: Stable) (Image: Latest) (Image: Pkg Status)"
+    "text": "Fake genomes, fake sequencing, real insights.(Image: Latest Release) (Image: MIT license) (Image: Stable) (Image: Latest) (Image: Pkg Status) (Image: DOI)"
 },
 
 {
@@ -41,7 +41,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#",
+    "location": "man/sequencing/concepts/#",
     "page": "Core concepts & workflow",
     "title": "Core concepts & workflow",
     "category": "page",
@@ -49,7 +49,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#Sequencing:-*Core-concepts-and-basic-workflow*-1",
+    "location": "man/sequencing/concepts/#Sequencing:-*Core-concepts-and-basic-workflow*-1",
     "page": "Core concepts & workflow",
     "title": "Sequencing: Core concepts & basic workflow",
     "category": "section",
@@ -57,7 +57,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#.-Create-a-pool-of-DNA-molecules-1",
+    "location": "man/sequencing/concepts/#.-Create-a-pool-of-DNA-molecules-1",
     "page": "Core concepts & workflow",
     "title": "1. Create a pool of DNA molecules",
     "category": "section",
@@ -65,7 +65,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#.-Process-the-DNA-molecule-pool-1",
+    "location": "man/sequencing/concepts/#.-Process-the-DNA-molecule-pool-1",
     "page": "Core concepts & workflow",
     "title": "2. Process the DNA molecule pool",
     "category": "section",
@@ -73,7 +73,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#Fragmenting-the-pool-1",
+    "location": "man/sequencing/concepts/#Fragmenting-the-pool-1",
     "page": "Core concepts & workflow",
     "title": "Fragmenting the pool",
     "category": "section",
@@ -81,7 +81,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#Subsampling-molecules-from-a-pool-1",
+    "location": "man/sequencing/concepts/#Subsampling-molecules-from-a-pool-1",
     "page": "Core concepts & workflow",
     "title": "Subsampling molecules from a pool",
     "category": "section",
@@ -89,7 +89,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#Determining-the-number-of-molecules-to-subsample-1",
+    "location": "man/sequencing/concepts/#Determining-the-number-of-molecules-to-subsample-1",
     "page": "Core concepts & workflow",
     "title": "Determining the number of molecules to subsample",
     "category": "section",
@@ -97,7 +97,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#Tagging-molecules-in-a-pool-1",
+    "location": "man/sequencing/concepts/#Tagging-molecules-in-a-pool-1",
     "page": "Core concepts & workflow",
     "title": "Tagging molecules in a pool",
     "category": "section",
@@ -105,7 +105,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "sequencing/#.-Generating-reads-1",
+    "location": "man/sequencing/concepts/#.-Generating-reads-1",
     "page": "Core concepts & workflow",
     "title": "3. Generating reads",
     "category": "section",
@@ -113,7 +113,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/pe-example/#",
+    "location": "man/sequencing/examples/pe-example/#",
     "page": "Paired end reads",
     "title": "Paired end reads",
     "category": "page",
@@ -121,7 +121,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/pe-example/#Example:-paired-end-sequencing-1",
+    "location": "man/sequencing/examples/pe-example/#Example:-paired-end-sequencing-1",
     "page": "Paired end reads",
     "title": "Example: paired-end sequencing",
     "category": "section",
@@ -129,7 +129,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/pe-example/#Using-the-[sequence](@ref)-method-1",
+    "location": "man/sequencing/examples/pe-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Paired end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -137,7 +137,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/pe-example/#Using-the-Pseudoseq-API-1",
+    "location": "man/sequencing/examples/pe-example/#Using-the-Pseudoseq-API-1",
     "page": "Paired end reads",
     "title": "Using the Pseudoseq API",
     "category": "section",
@@ -145,7 +145,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/se-example/#",
+    "location": "man/sequencing/examples/se-example/#",
     "page": "Long single end reads",
     "title": "Long single end reads",
     "category": "page",
@@ -153,7 +153,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/se-example/#Example:-long,-single-end-reads-1",
+    "location": "man/sequencing/examples/se-example/#Example:-long,-single-end-reads-1",
     "page": "Long single end reads",
     "title": "Example: long, single end reads",
     "category": "section",
@@ -161,7 +161,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/se-example/#Using-the-[sequence](@ref)-method-1",
+    "location": "man/sequencing/examples/se-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Long single end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -169,7 +169,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/se-example/#Using-the-Pseudoseq-API-1",
+    "location": "man/sequencing/examples/se-example/#Using-the-Pseudoseq-API-1",
     "page": "Long single end reads",
     "title": "Using the Pseudoseq API",
     "category": "section",
@@ -177,7 +177,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/tg-example/#",
+    "location": "man/sequencing/examples/tg-example/#",
     "page": "Tagged paired end reads",
     "title": "Tagged paired end reads",
     "category": "page",
@@ -185,7 +185,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/tg-example/#Example:-tagged-paired-end-reads-1",
+    "location": "man/sequencing/examples/tg-example/#Example:-tagged-paired-end-reads-1",
     "page": "Tagged paired end reads",
     "title": "Example: tagged paired-end reads",
     "category": "section",
@@ -193,7 +193,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/tg-example/#Using-the-[sequence](@ref)-method-1",
+    "location": "man/sequencing/examples/tg-example/#Using-the-[sequence](@ref)-method-1",
     "page": "Tagged paired end reads",
     "title": "Using the sequence method",
     "category": "section",
@@ -201,7 +201,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/sequencing/tg-example/#Using-the-Pseudoseq-API-1",
+    "location": "man/sequencing/examples/tg-example/#Using-the-Pseudoseq-API-1",
     "page": "Tagged paired end reads",
     "title": "Using the Pseudoseq API",
     "category": "section",
@@ -209,7 +209,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#",
+    "location": "man/build-a-genome/concepts/#",
     "page": "Core concepts & workflow",
     "title": "Core concepts & workflow",
     "category": "page",
@@ -217,7 +217,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#Build-a-Genome:-*Core-concepts-and-basic-workflow*-1",
+    "location": "man/build-a-genome/concepts/#Build-a-Genome:-*Core-concepts-and-basic-workflow*-1",
     "page": "Core concepts & workflow",
     "title": "Build-a-Genome: Core concepts & basic workflow",
     "category": "section",
@@ -225,7 +225,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#.-Creating-chromosome-blueprints-1",
+    "location": "man/build-a-genome/concepts/#.-Creating-chromosome-blueprints-1",
     "page": "Core concepts & workflow",
     "title": "1. Creating chromosome blueprints",
     "category": "section",
@@ -233,7 +233,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#.-Adding-planned-features-to-a-chromosome-blueprint-1",
+    "location": "man/build-a-genome/concepts/#.-Adding-planned-features-to-a-chromosome-blueprint-1",
     "page": "Core concepts & workflow",
     "title": "2. Adding planned features to a chromosome blueprint",
     "category": "section",
@@ -241,7 +241,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#Repetitions-1",
+    "location": "man/build-a-genome/concepts/#Repetitions-1",
     "page": "Core concepts & workflow",
     "title": "Repetitions",
     "category": "section",
@@ -249,7 +249,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#Heterozygosity-1",
+    "location": "man/build-a-genome/concepts/#Heterozygosity-1",
     "page": "Core concepts & workflow",
     "title": "Heterozygosity",
     "category": "section",
@@ -257,7 +257,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#Utility-functions-1",
+    "location": "man/build-a-genome/concepts/#Utility-functions-1",
     "page": "Core concepts & workflow",
     "title": "Utility functions",
     "category": "section",
@@ -265,7 +265,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "build-a-genome/#.-Fabricate-a-FASTA-from-chromosome-blueprints-1",
+    "location": "man/build-a-genome/concepts/#.-Fabricate-a-FASTA-from-chromosome-blueprints-1",
     "page": "Core concepts & workflow",
     "title": "3. Fabricate a FASTA from chromosome blueprints",
     "category": "section",
@@ -273,7 +273,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/build-a-genome/build-a-yeast/#",
+    "location": "man/build-a-genome/examples/build-a-yeast/#",
     "page": "Build-a-Yeast",
     "title": "Build-a-Yeast",
     "category": "page",
@@ -281,7 +281,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/build-a-genome/build-a-yeast/#Example:-Build-a-Yeast-1",
+    "location": "man/build-a-genome/examples/build-a-yeast/#Example:-Build-a-Yeast-1",
     "page": "Build-a-Yeast",
     "title": "Example: Build-a-Yeast",
     "category": "section",
@@ -289,7 +289,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/build-a-genome/build-a-yeast/#Load-the-seed-sequence-1",
+    "location": "man/build-a-genome/examples/build-a-yeast/#Load-the-seed-sequence-1",
     "page": "Build-a-Yeast",
     "title": "Load the seed sequence",
     "category": "section",
@@ -297,7 +297,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/build-a-genome/build-a-yeast/#Designing-a-diploid-1",
+    "location": "man/build-a-genome/examples/build-a-yeast/#Designing-a-diploid-1",
     "page": "Build-a-Yeast",
     "title": "Designing a diploid",
     "category": "section",
@@ -305,7 +305,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/build-a-genome/build-a-yeast/#Designing-a-triploid-1",
+    "location": "man/build-a-genome/examples/build-a-yeast/#Designing-a-triploid-1",
     "page": "Build-a-Yeast",
     "title": "Designing a triploid",
     "category": "section",
@@ -313,7 +313,7 @@ var documenterSearchIndex = {"docs": [
 },
 
 {
-    "location": "examples/build-a-genome/build-a-yeast/#Designing-a-tetraploid-genome-1",
+    "location": "man/build-a-genome/examples/build-a-yeast/#Designing-a-tetraploid-genome-1",
     "page": "Build-a-Yeast",
     "title": "Designing a tetraploid genome",
     "category": "section",
