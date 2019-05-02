@@ -31,12 +31,12 @@ Specification for a chromosome:
  Length of chromosomes: 100
  99bp available in the following stretches:</code></pre><p>Here I planned a heterozygous position, at one site in the chromosome (20), and I set the state of the first copy to <code>DNA_T</code>, and the state of the second copy to <code>DNA_A</code>.</p><p>So as you can see, <a href="../../../api/chromosome-blueprint/#Pseudoseq.plan_het"><code>plan_het</code></a> is very flexible. Check it&#39;s API documentation, and the &quot;Build-A-Yeast&quot; example walkthrough to see more examples of <a href="../../../api/chromosome-blueprint/#Pseudoseq.plan_het"><code>plan_het</code></a> use.</p><h3><a class="nav-anchor" id="Utility-functions-1" href="#Utility-functions-1">Utility functions</a></h3><p>There is a utility function <a href="../../../api/chromosome-blueprint/#Pseudoseq.suggest_regions"><code>suggest_regions</code></a> available to help you plan where to place features.</p><p>Say you wanted to see where you could place 3 5bp repetitions, you could do the following:</p><pre><code class="language-julia-repl">julia&gt; r = suggest_regions(chet, 5, 6)
 6-element Array{UnitRange{Int64},1}:
- 85:89
- 96:100
- 24:28
- 55:59
- 43:47
- 78:82</code></pre><p>So now you have 6 5bp regions, every 2 regions defining a <code>from</code> and a <code>to</code> region for a single repetition. </p><p>You can provide <code>r</code> as an input to <a href="../../../api/chromosome-blueprint/#Pseudoseq.plan_repetition"><code>plan_repetition</code></a>.</p><pre><code class="language-julia-repl">julia&gt; crep = plan_repetition(chet, r)
+ 57:61
+ 8:12
+ 44:48
+ 50:54
+ 2:6
+ 14:18</code></pre><p>So now you have 6 5bp regions, every 2 regions defining a <code>from</code> and a <code>to</code> region for a single repetition. </p><p>You can provide <code>r</code> as an input to <a href="../../../api/chromosome-blueprint/#Pseudoseq.plan_repetition"><code>plan_repetition</code></a>.</p><pre><code class="language-julia-repl">julia&gt; crep = plan_repetition(chet, r)
 Specification for a chromosome:
  Number of copies: 2
  Length of chromosomes: 100
@@ -57,13 +57,13 @@ Closest candidates are:
   suggest_alleles(!Matched::Array{Int64,1}...) at /home/travis/build/bioinfologics/Pseudoseq.jl/src/build_a_genome/plan/polymorphism.jl:98
   suggest_alleles(!Matched::Int64, ::Any...) at /home/travis/build/bioinfologics/Pseudoseq.jl/src/build_a_genome/plan/polymorphism.jl:140</code></pre><p>In the above, which chromosomes get the same allele is user-specified, but which bases those alleles are, is randomly determined.</p><p>You can get many suggestions at once:</p><pre><code class="language-julia-repl">julia&gt; suggest_alleles(5, [1, 1, 2])
 5-element Array{Array{BioSymbols.DNA,1},1}:
- [DNA_C, DNA_C, DNA_T]
- [DNA_C, DNA_C, DNA_A]
- [DNA_T, DNA_T, DNA_G]
- [DNA_T, DNA_T, DNA_G]
- [DNA_C, DNA_C, DNA_T]</code></pre><p>See the API docs for <a href="../../../api/chromosome-blueprint/#Pseudoseq.suggest_alleles"><code>suggest_alleles</code></a> for more details on the arguments permitted by the different methods. </p><h2><a class="nav-anchor" id=".-Fabricate-a-FASTA-from-chromosome-blueprints-1" href="#.-Fabricate-a-FASTA-from-chromosome-blueprints-1">3. Fabricate a FASTA from chromosome blueprints</a></h2><p>Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate the sequences of these chromosomes.</p><p>To do that, use the <a href="../../../api/chromosome-blueprint/#Pseudoseq.fabricate"><code>fabricate</code></a> method.</p><p>You can simply fabricate the sequences, for use in the interactive session:</p><pre><code class="language-julia-repl">julia&gt; fabricate(chet)
+ [DNA_A, DNA_A, DNA_C]
+ [DNA_T, DNA_T, DNA_A]
+ [DNA_A, DNA_A, DNA_C]
+ [DNA_G, DNA_G, DNA_A]
+ [DNA_A, DNA_A, DNA_C]</code></pre><p>See the API docs for <a href="../../../api/chromosome-blueprint/#Pseudoseq.suggest_alleles"><code>suggest_alleles</code></a> for more details on the arguments permitted by the different methods. </p><h2><a class="nav-anchor" id=".-Fabricate-a-FASTA-from-chromosome-blueprints-1" href="#.-Fabricate-a-FASTA-from-chromosome-blueprints-1">3. Fabricate a FASTA from chromosome blueprints</a></h2><p>Once you have a set of chromosome blueprints with the features planned that you desire, you can fabricate the sequences of these chromosomes.</p><p>To do that, use the <a href="../../../api/chromosome-blueprint/#Pseudoseq.fabricate"><code>fabricate</code></a> method.</p><p>You can simply fabricate the sequences, for use in the interactive session:</p><pre><code class="language-julia-repl">julia&gt; fabricate(chet)
 2-element Array{BioSequences.BioSequence{BioSequences.DNAAlphabet{2}},1}:
- CACCCATTAGGACAGAGGTTCACTGCTACACTGATCACC…AAGCAAGCCTAGTCCAGGTGACGTGCCGAGAACCTGAAC
- CACCCATTAGGACAGAGGTACACTGCTACACTGATCACC…AAGCAAGCCTAGTCCAGGTGACGTGCCGAGAACCTGAAC</code></pre><p>Or have the sequences output to a FASTA formatted file.</p><pre><code class="language-julia-repl">julia&gt; fabricate(&quot;mychrom.fasta&quot;, chet)
+ TGTCGCCTCATGTAGTGCTTGCCTTTGCCTACCGCAAAG…CGATGCAACTTTACAATGGTTGAAGGCTATTACAACGAG
+ TGTCGCCTCATGTAGTGCTAGCCTTTGCCTACCGCAAAG…CGATGCAACTTTACAATGGTTGAAGGCTATTACAACGAG</code></pre><p>Or have the sequences output to a FASTA formatted file.</p><pre><code class="language-julia-repl">julia&gt; fabricate(&quot;mychrom.fasta&quot;, chet)
 [ Info: Opening FASTA file at: mychrom.fasta
 [ Info: Fabricated 1 chromosomes and written to file</code></pre><p>A randomly generated seed sequence is used to start the fabrication process unless you provide one. See the API docs for <a href="../../../api/chromosome-blueprint/#Pseudoseq.fabricate"><code>fabricate</code></a> for more details.</p><p>And that&#39;s all there is to building a chromosome with Pseudoseq. To build a genome with more than one chromosome, simply build a set of chromosome blueprints.</p><p>Now check out the examples to see how various genomes can be built with Pseudoseq.</p><footer><hr/><a class="previous" href="../../sequencing/examples/tg-example/"><span class="direction">Previous</span><span class="title">Tagged paired end reads</span></a><a class="next" href="../examples/build-a-yeast/"><span class="direction">Next</span><span class="title">Build-a-Yeast</span></a></footer></article></body></html>

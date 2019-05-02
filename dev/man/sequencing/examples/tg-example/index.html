@@ -8,21 +8,21 @@
 [ Info: - ✔ Subsampled pool at 50X coverage (463967 molecules)
 [ Info: - ✔ Created set of 250bp paired-end reads
 [ Info: - ✔ Applied sequencing errors at a per-base rate of 0.1
-[ Info: - ✔ Wrote 654818 paired end reads to FASTQ file</code></pre></div><h2><a class="nav-anchor" id="Using-the-Pseudoseq-API-1" href="#Using-the-Pseudoseq-API-1">Using the Pseudoseq API</a></h2><p>Here&#39;s how to achieve the same thing, using the Pseudoseq API. It is nessecery to use the API if you want to do something that is not anticipated by the available functionality of the <code>sequence</code> method: the cost of conveinience is fewer options.</p><p>Let&#39;s start with a pool of 5000 copies of a genome contained in a FASTA file:</p><div><pre><code class="language-julia">dnapool = makepool(&quot;ecoli-ref.fasta&quot;, 5000)</code></pre><pre><code class="language-none">Pool of 5000 molecules:
+[ Info: - ✔ Wrote 653744 paired end reads to FASTQ file</code></pre></div><h2><a class="nav-anchor" id="Using-the-Pseudoseq-API-1" href="#Using-the-Pseudoseq-API-1">Using the Pseudoseq API</a></h2><p>Here&#39;s how to achieve the same thing, using the Pseudoseq API. It is nessecery to use the API if you want to do something that is not anticipated by the available functionality of the <code>sequence</code> method: the cost of conveinience is fewer options.</p><p>Let&#39;s start with a pool of 5000 copies of a genome contained in a FASTA file:</p><div><pre><code class="language-julia">dnapool = makepool(&quot;ecoli-ref.fasta&quot;, 5000)</code></pre><pre><code class="language-none">Pool of 5000 molecules:
  All molecules are of the same size: 4639675</code></pre></div><p>Now let&#39;s cut up the molecules to an average length of 40,000bp</p><div><pre><code class="language-julia">cutpool = fragment(dnapool, 40000)</code></pre><pre><code class="language-none">Pool of 575000 molecules:
- Maximum molecule size: 495319
+ Maximum molecule size: 579678
  Average molecule size: 40345
  Minimum molecule size: 1</code></pre></div><p>Ok, now we will tag these large fragments randomly. Once you tag a fragment in a universe, any other fragments that are derived from that tagged fragment will inherit the same tag.</p><div><pre><code class="language-julia">taggedpool = tag(cutpool, 1000000)</code></pre><pre><code class="language-none">[ Info: Attaching 1000000 tags randomly to each molecule in pool...
 [ Info: Done
 Pool of 575000 molecules:
- Maximum molecule size: 495319
+ Maximum molecule size: 579678
  Average molecule size: 40345
  Minimum molecule size: 1
- Number of distinct tags: 436973</code></pre></div><p>Here I&#39;m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we&#39;ll fragment the pool again</p><div><pre><code class="language-julia">taggedcutpool = fragment(taggedpool, 700)</code></pre><pre><code class="language-none">Pool of 32863344 molecules:
- Maximum molecule size: 11073
+ Number of distinct tags: 437516</code></pre></div><p>Here I&#39;m going to use a pool of 1,000,000 distinct tags. Which fragment gets a certain tag is random. The size of the tag pool, and the number of fragments in your universe will determine how likely it is that any two fragments get the same tag. Now we&#39;ll fragment the pool again</p><div><pre><code class="language-julia">taggedcutpool = fragment(taggedpool, 700)</code></pre><pre><code class="language-none">Pool of 32863475 molecules:
+ Maximum molecule size: 10869
  Average molecule size: 705
  Minimum molecule size: 1
- Number of distinct tags: 436973</code></pre></div><p>Subsample the pool of tagged molecules.</p><div><pre><code class="language-julia">genome_size = 4639675
+ Number of distinct tags: 437516</code></pre></div><p>Subsample the pool of tagged molecules.</p><div><pre><code class="language-julia">genome_size = 4639675
 expected_coverage = 50
 read_length = 250
 
@@ -30,8 +30,8 @@ N = needed_sample_size(expected_coverage, genome_size, read_length)
 N = div(N, 2) # Divide by 2 as we&#39;re doing paired end sequencing.
 
 sampledpool = subsample(taggedcutpool, N)</code></pre><pre><code class="language-none">Pool of 463967 molecules:
- Maximum molecule size: 8991
- Average molecule size: 703
+ Maximum molecule size: 8211
+ Average molecule size: 705
  Minimum molecule size: 1
- Number of distinct tags: 226748</code></pre></div><p>Now let&#39;s make some 250bp tagged paired reads and generate some erroneous positions.</p><div><pre><code class="language-julia">tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
-tagged_w_errs = mark_errors(tagged_reads, 0.001)</code></pre></div><p>Output to FASTQ:</p><div><pre><code class="language-julia">generate(&quot;tagged_reads.fastq&quot;, tagged_w_errs)#-</code></pre><pre><code class="language-none">[ Info: - ✔ Wrote 654630 tagged paired end reads to FASTQ file</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../se-example/"><span class="direction">Previous</span><span class="title">Long single end reads</span></a><a class="next" href="../../../build-a-genome/concepts/"><span class="direction">Next</span><span class="title">Core concepts &amp; workflow</span></a></footer></article></body></html>
+ Number of distinct tags: 226965</code></pre></div><p>Now let&#39;s make some 250bp tagged paired reads and generate some erroneous positions.</p><div><pre><code class="language-julia">tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
+tagged_w_errs = mark_errors(tagged_reads, 0.001)</code></pre></div><p>Output to FASTQ:</p><div><pre><code class="language-julia">generate(&quot;tagged_reads.fastq&quot;, tagged_w_errs)#-</code></pre><pre><code class="language-none">[ Info: - ✔ Wrote 655060 tagged paired end reads to FASTQ file</code></pre></div><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p><footer><hr/><a class="previous" href="../se-example/"><span class="direction">Previous</span><span class="title">Long single end reads</span></a><a class="next" href="../../../build-a-genome/concepts/"><span class="direction">Next</span><span class="title">Core concepts &amp; workflow</span></a></footer></article></body></html>
