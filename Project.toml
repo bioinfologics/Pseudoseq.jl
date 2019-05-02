@@ -8,4 +8,5 @@ BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 
 [compat]
+julia = "1.1"
 BioSequences = "1.1.0"
