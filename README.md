@@ -7,6 +7,7 @@ _Fake genomes, fake sequencing, **real** insights._
 [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://bioinfologics.github.io/Pseudoseq.jl/stable)
 [![Latest](https://img.shields.io/badge/docs-dev-blue.svg)](https://bioinfologics.github.io/Pseudoseq.jl/dev)
 [![Pkg Status](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![DOI](https://zenodo.org/badge/160373866.svg)](https://zenodo.org/badge/latestdoi/160373866)
 
 
 ## Description
