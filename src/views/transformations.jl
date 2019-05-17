@@ -25,6 +25,9 @@ function subsample(vs::Views, n::Int)
     return vs[p]
 end
 
+function sizefilter(vs::Views, fn::Function)
+    
+end
 
 # The tag transformation
 # ----------------------
@@ -128,3 +131,14 @@ function take_single_ends(vs::Views)
     end
     return newviews
 end
+
+function flip_views!(vs::Views)
+    willflip = rand(Bool, length(vs))
+    @inbounds for (i, view) in enumerate(vs)
+        if willflip[i]
+            vs[i] = reverse(vs[i])
+        end
+    end
+end
+
+flip_views(vs::Views) = flip_views!(deepcopy(vs))
