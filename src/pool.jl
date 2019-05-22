@@ -5,17 +5,14 @@ struct MoleculePool
 end
 
 """
-    makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular::Bool = false)
+    makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1)
 
 Create a pool of `ng` copies of a genome defined by the `gen` vector of sequences.
-
-!!! note
-    The argument `iscircular` is currently not used.
 """
-function makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular = false)
+function makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1)
     vs = Views()
     for (i, seq) in enumerate(gen)
-        push!(vs, SequencingView(i, 1, length(seq), iscircular))
+        push!(vs, SequencingView(i, 1, length(seq), false))
     end
     if ng > 1
         vs = amplify(vs, ng)
@@ -24,21 +21,18 @@ function makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircu
 end
 
 """
-    makepool(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)
+    makepool(rdr::FASTA.Reader, ng::Int = 1)
 
 Create a pool of `ng` copies of the genome read in from the `FASTA.Reader`.
-
-!!! note
-    The argument `iscircular` is currently not used.
 """
-function makepool(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)
+function makepool(rdr::FASTA.Reader, ng::Int = 1)
     gen = Vector{BioSequence{DNAAlphabet{2}}}()
     rec = eltype(rdr)()
     while !eof(rdr)
         read!(rdr, rec)
         push!(gen, FASTA.sequence(BioSequence{DNAAlphabet{2}}, rec))
     end
-    return makepool(gen, ng, iscircular)
+    return makepool(gen, ng)
 end
 
 """
@@ -167,4 +161,16 @@ function tag(p::MoleculePool, ntags::Int)
     np = MoleculePool(genome(p), tag(views(p), ntags))
     @info "Done"
     return np
+end
+
+"""
+    flip(p::MoleculePool)
+
+Create a copy of flipped DNA molecules from some input pool.
+
+The flip function lets you randomly flip some of the molecules in a pool to the
+opposite orientation they are in.
+"""
+function flip(p::MoleculePool)
+    return MoleculePool(genome(p), flip_views(views(p)))
 end
