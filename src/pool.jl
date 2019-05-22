@@ -36,16 +36,16 @@ function makepool(rdr::FASTA.Reader, ng::Int = 1)
 end
 
 """
-    makepool(file::String, ng::Int, iscircular::Bool = false)
+    makepool(file::String, ng::Int)
 
 Create a pool of `ng` copies of the genome in the fasta formatted `file`.
 
 !!! note
     The argument `iscircular` is currently not used.
 """
-function makepool(file::String, ng::Int = 1, iscircular::Bool = false)
+function makepool(file::String, ng::Int = 1)
     open(FASTA.Reader, file) do rdr
-        makepool(rdr, ng, iscircular)
+        makepool(rdr, ng)
     end
 end
 
