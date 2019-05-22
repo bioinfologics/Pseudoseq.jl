@@ -37,7 +37,7 @@ function sequence(input, output = nothing;
                   err::Float64 = 0.001
                   )
                   
-    pool = makepool(input, 1, false)
+    pool = makepool(input, 1)
     genome_size = sum(length(x) for x in views(pool))
     
     pool = amplify(pool, ng)
