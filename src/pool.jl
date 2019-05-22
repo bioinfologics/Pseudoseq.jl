@@ -172,5 +172,5 @@ The flip function lets you randomly flip some of the molecules in a pool to the
 opposite orientation they are in.
 """
 function flip(p::MoleculePool)
-    return MoleculePool(genome(p), flip_views(views(p))))
+    return MoleculePool(genome(p), flip_views(views(p)))
 end
