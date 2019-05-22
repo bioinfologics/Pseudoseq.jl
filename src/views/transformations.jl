@@ -40,7 +40,7 @@ function select(fn::Function, vs::Views)
         end
     end
     resize!(newviews, nselected)
-    return new
+    return newviews
 end
 
 
