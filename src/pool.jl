@@ -174,3 +174,7 @@ opposite orientation they are in.
 function flip(p::MoleculePool)
     return MoleculePool(genome(p), flip_views(views(p)))
 end
+
+function select(fn::Function, p::MoleculePool)
+    np = MoleculePool(genome(p), select(fn, views(p)))
+end
