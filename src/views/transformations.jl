@@ -25,9 +25,26 @@ function subsample(vs::Views, n::Int)
     return vs[p]
 end
 
-function sizefilter(vs::Views, fn::Function)
-    
+
+# The selection transformation
+# ----------------------------
+
+function select(fn::Function, vs::Views)
+    nselected = 0
+    newviews = Views(length(vs))
+    @inbounds for oldview in vs
+        prob = fn(oldview)
+        if rand() < prob
+            nselected += 1
+            newviews[nselected] = oldview
+        end
+    end
+    resize!(newviews, nselected)
+    return new
 end
+
+
+
 
 # The tag transformation
 # ----------------------

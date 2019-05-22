@@ -27,3 +27,9 @@ subsample(p::Pseudoseq.MoleculePool, n::Int)
 ```@docs
 tag(p::Pseudoseq.MoleculePool, ntags::Int)
 ```
+
+#### Flipping
+
+```@docs
+flip(p::Pseudoseq.MoleculePool)
+```
