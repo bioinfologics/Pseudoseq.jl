@@ -381,7 +381,7 @@ var documenterSearchIndex = {"docs": [
     "page": "Molecule Pool",
     "title": "Pseudoseq.makepool",
     "category": "function",
-    "text": "makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1, iscircular::Bool = false)\n\nCreate a pool of ng copies of a genome defined by the gen vector of sequences.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakepool(rdr::FASTA.Reader, ng::Int = 1, iscircular::Bool = false)\n\nCreate a pool of ng copies of the genome read in from the FASTA.Reader.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\nmakepool(file::String, ng::Int, iscircular::Bool = false)\n\nCreate a pool of ng copies of the genome in the fasta formatted file.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\n"
+    "text": "makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1)\n\nCreate a pool of ng copies of a genome defined by the gen vector of sequences.\n\n\n\n\n\nmakepool(rdr::FASTA.Reader, ng::Int = 1)\n\nCreate a pool of ng copies of the genome read in from the FASTA.Reader.\n\n\n\n\n\nmakepool(file::String, ng::Int)\n\nCreate a pool of ng copies of the genome in the fasta formatted file.\n\nnote: Note\nThe argument iscircular is currently not used.\n\n\n\n\n\n"
 },
 
 {
@@ -446,6 +446,14 @@ var documenterSearchIndex = {"docs": [
     "title": "Tagging",
     "category": "section",
     "text": "tag(p::Pseudoseq.MoleculePool, ntags::Int)"
+},
+
+{
+    "location": "api/pool/#Flipping-1",
+    "page": "Molecule Pool",
+    "title": "Flipping",
+    "category": "section",
+    "text": "flip(p::Pseudoseq.MoleculePool)"
 },
 
 {
