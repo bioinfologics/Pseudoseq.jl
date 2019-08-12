@@ -21,7 +21,7 @@ end
 
 struct Reads{T <: Technology}
     tech::T
-    genome::Vector{BioSequence{DNAAlphabet{2}}}
+    genome::Vector{LongSequence{DNAAlphabet{2}}}
     seqviews::Views
     errpos::Dict{Int, Vector{Int}}
 end
@@ -369,7 +369,7 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{TaggedPairs
     g = genome(reads)
     errs = errors(reads)
     
-    bufseq = BioSequence{DNAAlphabet{2}}(rand(ACGT, 7))
+    bufseq = LongSequence{DNAAlphabet{2}}(rand(ACGT, 7))
     tagdict = prepare_tags(reads)
     n = 0
     
@@ -381,7 +381,7 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{TaggedPairs
         seq = extract_sequence(ref, v)
         
         if isodd(i) # We are dealing with an R1 read
-            tagseq = BioSequence{DNAAlphabet{2}}(tagdict[tag(v)])
+            tagseq = LongSequence{DNAAlphabet{2}}(tagdict[tag(v)])
             seq = tagseq * bufseq * seq
         end
         
