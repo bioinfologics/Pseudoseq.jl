@@ -48,35 +48,35 @@ A random DNA sequence will be generated to use as a seed sequence.
 A sequence will be built for each chromosome copy in the blueprint.
 """
 function fabricate(cb::ChromosomeBlueprint)
-    seed = BioSequence{DNAAlphabet{2}}(randdnaseq(length(cb)))
+    seed = LongSequence{DNAAlphabet{2}}(randdnaseq(length(cb)))
     return fabricate(cb, seed)
 end
 
 """
-    fabricate(cb::ChromosomeBlueprint, seed::BioSequence{DNAAlphabet{2}})
+    fabricate(cb::ChromosomeBlueprint, seed::LongSequence{DNAAlphabet{2}})
 
 Fabricate a DNA sequence by applying the planned features in a chromosome blueprint,
 to some initial starting seed sequence.
 
 A sequence will be built for each chromosome copy in the blueprint.
 """
-function fabricate(cb::ChromosomeBlueprint, seed::BioSequence{DNAAlphabet{2}})
+function fabricate(cb::ChromosomeBlueprint, seed::LongSequence{DNAAlphabet{2}})
     apply_repeats!(seed, cb)
     copies = [copy(seed) for _ in 1:ncopies(cb)]
     apply_hets!(copies, cb)
     return copies
 end
-fabricate(p::Pair{ChromosomeBlueprint, BioSequence{DNAAlphabet{2}}}) = fabricate(p.first, p.second)
-fabricate(p::Pair{BioSequence{DNAAlphabet{2}}, ChromosomeBlueprint}) = fabricate(p.second, p.first)
+fabricate(p::Pair{ChromosomeBlueprint, LongSequence{DNAAlphabet{2}}}) = fabricate(p.first, p.second)
+fabricate(p::Pair{LongSequence{DNAAlphabet{2}}, ChromosomeBlueprint}) = fabricate(p.second, p.first)
 
-function apply_repeats!(seq::BioSequence{DNAAlphabet{2}}, cb::ChromosomeBlueprint)
+function apply_repeats!(seq::LongSequence{DNAAlphabet{2}}, cb::ChromosomeBlueprint)
     for repeat in repetitions_unsafe(cb)
         copyto!(seq, repeat.destination, seq, repeat.origin, repeat.size)
     end
     return seq
 end
 
-function apply_hets!(seqs::Vector{BioSequence{DNAAlphabet{2}}}, cb::ChromosomeBlueprint)
+function apply_hets!(seqs::Vector{LongSequence{DNAAlphabet{2}}}, cb::ChromosomeBlueprint)
     for het in hets_unsafe(cb)
         @assert length(seqs) == length(het.alleles)
         p = het.position

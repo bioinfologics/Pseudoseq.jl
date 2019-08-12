@@ -1,15 +1,15 @@
 
 struct MoleculePool
-    genome::Vector{BioSequence{DNAAlphabet{2}}}
+    genome::Vector{LongSequence{DNAAlphabet{2}}}
     seqviews::Views
 end
 
 """
-    makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1)
+    makepool(gen::Vector{LongSequence{DNAAlphabet{2}}}, ng::Int = 1)
 
 Create a pool of `ng` copies of a genome defined by the `gen` vector of sequences.
 """
-function makepool(gen::Vector{BioSequence{DNAAlphabet{2}}}, ng::Int = 1)
+function makepool(gen::Vector{LongSequence{DNAAlphabet{2}}}, ng::Int = 1)
     vs = Views()
     for (i, seq) in enumerate(gen)
         push!(vs, SequencingView(i, 1, length(seq), false))
@@ -26,11 +26,11 @@ end
 Create a pool of `ng` copies of the genome read in from the `FASTA.Reader`.
 """
 function makepool(rdr::FASTA.Reader, ng::Int = 1)
-    gen = Vector{BioSequence{DNAAlphabet{2}}}()
+    gen = Vector{LongSequence{DNAAlphabet{2}}}()
     rec = eltype(rdr)()
     while !eof(rdr)
         read!(rdr, rec)
-        push!(gen, FASTA.sequence(BioSequence{DNAAlphabet{2}}, rec))
+        push!(gen, FASTA.sequence(LongSequence{DNAAlphabet{2}}, rec))
     end
     return makepool(gen, ng)
 end

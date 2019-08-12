@@ -62,7 +62,7 @@ export
     ### Views
     Views
     
-using BioSequences
+using BioSequences, FASTX
 import Random
 
 # Build-a-Genome

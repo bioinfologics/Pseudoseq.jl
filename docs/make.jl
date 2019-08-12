@@ -39,11 +39,11 @@ makedocs(
         "Manual" => [
             "Sequencing" => [
                 "Core concepts & workflow" => "man/sequencing/concepts.md",
-                "Examples" => [
+                hide("Examples" => "man/sequencing/examples.md", [
                     "Paired end reads" => "man/sequencing/examples/pe-example.md",
                     "Long single end reads" => "man/sequencing/examples/se-example.md",
                     "Tagged paired end reads" => "man/sequencing/examples/tg-example.md"
-                ]
+                ])
             ],
             "Build-a-Genome" => [
                 "Core concepts & workflow" => "man/build-a-genome/concepts.md",
