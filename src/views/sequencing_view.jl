@@ -70,7 +70,7 @@ function take_single_end(sv::SequencingView, len::Int = length(sv))
 end
     
 
-function extract_sequence(ref::Sequence, view::SequencingView)
+function extract_sequence(ref::BioSequence, view::SequencingView)
     if isbwd(view)
         subseq = ref[last(view):first(view)]
         reverse_complement!(subseq)

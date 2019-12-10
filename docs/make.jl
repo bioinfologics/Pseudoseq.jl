@@ -1,5 +1,7 @@
 using Documenter, Literate, Pseudoseq
 
+Documenter.post_status(; type = "pending", repo = "github.com/bioinfologics/Pseudoseq.jl.git")
+
 SEQ_EXAMPLES = [joinpath("examples/sequencing", f) for f in ("pe-example.jl",
                                                              "se-example.jl",
                                                              "tg-example.jl")]
@@ -29,7 +31,9 @@ for ex in BAG_EXAMPLES
 end
 
 makedocs(
-    format = :html,
+    format = Documenter.HTML(
+        prettyurls = haskey(ENV, "GITHUB_ACTIONS")
+    ),
     modules = [Pseudoseq],
     sitename = "Pseudoseq.jl",
     doctest = false,
@@ -39,11 +43,11 @@ makedocs(
         "Manual" => [
             "Sequencing" => [
                 "Core concepts & workflow" => "man/sequencing/concepts.md",
-                hide("Examples" => "man/sequencing/examples.md", [
+                "Examples" => [
                     "Paired end reads" => "man/sequencing/examples/pe-example.md",
                     "Long single end reads" => "man/sequencing/examples/se-example.md",
                     "Tagged paired end reads" => "man/sequencing/examples/tg-example.md"
-                ])
+                ]
             ],
             "Build-a-Genome" => [
                 "Core concepts & workflow" => "man/build-a-genome/concepts.md",
@@ -70,5 +74,6 @@ makedocs(
 run(`find . -name "*.fastq" -type f -delete`)
 
 deploydocs(
-    repo = "github.com/bioinfologics/Pseudoseq.jl.git"
+    repo = "github.com/bioinfologics/Pseudoseq.jl.git",
+    push_preview = true
 )
