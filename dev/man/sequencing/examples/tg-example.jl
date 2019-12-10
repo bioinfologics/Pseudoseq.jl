@@ -22,6 +22,7 @@ sampledpool = subsample(taggedcutpool, N)
 tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
 tagged_w_errs = mark_errors(tagged_reads, 0.001)
 
-generate("tagged_reads.fastq", tagged_w_errs)#-
+generate("tagged_reads.fastq", tagged_w_errs)
+
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

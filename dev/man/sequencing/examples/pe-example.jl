@@ -19,6 +19,7 @@ pe_reads = make_reads(PairedEnd, sampledpool, 250)
 
 pe_w_errs = mark_errors(pe_reads, 0.001)
 
-generate("pe-reads.fastq", pe_w_errs)#-
+generate("pe-reads.fastq", pe_w_errs)
+
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

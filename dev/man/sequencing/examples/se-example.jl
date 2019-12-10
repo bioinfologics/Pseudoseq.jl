@@ -18,6 +18,7 @@ se_reads = make_reads(SingleEnd, sampledpool)
 
 se_w_errs = mark_errors(se_reads, 0.1)
 
-generate("longreads.fastq", se_w_errs)#-
+generate("longreads.fastq", se_w_errs)
+
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 

@@ -1,7 +1,7 @@
-using BioSequences, Pseudoseq
+using FASTX, BioSequences, Pseudoseq
 
 refseq = open(FASTA.Reader, "yeast-chr1.fasta") do rdr
-    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))
+    FASTA.sequence(LongSequence{DNAAlphabet{2}}, read(rdr))
 end
 
 reflen = length(refseq)
