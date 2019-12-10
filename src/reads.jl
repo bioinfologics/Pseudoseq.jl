@@ -99,7 +99,7 @@ end
 
 const nucs = [ACGT...]
 
-function add_errors!(seq::Sequence, errs::Vector{Int})
+function add_errors!(seq::BioSequence, errs::Vector{Int})
     for err in errs
         truebase = seq[err]
         posbases = filter(!isequal(truebase), nucs)
@@ -135,8 +135,8 @@ in a single FASTQ file, R1 and R2 reads are partitioned into two seperate FASTQ
 files.
 """
 function generate(R1name::String, R2name::String, reads::Reads{<:PairedReads})
-    R1W = open(FASTQ.Writer, R1)
-    R2W = open(FASTQ.Writer, R2)
+    R1W = open(FASTQ.Writer, R1name)
+    R2W = open(FASTQ.Writer, R2name)
     try
         generate(R1W, R2W, reads)
     finally
@@ -356,7 +356,7 @@ end
 function prepare_tags(reads::Reads{TaggedPairs})
     tags = keys(summarize_tags(views(reads)))
     tagrange = 0x0000000000000000:0x00000000ffffffff
-    tagseqs = DNAKmer{16}.(sample_values(tagrange, length(tags)))
+    tagseqs = DNAMer{16}.(sample_values(tagrange, length(tags)))
     tagdict = Dict(zip(tags, tagseqs))
     return tagdict
 end

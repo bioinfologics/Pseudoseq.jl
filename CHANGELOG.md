@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.0]
+
+### Added
+- The ability to filter and select views according to a condition.
+  Allowing to create e.g. size filters.
+
+### Changed
+- Set the required version of BioSequences to v2.
+
 ## [0.1.0]
 
 ### Added

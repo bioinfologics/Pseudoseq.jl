@@ -19,18 +19,18 @@
 #    b. Triploid chromosome
 #    c. Tetraploid chromosome
 
-using BioSequences, Pseudoseq
+using FASTX, BioSequences, Pseudoseq
 
 # ## Load the seed sequence
 # 
-# First load the sequence from FASTA file. This uses tools from BioSequences,
+# First load the sequence from FASTA file. This uses tools from FASTX,
 # which is a dependency of Pseudoseq and so the user should have it available,
 # as julia's package manager would have installed any dependencies.
 # The lines below open a fasta file, with a fasta reader, and load a single
 # FASTA record, and get its sequence. 
 
 refseq = open(FASTA.Reader, "yeast-chr1.fasta") do rdr
-    FASTA.sequence(BioSequence{DNAAlphabet{2}}, read(rdr))
+    FASTA.sequence(LongSequence{DNAAlphabet{2}}, read(rdr))
 end
 
 reflen = length(refseq)
