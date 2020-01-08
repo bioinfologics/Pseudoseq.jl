@@ -199,13 +199,12 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{PairedEnd})
         qual = Vector{Int}(undef, length(seq))
         FASTQ.encode_quality_string!(FASTQ.SANGER_QUAL_ENCODING, fill(30, length(seq)), qual, 1, length(seq))
         # Create the name for the read...
-        fragname = string("Refseq_", seqid(v))
         if isodd(i)
-            fragname = string(fragname, "_R1")
+            fragname = string("readpair_", i)
             fqread = FASTQ.Record(fragname, seq, qual)
             write(R1W, fqread)
         else
-            fragname = string(fragname, "_R2")
+            fragname = string("readpair_", i - 1)
             fqread = FASTQ.Record(fragname, seq, qual)
             write(R2W, fqread)
         end
@@ -391,14 +390,14 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{TaggedPairs
         FASTQ.encode_quality_string!(FASTQ.SANGER_QUAL_ENCODING, fill(30, length(seq)), qual, 1, length(seq))
         
         # Create the name for the read...
-        fragname = string("Refseq_", seqid(v))
+        #fragname = string("Refseq_", seqid(v))
         
         if isodd(i)
-            fragname = string(fragname, "_R1")
+            fragname = string("readpair_", i)
             fqread = FASTQ.Record(fragname, seq, qual)
             write(R1W, fqread)
         else
-            fragname = string(fragname, "_R2")
+            fragname = string("readpair_", i - 1)
             fqread = FASTQ.Record(fragname, seq, qual)
             write(R2W, fqread)
         end
