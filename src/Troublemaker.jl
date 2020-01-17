@@ -157,13 +157,15 @@ function stitch_motifs(ms::MotifStitcher)
 end
 
 function GenomeGraphs.Graphs.SequenceDistanceGraph(ms::MotifStitcher)
-    sdg = GenomeGraphs.Graphs.SequenceDistanceGraph{eltype(ms.motif_sequences)}()
-    for motif in ms.motif_sequences
-        GenomeGraphs.Graphs.add_node!(sdg, motif)
+    sequences = generate_motif_sequences(ms)
+    sdg = GenomeGraphs.Graphs.SequenceDistanceGraph{SEQ_T}()
+    for i in 1:length(sequences)
+        GenomeGraphs.Graphs.add_node!(sdg, sequences[i])
     end
-    path = ms.motif_order
-    for i in 2:lastindex(path)
-        GenomeGraphs.Graphs.add_link!(sdg, -path[i - 1], path[i], 0)
+    for path in ms.motif_order
+        for i in 2:lastindex(path)
+            GenomeGraphs.Graphs.add_link!(sdg, -path[i - 1], path[i], 0)
+        end
     end
     return sdg
 end
