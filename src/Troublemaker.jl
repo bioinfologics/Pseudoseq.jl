@@ -68,6 +68,16 @@ end
     return ms
 end
 
+@inline function add_motif!(ms::MotifStitcher, sm::SiblingMotif)
+    ms.n_motifs += 1
+    ms.sibling_motifs[ms.n_motifs] = sm
+    return ms
+end
+
+@inline function add_motif!(ms::MotifStitcher, p::Pair{Int,Float64})
+    return add_motif!(ms, SiblingMotif(first(p), last(p)))
+end
+
 function add_motifs!(ms::MotifStitcher, args...)
     for arg in args
         add_motif!(ms, arg)
