@@ -148,11 +148,10 @@ function generate_motif_sequences(ms::MotifStitcher)
         sequences[k] = randseq(DNAAlphabet{2}(), v.sampler, v.len)
     end
     merge!(sequences, ms.fixed_motifs)
-    # TODO: Generate sibling motifs!
     # TODO: Calls rand a lot.
     for (k, v) in ms.sibling_motifs
         s = copy(sequences[v.source_motif])
-        npoly = ceil(v.poly * length(sseq))
+        npoly = ceil(v.poly * length(s))
         sites = Random.randperm(npoly)
         @inbounds for si in sites
             oldnuc = s[si]
