@@ -152,7 +152,7 @@ function generate_motif_sequences(ms::MotifStitcher)
     for (k, v) in ms.sibling_motifs
         s = copy(sequences[v.source_motif])
         npoly = Int(ceil(v.poly * length(s)))
-        sites = Random.randperm(npoly)
+        sites = view(Random.randperm(length(s)), 1:npoly)
         @inbounds for si in sites
             s[si] = rand(MUTATIONS[s[si]])
         end
