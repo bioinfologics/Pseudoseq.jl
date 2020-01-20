@@ -154,8 +154,7 @@ function generate_motif_sequences(ms::MotifStitcher)
         npoly = Int(ceil(v.poly * length(s)))
         sites = Random.randperm(npoly)
         @inbounds for si in sites
-            oldnuc = s[si]
-            s[i] = rand(MUTATIONS[s[i]])
+            s[si] = rand(MUTATIONS[s[si]])
         end
         sequences[k] = s
     end
