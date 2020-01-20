@@ -87,8 +87,7 @@ end
 
 function add_motif_arrangement!(ms::MotifStitcher, arr::Vector{Int})
     arr′ = abs.(arr)
-    @assert minimum(arr′) === 1
-    @assert maximum(arr′) ≤ ms.n_motifs
+    @assert all(1 ≤ x ≤ ms.n_motifs for x in arr′)
     push!(ms.motif_order, copy(arr))
     return ms
 end
