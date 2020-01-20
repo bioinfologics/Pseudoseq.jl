@@ -158,6 +158,7 @@ function generate_motif_sequences(ms::MotifStitcher)
             oldnuc = s[si]
             s[i] = rand(MUTATIONS[s[i]])
         end
+        sequences[k] = s
     end
     return sequences
 end
