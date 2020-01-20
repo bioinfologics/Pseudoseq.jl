@@ -9,10 +9,16 @@ export
     generate_random_motif_sequences!,
     stitch_motifs
 
-
 using BioSequences
 using GenomeGraphs
+import Random
 
+const MUTATIONS = Dict(
+    DNA_A => (DNA_C, DNA_G, DNA_T),
+    DNA_C => (DNA_A, DNA_G, DNA_T),
+    DNA_G => (DNA_A, DNA_C, DNA_T),
+    DNA_T => (DNA_A, DNA_C, DNA_G),
+)
 const DEFAULT_SAMPLER = SamplerWeighted(dna"ATCG", fill(0.25, 3))
 const SEQ_T = LongSequence{DNAAlphabet{2}}
 
@@ -23,14 +29,14 @@ end
 
 struct SiblingMotif
     source_motif::Int
-    poly_positions::Int
+    poly::Float64
 end
 
 mutable struct MotifStitcher
     n_motifs::Int
     random_motifs::Dict{Int,RandomMotif}
     fixed_motifs::Dict{Int,SEQ_T}
-    motif_similarities::Dict{Int,SiblingMotif}
+    sibling_motifs::Dict{Int,SiblingMotif}
     motif_order::Vector{Vector{Int}}
 end
 
@@ -126,8 +132,6 @@ function set_motif_lengths!(pm::MotifStitcher, lens::Vector{Int})
 end
 =#
 
-
-
 function generate_motif_sequences(ms::MotifStitcher)
     sequences = Dict{Int, SEQ_T}()
     for (k, v) in ms.random_motifs
@@ -135,6 +139,16 @@ function generate_motif_sequences(ms::MotifStitcher)
     end
     merge!(sequences, ms.fixed_motifs)
     # TODO: Generate sibling motifs!
+    # TODO: Calls rand a lot.
+    for (k, v) in ms.sibling_motifs
+        s = copy(sequences[v.source_motif])
+        npoly = ceil(v.poly * length(sseq))
+        sites = Random.randperm(npoly)
+        @inbounds for si in sites
+            oldnuc = s[si]
+            s[i] = rand(MUTATIONS[s[i]])
+        end
+    end
     return sequences
 end
 
@@ -154,20 +168,6 @@ function stitch_motifs(ms::MotifStitcher)
         sequences[i] = s
     end
     return sequences
-end
-
-function GenomeGraphs.Graphs.SequenceDistanceGraph(ms::MotifStitcher)
-    sequences = generate_motif_sequences(ms)
-    sdg = GenomeGraphs.Graphs.SequenceDistanceGraph{SEQ_T}()
-    for i in 1:length(sequences)
-        GenomeGraphs.Graphs.add_node!(sdg, sequences[i])
-    end
-    for path in ms.motif_order
-        for i in 2:lastindex(path)
-            GenomeGraphs.Graphs.add_link!(sdg, -path[i - 1], path[i], 0)
-        end
-    end
-    return sdg
 end
 
 end # module
