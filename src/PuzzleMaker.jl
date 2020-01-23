@@ -1,4 +1,4 @@
-module Troublemaker
+module PuzzleMaker
 
 export
     MotifStitcher,
@@ -68,6 +68,15 @@ end
     return ms
 end
 
+#=
+function fix_motif_sequence!(ms::MotifStitcher, motifid::Int, seq::SEQ_T)
+    delete!(ms.random_motifs, motifid)
+    ms.fixed_motifs[motifid] = seq
+    ms.motif_lengths[motifid] = length(seq)
+    return ms
+end
+=#
+
 @inline function add_motif!(ms::MotifStitcher, sm::SiblingMotif)
     ms.n_motifs += 1
     ms.sibling_motifs[ms.n_motifs] = sm
@@ -100,14 +109,7 @@ end
 
 
 
-#=
-function fix_motif_sequence!(ms::MotifStitcher, motifid::Int, seq::SEQ_T)
-    delete!(ms.random_motifs, motifid)
-    ms.fixed_motifs[motifid] = seq
-    ms.motif_lengths[motifid] = length(seq)
-    return ms
-end
-=#
+
 
 #=
 function _delete_and_rekey_dictionary!(d::Dict{Int,T}, key::Int) where {T}

@@ -65,8 +65,8 @@ export
 using BioSequences, FASTX
 import Random
 
-# Troublemaker
-include("Troublemaker.jl")
+# PuzzleMaker
+include("PuzzleMaker.jl")
 
 # Build-a-Genome
 include("build_a_genome/internals.jl")

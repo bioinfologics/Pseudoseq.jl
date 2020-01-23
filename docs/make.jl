@@ -41,6 +41,7 @@ makedocs(
     pages = [
         "Home" => "index.md",
         "Manual" => [
+            "PuzzleMaker" => "man/puzzlemaker/concepts.md",
             "Sequencing" => [
                 "Core concepts & workflow" => "man/sequencing/concepts.md",
                 "Examples" => [
