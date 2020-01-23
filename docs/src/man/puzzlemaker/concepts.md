@@ -39,14 +39,82 @@ There are three kinds of motif that can be added to the MotifStitcher.
 2. A fixed motif.
 3. A sibling motif.
 
+#### Random motifs
+
 A random motif is a motif that will change between calls to `make_puzzle`.
-The reason is so as you can make multiple replicate puzzles with the same
-properties, but with different specific sequences.
+The reason is so as you can trivially make multiple replicate puzzles with the
+same properties, but with different specific sequences.
 
 You can add a random motif to a `MotifStitcher` by using the `add_motif!` method,
 and specifying only a length (in bp) for the random motif, for example:
 
-```jlcon
-ms = MotifStitcher
+```julia
+ms = MotifStitcher()
 add_motif!(ms, 10_000)
 ```
+
+By default, a random motif is constructed using a sampler that gives equal weighting
+to the four nucleotides. If you wanted more control over some of the nucleotide
+biases. You can construct a `RandomMotif` yourself, and provide it with your own
+nucleotide sampler:
+
+```julia
+ms = MotifStitcher()
+# Sampler biased toward GC.
+smp = SamplerWeighted(dna"ACGT", [0.2, 0.3, 0.3,])
+# RandomMotif of 10_000 bp in length, using custom sampler.
+add_motif!(ms, RandomMotif(10_000, smp))
+```
+
+!!! note
+    Only `SamplerWeighted{DNA}` types are accepted by `add_motif!`.
+
+#### Fixed motifs
+
+Unlike a random motif, a fixed motif has its sequence defined and constant over
+multiple calls of `make_puzzle`.
+
+This is useful for situations where your puzzles must always include a certain
+DNA sequence. Perhaps one of biological interest or known to confuse a heuristic.
+
+You add a fixed motif to a `MotifStitcher` simply by passing it a DNA sequence:
+
+```julia
+ms = MotifStitcher()
+add_motif!(ms, dna"ATCGATCG")
+```
+
+#### Sibling motifs
+
+A sibling motif is a motif that is randomly generated for each call of
+`make_puzzle` just like random motifs. However, unlike random motifs, a sibling
+motif is defined in terms of another motif already defined in the `MotifStitcher`.
+
+To define a sibling motif, you specify an already existing motif. That motif's
+sequence forms the base sequence of the new sibling motif. To define a sibling
+motif you also need to provide a value that specifies the proportion of bases in
+the new sibling motif's sequence, that should differ in their nucleic acid from
+the base motifs sequence.
+
+So sibling motifs then make it simple to define motifs that have a certain
+level of sequence similarity / homology / shared ancestry, with another motif.
+Creating portions of a simulated diploid genome might be one practical application
+of sibling motifs.
+
+You add a sibling motif to the `MotifStitcher` by providing the `add_motif!` method
+with an `Pair{Int,Float64}`. where the integer is the ID of the chosen base motif
+already defined in the `MotifStitcher`, and the floating point number specifies
+the proportion of differing bases in the new motif's sequence:
+
+```julia
+ms = MotifStitcher()
+# A random first 10,000bp motif. Has ID = 1.
+add_motif!(ms, 10_000)
+# Add a sibling motif that will have ~10 bases which differ from motif #1.
+# Will have ID = 2.
+add_motif!(ms, 1 => 0.01)
+```
+
+### 1. Specify haplotypes
+
+

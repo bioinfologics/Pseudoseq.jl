@@ -7,7 +7,8 @@ export
     add_motifs!,
     add_motif_arrangement!,
     generate_random_motif_sequences!,
-    stitch_motifs
+    stitch_motifs,
+    SamplerWeighted
 
 using BioSequences
 using GenomeGraphs
