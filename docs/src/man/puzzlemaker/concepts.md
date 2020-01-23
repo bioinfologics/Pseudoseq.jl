@@ -67,7 +67,7 @@ add_motif!(ms, RandomMotif(10_000, smp))
 ```
 
 !!! note
-    Only `SamplerWeighted{DNA}` types are accepted by `add_motif!`.
+    Only `SamplerWeighted{DNA}` types are accepted.
 
 #### Fixed motifs
 
@@ -115,6 +115,17 @@ add_motif!(ms, 10_000)
 add_motif!(ms, 1 => 0.01)
 ```
 
-### 1. Specify haplotypes
+### 2. Specify haplotypes
+
+Once you have a set of motifs defined, you can build a set of haplotypes by
+specifying sequences of motifs.
+
+!!! note 
+    You specify the motifs using a vector of ID numbers. If you use a negative ID
+    number -N then it means the reverse complement of the sequence of motif N.
+
+!!! note
+    A motif's ID can be repeated in such a vector any number of times, so you can
+    create repeat structures in a haplotype. 
 
 
