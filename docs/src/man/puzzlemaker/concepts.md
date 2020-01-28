@@ -144,20 +144,20 @@ add_motif_arrangement!(ms, [1, 2, 3, 4, 5, -4, -6, -2, 7])
 
 With the motifs defined and the haplotypes defined you can now generate sequences!
 
-Simply call the `generate` method on the `MotifStitcher` to get a vector of
-haplotype sequences. Repeatedly call `generate` to get independently generated
+Simply call the `make_puzzle` method on the `MotifStitcher` to get a vector of
+haplotype sequences. Repeatedly call `make_puzzle` to get independently generated
 sequences from the same specification:
 
 ```@repl pmkr
-generate(ms)
-generate(ms)
+make_puzzle(ms)
+make_puzzle(ms)
 ```
 
 If you provide a filename, the haplotypes will be written to file in FASTA
 format, instead of returned as a value:
 
-```@repl
-generate(ms, "myhaplos.fasta")
+```@repl pmkr
+make_puzzle(ms, "myhaplos.fasta")
 ```
 
 That's all there is to it. Now you can try a simulated sequencing experiment on
