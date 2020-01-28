@@ -50,6 +50,7 @@ and specifying only a length (in bp) for the random motif, for example:
 
 ```@setup pmkr
 using Pseudoseq.PuzzleMaker
+using BioSequences
 ```
 
 ```@repl pmkr
@@ -112,11 +113,8 @@ the proportion of differing bases in the new motif's sequence:
 
 ```@repl pmkr
 ms = MotifStitcher()
-# A random first 10,000bp motif. Has ID = 1.
-add_motif!(ms, 10_000)
-# Add a sibling motif that will have ~10 bases which differ from motif #1.
-# Will have ID = 2.
-add_motif!(ms, 1 => 0.01)
+add_motif!(ms, 10_000) # A random first 10,000bp motif. Has ID = 1.
+add_motif!(ms, 1 => 0.01) # Add a sibling motif that will have ~10 bases which differ from motif #1. Will have ID = 2.
 ```
 
 ### 2. Specify haplotypes
@@ -140,8 +138,7 @@ with repeats when turned into a DeBruijn graph.
 
 ```@repl pmkr
 ms = MotifStitcher()
-# Use add_motifs! to add multiple random motifs at once.
-add_motifs!(ms, 10000, 600, 10000, 600, 10000, 10000, 10000)
+add_motifs!(ms, 10000, 600, 10000, 600, 10000, 10000, 10000) # Use add_motifs! to add multiple random motifs at once.
 add_motif_arrangement!(ms, [1, 2, 3, 4, 5, -4, -6, -2, 7])
 ```
 
