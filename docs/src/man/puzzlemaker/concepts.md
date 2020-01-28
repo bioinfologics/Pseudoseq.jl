@@ -65,10 +65,8 @@ nucleotide sampler:
 
 ```@repl pmkr
 ms = MotifStitcher()
-# Sampler biased toward GC.
-smp = SamplerWeighted(dna"ACGT", [0.2, 0.3, 0.3,])
-# RandomMotif of 10_000 bp in length, using custom sampler.
-add_motif!(ms, RandomMotif(10_000, smp))
+smp = SamplerWeighted(dna"ACGT", [0.2, 0.3, 0.3,]) # Sampler biased toward GC.
+add_motif!(ms, RandomMotif(10_000, smp)) # RandomMotif of 10_000 bp in length, using custom sampler.
 ```
 
 !!! note

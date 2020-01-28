@@ -70,6 +70,10 @@ end
     return ms
 end
 
+@inline function add_motif!(ms::MotifStitcher, fm::DNASequence)
+    return add_motif!(ms, LongSequence{DNAAlphabet{2}}(fm))
+end
+
 #=
 function fix_motif_sequence!(ms::MotifStitcher, motifid::Int, seq::SEQ_T)
     delete!(ms.random_motifs, motifid)
