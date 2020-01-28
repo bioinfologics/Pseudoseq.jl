@@ -48,7 +48,11 @@ same properties, but with different specific sequences.
 You can add a random motif to a `MotifStitcher` by using the `add_motif!` method,
 and specifying only a length (in bp) for the random motif, for example:
 
-```julia
+```@setup pmkr
+using Pseudoseq.PuzzleMaker
+```
+
+```@repl pmkr
 ms = MotifStitcher()
 add_motif!(ms, 10_000)
 ```
@@ -58,7 +62,7 @@ to the four nucleotides. If you wanted more control over some of the nucleotide
 biases. You can construct a `RandomMotif` yourself, and provide it with your own
 nucleotide sampler:
 
-```julia
+```@repl pmkr
 ms = MotifStitcher()
 # Sampler biased toward GC.
 smp = SamplerWeighted(dna"ACGT", [0.2, 0.3, 0.3,])
@@ -79,7 +83,7 @@ DNA sequence. Perhaps one of biological interest or known to confuse a heuristic
 
 You add a fixed motif to a `MotifStitcher` simply by passing it a DNA sequence:
 
-```julia
+```@repl pmkr
 ms = MotifStitcher()
 add_motif!(ms, dna"ATCGATCG")
 ```
@@ -106,7 +110,7 @@ with an `Pair{Int,Float64}`. where the integer is the ID of the chosen base moti
 already defined in the `MotifStitcher`, and the floating point number specifies
 the proportion of differing bases in the new motif's sequence:
 
-```julia
+```@repl pmkr
 ms = MotifStitcher()
 # A random first 10,000bp motif. Has ID = 1.
 add_motif!(ms, 10_000)
@@ -120,7 +124,7 @@ add_motif!(ms, 1 => 0.01)
 Once you have a set of motifs defined, you can build a set of haplotypes by
 specifying sequences of motifs.
 
-!!! note 
+!!! note
     You specify the motifs using a vector of ID numbers. If you use a negative ID
     number -N then it means the reverse complement of the sequence of motif N.
 
@@ -128,4 +132,38 @@ specifying sequences of motifs.
     A motif's ID can be repeated in such a vector any number of times, so you can
     create repeat structures in a haplotype. 
 
+You add a haplotype by using the `add_motif_arrangement!` method with a
+`MotifStitcher` and a vector of motif IDs.
 
+For example, let's make a sequence that would form a hair-pin like structure,
+with repeats when turned into a DeBruijn graph.
+
+```@repl pmkr
+ms = MotifStitcher()
+# Use add_motifs! to add multiple random motifs at once.
+add_motifs!(ms, 10000, 600, 10000, 600, 10000, 10000, 10000)
+add_motif_arrangement!(ms, [1, 2, 3, 4, 5, -4, -6, -2, 7])
+```
+
+### 3. Generate haplotype sequences
+
+With the motifs defined and the haplotypes defined you can now generate sequences!
+
+Simply call the `generate` method on the `MotifStitcher` to get a vector of
+haplotype sequences. Repeatedly call `generate` to get independently generated
+sequences from the same specification:
+
+```@repl pmkr
+generate(ms)
+generate(ms)
+```
+
+If you provide a filename, the haplotypes will be written to file in FASTA
+format, instead of returned as a value:
+
+```@repl
+generate(ms, "myhaplos.fasta")
+```
+
+That's all there is to it. Now you can try a simulated sequencing experiment on
+your haplotypes. 

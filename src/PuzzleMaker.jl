@@ -7,10 +7,11 @@ export
     add_motifs!,
     add_motif_arrangement!,
     generate_random_motif_sequences!,
-    stitch_motifs,
+    generate,
     SamplerWeighted
 
 using BioSequences
+using FASTX
 using GenomeGraphs
 import Random
 
@@ -163,7 +164,7 @@ function generate_motif_sequences(ms::MotifStitcher)
     return sequences
 end
 
-function stitch_motifs(ms::MotifStitcher)
+function generate(ms::MotifStitcher)
     sequences = Vector{SEQ_T}(undef, length(ms.motif_order))
     motif_seqs = generate_motif_sequences(ms)
     for i in eachindex(ms.motif_order)
@@ -180,5 +181,18 @@ function stitch_motifs(ms::MotifStitcher)
     end
     return sequences
 end
+
+function generate(ms::MotifStitcher, fastafile::String)
+    seqs = generate(ms)
+    open(FASTA.Writer, fastafile) do wtr
+        for (i, s) in enumerate(seqs)
+            rec = FASTA.Record(string("haplotype_", i), s)
+            write(wtr, rec)
+        end
+    end
+    return nothing
+end
+
+
 
 end # module
