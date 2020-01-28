@@ -70,7 +70,7 @@ end
     return ms
 end
 
-@inline function add_motif!(ms::MotifStitcher, fm::DNASequence)
+@inline function add_motif!(ms::MotifStitcher, fm::LongDNASeq)
     return add_motif!(ms, LongSequence{DNAAlphabet{2}}(fm))
 end
 
