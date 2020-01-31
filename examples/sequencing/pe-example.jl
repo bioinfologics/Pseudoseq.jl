@@ -36,7 +36,7 @@ using Pseudoseq.Sequencing
 
 sequence("ecoli-ref.fasta", "pe-reads.fastq"; ng = 5000, flen = 700, cov = 50, paired = true, rdlen = 250, err = 0.001)
 
-# ## Using the Pseudoseq API
+# ## Using the `Molecules` tranformation methods.
 # 
 # Here's how to achieve the same thing, using the Pseudoseq API. It is nessecery to
 # use the API if you want to do something that is not anticipated by the available
@@ -76,3 +76,26 @@ pe_w_errs = mark_errors(pe_reads, 0.001)
 # can generate FASTQ files.
 
 generate("pe-reads.fastq", pe_w_errs)
+
+# ## Constructing a pipeline of `Processors`.
+#
+# As a convenience, some users may prefer to use pipelines of `Processors`
+# These behave like curried versions of the `Molecules` transformation methods.
+# First let's define our starting `Molecules` pool:
+
+pool = Molecules("ecoli-ref.fasta", 5000)
+
+# To make a Processor, use a `Molecules` transformation method, but do not
+# provide a `Molecules` value as a first argument. So let's make Processors for
+# each step of our paired end sequencing pipeline.
+
+cutter = fragment(700)
+sampler = subsample(N) # Remember how to computed N previously.
+
+# Next we can construct the pipeline using standard julia function pipelining syntax:
+
+pool |> cutter |> sampler
+
+# You can also compose the processors together into one whole function. 
+
+# \circ.

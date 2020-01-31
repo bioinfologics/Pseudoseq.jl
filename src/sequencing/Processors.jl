@@ -1,4 +1,7 @@
+# Processors
+# ==========
 
+# Processors for pipelining
 
 
 struct Amplifier
@@ -23,7 +26,7 @@ struct SubSampler
     nsamples::Int
 end
 subsample(n::Int) = SubSampler(n)
-(s::SubSampler)(p::Molecules) = subsample(p, s.n)
+(s::SubSampler)(p::Molecules) = subsample(p, s.nsamples)
 
 struct Selector{F<:Function}
     f::F
