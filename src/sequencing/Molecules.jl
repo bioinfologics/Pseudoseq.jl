@@ -125,12 +125,6 @@ function fragment(p::Molecules, meansize::Int)
     return np
 end
 
-struct Fragmenter
-    meansize::Int
-end
-fragment(meansize::Int) = Fragmenter(meansize)
-(f::Fragmenter)(p::Molecules) = fragment(p, f.meansize)
-
 """
     subsample(p::Molecules, n::Int)
 
