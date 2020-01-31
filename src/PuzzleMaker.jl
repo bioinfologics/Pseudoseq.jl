@@ -194,7 +194,7 @@ function make_puzzle(ms::MotifStitcher, fastafile::String)
             write(wtr, rec)
         end
     end
-    return nothing
+    return seqs
 end
 
 

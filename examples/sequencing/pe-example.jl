@@ -19,7 +19,7 @@
 # 5. Apply errors to the paired-end reads at a rate of 0.001 (.1%).
 # 6. Generate an output FASTQ file.
 
-using Pseudoseq
+using Pseudoseq.Sequencing
 
 # ## Using the [`sequence`](@ref) method
 # 
@@ -45,7 +45,7 @@ sequence("ecoli-ref.fasta", "pe-reads.fastq"; ng = 5000, flen = 700, cov = 50, p
 # Starting with a FASTA formatted file containing the genome we want to sequence,
 # we create a pool with 5000 copies of the genome.
 
-pool = makepool("ecoli-ref.fasta", 5000)
+pool = Molecules("ecoli-ref.fasta", 5000)
 
 # Next we use the fragment function to make a pool of shorter DNA molecules.
 
@@ -65,7 +65,7 @@ sampledpool = subsample(cutpool, N)
 # We now want to create a set of paired-end reads. We want our reads to be 250bp
 # in length.
 
-pe_reads = make_reads(PairedEnd, sampledpool, 250)
+pe_reads = paired_reads(sampledpool, 250)
 
 # Now we have some reads, we should mark positions in the reads that are destined
 # to be errors in the output FASTQ.

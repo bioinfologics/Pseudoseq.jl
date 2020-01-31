@@ -37,7 +37,7 @@ function sequence(input, output = nothing;
                   err::Float64 = 0.001
                   )
                   
-    pool = makepool(input, 1)
+    pool = Molecules(input, 1)
     genome_size = sum(length(x) for x in views(pool))
     
     pool = amplify(pool, ng)
@@ -62,10 +62,10 @@ function sequence(input, output = nothing;
     @info string("- ✔ Subsampled pool at ", cov, "X coverage (", N, " molecules)")
     
     if paired
-        reads = make_reads(PairedEnd, pool, rdlen)
+        reads = paired_reads(pool, rdlen)
         @info string("- ✔ Created set of ", rdlen, "bp paired-end reads")
     else
-        reads = make_reads(SingleEnd, pool, rdlen)
+        reads = unpaired_reads(pool, rdlen)
         @info string("- ✔ Created set of ", rdlen === nothing ? "" : string(rdlen, "bp "), "single-end reads")
     end
     
