@@ -5,7 +5,7 @@
 ### Making a pool of molecules
 
 ```@docs
-makepool
+Molecules
 ```
 
 ### Molecule pool transformations

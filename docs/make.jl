@@ -6,17 +6,17 @@ SEQ_EXAMPLES = [joinpath("examples/sequencing", f) for f in ("pe-example.jl",
                                                              "se-example.jl",
                                                              "tg-example.jl")]
 
-BAG_EXAMPLES = [joinpath("examples/build-a-genome", f) for f in ("build-a-yeast.jl",)]
+#BAG_EXAMPLES = [joinpath("examples/build-a-genome", f) for f in ("build-a-yeast.jl",)]
 
 
 OUTPUT = joinpath(@__DIR__, "src/man")
 SEQ_OUTPUT = joinpath(OUTPUT, "sequencing/examples")
-BAG_OUTPUT = joinpath(OUTPUT, "build-a-genome/examples")
+#BAG_OUTPUT = joinpath(OUTPUT, "build-a-genome/examples")
 mkdir(SEQ_OUTPUT)
-mkdir(BAG_OUTPUT)
+#mkdir(BAG_OUTPUT)
 
 cp("examples/sequencing/ecoli-ref.fasta", "docs/src/man/sequencing/examples/ecoli-ref.fasta")
-cp("examples/build-a-genome/yeast-chr1.fasta", "docs/src/man/build-a-genome/examples/yeast-chr1.fasta")
+#cp("examples/build-a-genome/yeast-chr1.fasta", "docs/src/man/build-a-genome/examples/yeast-chr1.fasta")
 
 for ex in SEQ_EXAMPLES
     Literate.markdown(ex, SEQ_OUTPUT)
@@ -24,11 +24,11 @@ for ex in SEQ_EXAMPLES
     Literate.script(ex, SEQ_OUTPUT)
 end
 
-for ex in BAG_EXAMPLES
-    Literate.markdown(ex, BAG_OUTPUT)
-    Literate.notebook(ex, BAG_OUTPUT)
-    Literate.script(ex, BAG_OUTPUT)
-end
+#for ex in BAG_EXAMPLES
+#    Literate.markdown(ex, BAG_OUTPUT)
+#    Literate.notebook(ex, BAG_OUTPUT)
+#    Literate.script(ex, BAG_OUTPUT)
+#end
 
 makedocs(
     format = Documenter.HTML(
@@ -48,12 +48,6 @@ makedocs(
                     "Paired end reads" => "man/sequencing/examples/pe-example.md",
                     "Long single end reads" => "man/sequencing/examples/se-example.md",
                     "Tagged paired end reads" => "man/sequencing/examples/tg-example.md"
-                ]
-            ],
-            "Build-a-Genome" => [
-                "Core concepts & workflow" => "man/build-a-genome/concepts.md",
-                "Examples" => [
-                    "Build-a-Yeast" => "man/build-a-genome/examples/build-a-yeast.md",
                 ]
             ]
         ],

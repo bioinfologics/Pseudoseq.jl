@@ -22,7 +22,7 @@
 # 7. Apply errors to the paired-end reads at a rate of 0.001 (.1%).
 # 8. Generate an output FASTQ file.
 
-using Pseudoseq
+using Pseudoseq.Sequencing
 
 # ## Using the [`sequence`](@ref) method
 # 
@@ -49,7 +49,7 @@ sequence("ecoli-ref.fasta", "tagged_reads.fastq"; ng = 5000, tusize = 1000000, t
 #
 # Let's start with a pool of 5000 copies of a genome contained in a FASTA file:
 
-dnapool = makepool("ecoli-ref.fasta", 5000)
+dnapool = Molecules("ecoli-ref.fasta", 5000)
 
 # Now let's cut up the molecules to an average length of 40,000bp
 
@@ -83,7 +83,7 @@ sampledpool = subsample(taggedcutpool, N)
 # Now let's make some 250bp tagged paired reads and generate some erroneous
 # positions.
 
-tagged_reads = make_reads(TaggedPairs, sampledpool, 250)
+tagged_reads = paired_reads(sampledpool, 250)
 tagged_w_errs = mark_errors(tagged_reads, 0.001)
 
 # Output to FASTQ:

@@ -1,86 +1,88 @@
 
-struct MoleculePool
+struct Molecules{T<:AbstractSequencingView}
     genome::Vector{LongSequence{DNAAlphabet{2}}}
-    seqviews::Views
+    views::Vector{T}
 end
 
 """
-    makepool(gen::Vector{LongSequence{DNAAlphabet{2}}}, ng::Int = 1)
+    Molecules(gen::Vector{LongSequence{DNAAlphabet{2}}}, ng::Int = 1)
 
 Create a pool of `ng` copies of a genome defined by the `gen` vector of sequences.
 """
-function makepool(gen::Vector{LongSequence{DNAAlphabet{2}}}, ng::Int = 1)
-    vs = Views()
+function Molecules(gen::Vector{LongSequence{DNAAlphabet{2}}}, ng::Int = 1)
+    vs = Vector{BasicSequencingView}()
     for (i, seq) in enumerate(gen)
-        push!(vs, SequencingView(i, 1, length(seq), false))
+        push!(vs, BasicSequencingView(i, 1, length(seq)))
     end
     if ng > 1
         vs = amplify(vs, ng)
     end
-    return MoleculePool(gen, vs)
+    return Molecules{BasicSequencingView}(gen, vs)
 end
 
 """
-    makepool(rdr::FASTA.Reader, ng::Int = 1)
+    Molecules(rdr::FASTA.Reader, ng::Int = 1)
 
 Create a pool of `ng` copies of the genome read in from the `FASTA.Reader`.
 """
-function makepool(rdr::FASTA.Reader, ng::Int = 1)
+function Molecules(rdr::FASTA.Reader, ng::Int = 1)
     gen = Vector{LongSequence{DNAAlphabet{2}}}()
     rec = eltype(rdr)()
     while !eof(rdr)
         read!(rdr, rec)
         push!(gen, FASTA.sequence(LongSequence{DNAAlphabet{2}}, rec))
     end
-    return makepool(gen, ng)
+    return Molecules(gen, ng)
 end
 
 """
-    makepool(file::String, ng::Int)
+    Molecules(file::String, ng::Int)
 
 Create a pool of `ng` copies of the genome in the fasta formatted `file`.
 
 !!! note
     The argument `iscircular` is currently not used.
 """
-function makepool(file::String, ng::Int = 1)
+function Molecules(file::String, ng::Int = 1)
     open(FASTA.Reader, file) do rdr
-        makepool(rdr, ng)
+        Molecules(rdr, ng)
     end
 end
 
-@inline views(u::MoleculePool) = u.seqviews
-@inline genome(u::MoleculePool) = u.genome
-@inline nmolecules(u::MoleculePool) = length(views(u))
+@inline views(u::Molecules) = u.views
+@inline genome(u::Molecules) = u.genome
+@inline nmolecules(u::Molecules) = length(views(u))
 
-function Base.show(io::IO, p::MoleculePool)
-    println(io, "Pool of $(nmolecules(p)) molecules:")
+function Base.show(io::IO, p::Molecules{T}) where {T<:AbstractSequencingView}
+    println(io, "Pool of $(nmolecules(p)) DNA molecules:")
     mx, av, mn = summarize_lengths(views(p))
-    if mx == mn
+    if mx === mn
         println(io, " All molecules are of the same size: $mx")
     else
         println(io, " Maximum molecule size: $mx")
         println(io, " Average molecule size: $av")
         println(io, " Minimum molecule size: $mn")
     end
-    tags = summarize_tags(views(p))
-    if length(tags) > 0
-        println(io, " Number of distinct tags: $(length(keys(tags)))")
+    if T === TaggedSequencingView
+        tags = summarize_tags(views(p))
+        if length(tags) > 0
+            println(io, " Number of distinct tags: $(length(keys(tags)))")
+        end
     end
 end
 
 # Transformations
 # ---------------
 
-function amplify(p::MoleculePool, n::Int)
-    np = MoleculePool(genome(p), amplify(views(p), n))
+function amplify(p::Molecules, n::Int) where {T}
+    np = typeof(p)(genome(p), amplify(views(p), n))
     return np
 end
 
 """
-    fragment(p::MoleculePool, meansize::Int)
+    fragment(p::Molecules, meansize::Int)
     
-Create a new pool by breaking up the DNA fragments in an input pool.
+Create a new pool of DNA molecules, by breaking up the DNA molecules in some input pool.
 
 This method breaks up a DNA molecule in a pool `p`, such that the average
 length of the fragments is approximately `meansize`.
@@ -110,15 +112,15 @@ across the molecule, before cutting the molecule at those breakpoints.
     If a DNA molecule being fragmented is smaller than the desired `meansize`,
     then it will not be broken, it will simply be included in the new pool.
 """
-function fragment(p::MoleculePool, meansize::Int)
-    np = MoleculePool(genome(p), fragment(views(p), meansize::Int))
+function fragment(p::Molecules, meansize::Int)
+    np = typeof(p)(genome(p), fragment(views(p), meansize::Int))
     return np
 end
 
 """
-    subsample(p::MoleculePool, n::Int)
+    subsample(p::Molecules, n::Int)
 
-Create a new pool by sampling an input pool.
+Create a new pool of DNA molecules by sampling an input pool.
 
 !!! note
     DNA molecules in the input pool `p` are selected according to the
@@ -129,17 +131,17 @@ Create a new pool by sampling an input pool.
     Sampling is done without replacement, so it is impossible for the new
     pool that is created to recieve one molecule the input pool twice.
 """
-function subsample(p::MoleculePool, n::Int)
-    np = MoleculePool(genome(p), subsample(views(p), n))
+function subsample(p::Molecules, n::Int)
+    np = typeof(p)(genome(p), subsample(views(p), n))
     return np
 end
 
 """
-    tag(u::MoleculePool, ntags::Int)
+    tag(u::Molecules{BasicSequencingView}, ntags::Int)
 
 Create a pool of tagged DNA molecules from some input pool.
 
-The new tagged pool has the same DNA molecules as the input pool.
+The new pool has the same DNA molecules as the input pool.
 However, each DNA molecule in the new tagged pool will be assigned a tag
 in the range of `1:ntags`.
 
@@ -156,25 +158,25 @@ fragment's tag.
     the same tag. The likelihood of that happening depends on the size of the
     tag pool (`ntags`), and the number of fragments in the pool.
 """
-function tag(p::MoleculePool, ntags::Int)
+function tag(p::Molecules{BasicSequencingView}, ntags::Int)
     @info "Attaching $(ntags) tags randomly to each molecule in pool..."
-    np = MoleculePool(genome(p), tag(views(p), ntags))
+    np = Molecules{TaggedSequencingView}(genome(p), tag(views(p), ntags))
     @info "Done"
     return np
 end
 
 """
-    flip(p::MoleculePool)
+    flip(p::Molecules)
 
 Create a copy of flipped DNA molecules from some input pool.
 
 The flip function lets you randomly flip some of the molecules in a pool to the
 opposite orientation they are in.
 """
-function flip(p::MoleculePool)
-    return MoleculePool(genome(p), flip_views(views(p)))
+function flip(p::Molecules)
+    return typeof(p)(genome(p), flip_views(views(p)))
 end
 
-function select(fn::Function, p::MoleculePool)
-    np = MoleculePool(genome(p), select(fn, views(p)))
+function select(fn::Function, p::Molecules)
+    np = typeof(p)(genome(p), select(fn, views(p)))
 end

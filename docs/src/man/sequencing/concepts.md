@@ -24,8 +24,8 @@ In reality, all DNA sequencing experiments begin with a sample of tissue or cell
 DNA is extracted from the sample in the laboratory, after the genomes of the
 cells exist as number of DNA molecules, suspended in a solution.
 
-In `Pseudoseq`, such a collection of DNA molecules is called *the molecule pool*,
-it is created with the [`makepool`](@ref) function.
+In `Pseudoseq`, such a collection of DNA molecules is called *a molecule pool*,
+it is created with the [`Molecules`](@ref) constructor function.
 
 In the beginning of a `Psueodseq` simulation script you create a pool that is
 the totality of all copies of the genome that exist in your simulation.

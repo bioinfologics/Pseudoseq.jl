@@ -21,7 +21,7 @@
 # 5. Apply errors to the reads at a rate of 0.10 (1 error every 10bp).
 # 6. Generate an output FASTQ file.
 
-using Pseudoseq
+using Pseudoseq.Sequencing
 
 # ## Using the [`sequence`](@ref) method
 # 
@@ -46,7 +46,7 @@ sequence("ecoli-ref.fasta", "longreads.fastq"; ng = 5000, flen = 40000, cov = 30
 # 
 # Let's start with a pool of 5000 copies of a genome contained in a FASTA file:
 
-pool = makepool("ecoli-ref.fasta", 5000)
+pool = Molecules("ecoli-ref.fasta", 5000)
 
 # Cut the pool of DNA into fragments of an average length of 40,000bp
 
@@ -69,7 +69,7 @@ sampledpool = subsample(cutpool, N)
 # It takes an entire DNA fragment, feeds it through an electrically charged
 # pore, producing a read for the entire fragment. 
 
-se_reads = make_reads(SingleEnd, sampledpool)
+se_reads = unpaired_reads(sampledpool, nothing)
 
 # Long read sequencer have much higher error rates than short read sequencers
 # so we use a error rate of 0.1.
