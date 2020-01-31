@@ -21,5 +21,12 @@ pe_w_errs = mark_errors(pe_reads, 0.001)
 
 generate("pe-reads.fastq", pe_w_errs)
 
+pool = Molecules("ecoli-ref.fasta", 5000)
+
+cutter = fragment(700)
+sampler = subsample(N) # Remember how to computed N previously.
+
+pool |> cutter |> sampler
+
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
