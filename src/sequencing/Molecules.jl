@@ -79,6 +79,14 @@ function amplify(p::Molecules, n::Int) where {T}
     return np
 end
 
+struct Amplifier
+    n::Int
+end
+amplify(n::Int) = Amplifier(n)
+(a::Amplifier)(p::Molecules) = amplify(p, a.n)
+
+
+
 """
     fragment(p::Molecules, meansize::Int)
     
@@ -116,6 +124,12 @@ function fragment(p::Molecules, meansize::Int)
     np = typeof(p)(genome(p), fragment(views(p), meansize::Int))
     return np
 end
+
+struct Fragmenter
+    meansize::Int
+end
+fragment(meansize::Int) = Fragmenter(meansize)
+(f::Fragmenter)(p::Molecules) = fragment(p, f.meansize)
 
 """
     subsample(p::Molecules, n::Int)
