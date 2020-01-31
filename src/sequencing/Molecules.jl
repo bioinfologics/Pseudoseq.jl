@@ -79,14 +79,6 @@ function amplify(p::Molecules, n::Int) where {T}
     return np
 end
 
-struct Amplifier
-    n::Int
-end
-amplify(n::Int) = Amplifier(n)
-(a::Amplifier)(p::Molecules) = amplify(p, a.n)
-
-
-
 """
     fragment(p::Molecules, meansize::Int)
     
