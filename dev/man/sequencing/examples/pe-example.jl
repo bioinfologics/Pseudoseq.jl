@@ -1,8 +1,8 @@
-using Pseudoseq
+using Pseudoseq.Sequencing
 
 sequence("ecoli-ref.fasta", "pe-reads.fastq"; ng = 5000, flen = 700, cov = 50, paired = true, rdlen = 250, err = 0.001)
 
-pool = makepool("ecoli-ref.fasta", 5000)
+pool = Molecules("ecoli-ref.fasta", 5000)
 
 cutpool = fragment(pool, 700)
 
@@ -15,7 +15,7 @@ N = div(N, 2) # Divide by 2 as we're doing paired end sequencing.
 
 sampledpool = subsample(cutpool, N)
 
-pe_reads = make_reads(PairedEnd, sampledpool, 250)
+pe_reads = paired_reads(sampledpool, 250)
 
 pe_w_errs = mark_errors(pe_reads, 0.001)
 
