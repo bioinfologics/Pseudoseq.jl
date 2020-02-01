@@ -25,6 +25,7 @@ expected_coverage(G::Int, L::Int, N::Int) = div(L * N, G)
 include("sequencing_views.jl")
 include("Molecules.jl")
 include("Reads.jl")
+include("Processors.jl")
 include("sequence.jl")
 
 end # module
