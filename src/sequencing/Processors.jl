@@ -33,3 +33,22 @@ struct Selector{F<:Function}
 end
 select(f::Function) = Selector(f)
 (s::Selector{F})(p::Molecules) where {F<:Function} = select(s.f, p)
+
+struct PairedReads
+    flen::Int
+    rlen::Int
+end
+paired_reads(flen::Int, rlen::Int = flen) = PairedReads(flen, rlen)
+(pr::PairedReads)(p::Molecules) = paired_reads(p, pr.flen, pr.rlen)
+
+struct ErrorMaker
+    rate::Float64
+end
+mark_errors(rate::Float64) = ErrorMaker(rate)
+(em::ErrorMaker)(p::Molecules) = mark_errors(p, em.rate)
+
+struct FileGenerator
+    filename::String
+end
+generate(filename::String) = FileGenerator(filename)
+(fg::FileGenerator)(r::Reads) = generate(fg.filename, r)

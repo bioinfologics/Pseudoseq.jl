@@ -91,11 +91,15 @@ pool = Molecules("ecoli-ref.fasta", 5000)
 
 cutter = fragment(700)
 sampler = subsample(N) # Remember how to computed N previously.
+mkreads = paired_reads(250)
+adderr = mark_errors(0.001)
 
 # Next we can construct the pipeline using standard julia function pipelining syntax:
 
-pool |> cutter |> sampler
+pool |> cutter |> sampler |> mkreads |> adderr |> generate("pe-reads.fastq")
 
 # You can also compose the processors together into one whole function. 
 
-# \circ.
+my_protocol = cutter ∘ sampler ∘ mkreads ∘ adderr
+
+pool |> my_protocol |> generate("pe-reads.fastq")
