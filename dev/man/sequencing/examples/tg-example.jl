@@ -24,5 +24,20 @@ tagged_w_errs = mark_errors(tagged_reads, 0.001)
 
 generate("tagged_reads.fastq", tagged_w_errs)
 
+pool = Molecules("ecoli-ref.fasta", 5000)
+
+cutter_a = fragment(40000)
+tagger = tag(1000000)
+cutter_b = fragment(700)
+sampler = subsample(N) # Remember how to computed N previously.
+mkreads = paired_reads(250)
+adderr = mark_errors(0.001)
+
+pool |> cutter_a |> tagger |> cutter_b |> sampler |> mkreads |> adderr |> generate("tagged_reads.fastq")
+
+my_protocol = adderr ∘ mkreads ∘ sampler ∘ cutter_b ∘ tagger ∘ cutter_a
+
+pool |> my_protocol |> generate("tagged_reads.fastq")
+
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
