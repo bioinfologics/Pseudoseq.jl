@@ -89,3 +89,35 @@ tagged_w_errs = mark_errors(tagged_reads, 0.001)
 # Output to FASTQ:
 
 generate("tagged_reads.fastq", tagged_w_errs)
+
+# ## Constructing a pipeline of `Processors`.
+#
+# As a convenience, some users may prefer to use pipelines of `Processors`
+# These behave like curried versions of the `Molecules` transformation methods.
+# First let's define our starting `Molecules` pool:
+
+pool = Molecules("ecoli-ref.fasta", 5000)
+
+# To make a Processor, use a `Molecules` transformation method, but do not
+# provide a `Molecules` value as a first argument. So let's make Processors for
+# each step of our paired-end, tagged-read, sequencing pipeline.
+
+cutter_a = fragment(40000)
+tagger = tag(1000000)
+cutter_b = fragment(700)
+sampler = subsample(N) # Remember how to computed N previously.
+mkreads = paired_reads(250)
+adderr = mark_errors(0.001)
+
+# Next we can construct the pipeline using standard julia function pipelining syntax:
+
+pool |> cutter_a |> tagger |> cutter_b |> sampler |> mkreads |> adderr |> generate("tagged_reads.fastq")
+
+# You can also compose the processors together into one whole function.
+# Typing \circ in the julia repl and then hitting tab gives you the circular
+# composition symbol. Note how pipelining above progresses from left to right,
+# but composition is right to left in order. 
+
+my_protocol = adderr ∘ mkreads ∘ sampler ∘ cutter_b ∘ tagger ∘ cutter_a
+
+pool |> my_protocol |> generate("tagged_reads.fastq")
