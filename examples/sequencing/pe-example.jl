@@ -98,8 +98,12 @@ adderr = mark_errors(0.001)
 
 pool |> cutter |> sampler |> mkreads |> adderr |> generate("pe-reads.fastq")
 
-# You can also compose the processors together into one whole function. 
+# You can also compose the processors together into one whole function.
+# Typing \circ in the julia repl and then hitting tab gives you the circular
+# composition symbol. Note how pipelining above progresses from left to right,
+# but composition is right to left in order. 
 
-my_protocol = cutter ∘ sampler ∘ mkreads ∘ adderr
+my_protocol = adderr ∘ mkreads ∘ sampler ∘ cutter
 
 pool |> my_protocol |> generate("pe-reads.fastq")
+
