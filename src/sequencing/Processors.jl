@@ -45,7 +45,7 @@ struct ErrorMaker
     rate::Float64
 end
 mark_errors(rate::Float64) = ErrorMaker(rate)
-(em::ErrorMaker)(p::Molecules) = mark_errors(p, em.rate)
+(em::ErrorMaker)(p::Reads) = mark_errors(p, em.rate)
 
 struct FileGenerator
     filename::String
