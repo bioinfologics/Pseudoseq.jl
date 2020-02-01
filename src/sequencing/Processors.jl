@@ -41,6 +41,12 @@ end
 paired_reads(flen::Int, rlen::Int = flen) = PairedReads(flen, rlen)
 (pr::PairedReads)(p::Molecules) = paired_reads(p, pr.flen, pr.rlen)
 
+struct UnPairedReads{T<:Union{Nothing,Int}}
+    len::T
+end
+unpaired_reads(len::T) where {T<:Union{Nothing,Int}} = UnPairedReads(len)
+(ur::UnPairedReads)(p::Molecules) = unpaired_reads(p, ur.len)
+
 struct ErrorMaker
     rate::Float64
 end

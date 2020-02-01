@@ -79,3 +79,33 @@ se_w_errs = mark_errors(se_reads, 0.1)
 # Finally produce the ouput FASTQ file.
 
 generate("longreads.fastq", se_w_errs)
+
+# ## Constructing a pipeline of `Processors`.
+#
+# As a convenience, some users may prefer to use pipelines of `Processors`
+# These behave like curried versions of the `Molecules` transformation methods.
+# First let's define our starting `Molecules` pool:
+
+pool = Molecules("ecoli-ref.fasta", 5000)
+
+# To make a Processor, use a `Molecules` transformation method, but do not
+# provide a `Molecules` value as a first argument. So let's make Processors for
+# each step of our single end sequencing pipeline.
+
+cutter = fragment(40000)
+sampler = subsample(N) # Remember how to computed N previously.
+mkreads = unpaired_reads(nothing)
+adderr = mark_errors(0.1)
+
+# Next we can construct the pipeline using standard julia function pipelining syntax:
+
+pool |> cutter |> sampler |> mkreads |> adderr |> generate("se-reads.fastq")
+
+# You can also compose the processors together into one whole function.
+# Typing \circ in the julia repl and then hitting tab gives you the circular
+# composition symbol. Note how pipelining above progresses from left to right,
+# but composition is right to left in order. 
+
+my_protocol = adderr ∘ mkreads ∘ sampler ∘ cutter
+
+pool |> my_protocol |> generate("se-reads.fastq")
