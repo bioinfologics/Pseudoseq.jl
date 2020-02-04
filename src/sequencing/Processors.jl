@@ -12,7 +12,7 @@ function (a::Amplifier)(p::Molecules...)
     if length(p) === 1
         return amplify(first(p), first(a.n))
     else
-        return tuple((amplify(sub_p, n_sub) for n_sub in a.n for sub_p in p)...)
+        return tuple((amplify(sub_p, a.n) for sub_p in p)...)
     end
 end
 
