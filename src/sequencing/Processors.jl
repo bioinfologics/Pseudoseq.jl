@@ -8,7 +8,7 @@ struct Amplifier{N}
     n::NTuple{N,Int}
 end
 amplify(n::Int...) = Amplifier{length(n)}(n)
-(a::Amplifier)(p::Molecules) = amplify(p, a.n)
+#(a::Amplifier)(p::Molecules) = amplify(p, a.n)
 function (a::Amplifier{N})(p::Molecules...) where {N}
     return tuple((amplify(sub_p, n_sub) for n_sub in a.n for sub_p in p)...)
 end
