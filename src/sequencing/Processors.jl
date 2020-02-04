@@ -3,14 +3,17 @@
 
 # Processors for pipelining
 
-
-struct Amplifier{N}
-    n::NTuple{N,Int}
+struct Amplifier
+    n::Int
 end
-amplify(n::Int...) = Amplifier{length(n)}(n)
+amplify(n::Int) = Amplifier(n)
 #(a::Amplifier)(p::Molecules) = amplify(p, a.n)
-function (a::Amplifier{N})(p::Molecules...) where {N}
-    return tuple((amplify(sub_p, n_sub) for n_sub in a.n for sub_p in p)...)
+function (a::Amplifier)(p::Molecules...)
+    if length(p) === 1
+        return amplify(first(p), first(a.n))
+    else
+        return tuple((amplify(sub_p, n_sub) for n_sub in a.n for sub_p in p)...)
+    end
 end
 
 struct Fragmenter
@@ -61,3 +64,6 @@ struct FileGenerator
 end
 generate(filename::String) = FileGenerator(filename)
 (fg::FileGenerator)(r::Reads) = generate(fg.filename, r)
+
+# The Branch processor
+
