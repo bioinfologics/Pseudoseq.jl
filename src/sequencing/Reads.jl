@@ -5,18 +5,29 @@ abstract type Pairing end
 struct Paired <: Pairing end
 struct UnPaired <: Pairing end
 
+struct Substitution
+    pos::UInt64
+    base::DNA
+end
+
 struct Reads{P<:Pairing,V<:AbstractSequencingView}
     genome::Vector{LongSequence{DNAAlphabet{2}}}
     views::Vector{V}
-    errors::Dict{Int,Vector{Int}}
+    #errors::Dict{Int,Vector{Int}}
+    substitutions::Dict{Int,Vector{Substitution}}
 end
 
 @inline views(x::Reads) = x.views
 @inline genome(x::Reads) = x.genome
-@inline errors(x::Reads) = x.errors
+#@inline errors(x::Reads) = x.errors
+@inline substitutions(x::Reads) = x.substitutions
 @inline nreads(x::Reads) = length(x.views)
 @inline pick_read(reads::Reads) = rand(1:nreads(reads))
-@inline nerrors(x::Reads) = length(x.errors) > 0 ? sum(length(x) for x in values(x.errors)) : 0
+#@inline nerrors(x::Reads) = length(x.errors) > 0 ? sum(length(x) for x in values(x.errors)) : 0
+@inline function nsubstitutions(x::Reads)
+    subs = substitutions(x)
+    return isempty(subs) ? 0 : sum(length(x) for x in values(subs))
+end
 
 # I/O and printing functions
 # --------------------------
@@ -32,7 +43,8 @@ end
 function Base.show(io::IO, reads::Reads)
     println(summary(reads))
     println(printlen(reads))
-    println(string(" Number of errors: ", nerrors(reads)))
+    #println(string(" Number of errors: ", nerrors(reads)))
+    println(string(" Number of errors: ", nsubstitutions(reads)))
 end
 
 # Constructors
@@ -41,13 +53,15 @@ end
 function Reads{Paired,V}(p::Molecules{V}, flen::Int, rlen::Int = flen) where {V<:AbstractSequencingView}
     vs = views(p)
     vse = take_paired_ends(vs, flen, rlen)
-    return Reads{Paired,V}(genome(p), vse, Dict{Int,Vector{Int}}())
+    rds = Reads{Paired,V}(genome(p), vse, Dict{Int,Vector{Substitution}}()) 
+    return rds
 end
 
 function Reads{UnPaired,V}(p::Molecules{V}, len::Union{Int,Nothing}) where {V<:AbstractSequencingView}
     vs = views(p)
     vse = take_single_ends(vs, len)
-    return Reads{UnPaired,V}(genome(p), vse, Dict{Int, Vector{Int}}())
+    rds = Reads{UnPaired,V}(genome(p), vse, Dict{Int, Vector{Substitution}}())
+    return rds
 end
 
 """
@@ -87,6 +101,106 @@ function unpaired_reads(p::Molecules{T}, len::Union{Int,Nothing}) where {T<:Abst
     return Reads{UnPaired,T}(p, len)
 end
 
+#=
+struct LinearDecayErrorRate
+    start::Float64
+    decrement::Float64
+end
+
+function (x::LinearDecayErrorRate)(rates::Vector{Float64}, sequence::LongSequence{DNAAlphabet{2}})
+    for i in eachindex(rates)
+        rates[i] = x.start - (i - 1) * x.decrement
+    end
+end
+=#
+
+const posbases = Dict{DNA, Tuple{DNA,DNA,DNA}}(
+    DNA_A => (DNA_C, DNA_G, DNA_T),
+    DNA_C => (DNA_A, DNA_G, DNA_T),
+    DNA_G => (DNA_A, DNA_C, DNA_T),
+    DNA_T => (DNA_A, DNA_C, DNA_G)
+)
+
+const posbases2 = (
+    (DNA_C, DNA_G, DNA_T),
+    (DNA_A, DNA_G, DNA_T),
+    (DNA_N, DNA_N, DNA_N),
+    (DNA_A, DNA_C, DNA_T),
+    (DNA_N, DNA_N, DNA_N),
+    (DNA_N, DNA_N, DNA_N),
+    (DNA_N, DNA_N, DNA_N),
+    (DNA_A, DNA_C, DNA_G)
+)
+
+mutable struct RandomSubstitutionScatter <: Function
+    errs_per_read::Dict{Int, Int}
+    readidx::Int
+end
+
+function RandomSubstitutionScatter(nsubs::Int, nreads::Int)
+    read_idxs = rand(Base.OneTo(nreads), nsubs)
+    errs_per_read = Dict{Int, Int}()
+    for idx in read_idxs
+        errs_per_read[idx] = get(errs_per_read, idx, 0) + 1
+    end
+    return RandomSubstitutionScatter(errs_per_read, 0)
+end
+
+function (f::RandomSubstitutionScatter)(output::Vector{Substitution}, readseq::LongSequence{DNAAlphabet{2}})
+    current_read = f.readidx + 1
+    f.readidx = current_read
+    nerrors = get(f.errs_per_read, current_read, 0)
+    posqueue = Random.shuffle(Base.OneTo(length(readseq)))
+    resize!(output, nerrors)
+    for i in 1:nerrors
+        basepos = posqueue[i]
+        basenuc = readseq[basepos]
+        output[i] = Substitution(basepos, rand(posbases[basenuc])) 
+    end
+end
+
+struct ClearSubstitutions <: Function end
+
+function (f::ClearSubstitutions)(output::Vector{Substitution}, readseq::LongSequence{DNAAlphabet{2}})
+    return empty!(output)
+end
+
+struct FixedProbSubstitutions <: Function
+    prob::Float64
+end
+
+function (f::FixedProbSubstitutions)(output::Vector{Substitution}, readseq::LongSequence{DNAAlphabet{2}})
+    p = f.prob
+    dice = rand(length(readseq))
+    dosub = dice .< p
+    @inbounds for pos in 1:length(readseq)
+        if dosub[pos]
+            basenuc = reinterpret(UInt8, readseq[pos])
+            push!(output, Substitution(pos, rand(posbases2[basenuc])))
+        end
+    end
+end
+
+function edit_substitutions!(f::Function, reads::Reads)
+    vs = views(reads)
+    subs = substitutions(reads)
+    subsbuf = Vector{Substitution}()
+    for (i, v) in enumerate(vs)
+        readseq = extract_sequence(genome(reads), v)
+        readsubs = get(subs, i, subsbuf)
+        f(readsubs, readseq)
+        if isempty(readsubs)           # Read no longer has any subs.
+            delete!(subs, i)
+        elseif readsubs === subsbuf    # Read did not have subs but now does.
+            subs[i] = copy(subsbuf)
+            empty!(subsbuf)
+        else                           # Read did have subs, and still does.
+            subs[i] = readsubs
+        end
+    end
+end
+
+#=
 function pick_error_positions!(reads::Reads, nerrs::Int)
     errs = errors(reads)
     empty!(errs)
@@ -139,17 +253,10 @@ function mark_errors(reads::Reads, rate::Float64)
     mark_errors!(newreads, rate)
     return newreads
 end
-
+=#
 
 # Read file generation
 # --------------------
-
-const posbases = Dict{DNA, Tuple{DNA,DNA,DNA}}(
-    DNA_A => (DNA_C, DNA_G, DNA_T),
-    DNA_C => (DNA_A, DNA_G, DNA_T),
-    DNA_G => (DNA_A, DNA_C, DNA_T),
-    DNA_T => (DNA_A, DNA_C, DNA_G)
-)
 
 function add_errors!(seq::BioSequence, errs::Vector{Int})
     for err in errs

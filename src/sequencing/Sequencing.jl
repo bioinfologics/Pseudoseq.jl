@@ -14,6 +14,7 @@ export
     generate,
     needed_sample_size,
     expected_coverage,
+    nreads,
     sequence
     
 

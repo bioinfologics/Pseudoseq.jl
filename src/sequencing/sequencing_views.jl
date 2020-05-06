@@ -124,6 +124,10 @@ function extract_sequence(ref::BioSequence, view::AbstractSequencingView)
     return subseq
 end
 
+function extract_sequence(genome::Vector{<:BioSequence}, view::AbstractSequencingView)
+    return extract_sequence(genome[seqid(view)], view)
+end
+
 # Utils for dealing with multiple views
 # -------------------------------------
 
@@ -299,22 +303,3 @@ function summarize_tags(vs::Vector{TaggedSequencingView})
     end
     return tagdict
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
