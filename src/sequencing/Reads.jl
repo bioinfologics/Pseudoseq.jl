@@ -178,6 +178,8 @@ end
 
 function edit_substitutions(f::Function, reads::Reads)
     newreads = typeof(reads)(genome(reads), views(reads), copy(substitutions(reads)))
+    edit_substitutions!(f, newreads)
+    return newreads
 end
 
 # Read file generation
