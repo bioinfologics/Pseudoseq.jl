@@ -280,17 +280,12 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{Paired,Tagg
         FASTQ.encode_quality_string!(FASTQ.SANGER_QUAL_ENCODING, fill(30, length(seq)), qual, 1, length(seq))
         
         # Create the name for the read...
-        #fragname = string("Refseq_", seqid(v))
+        pairnum = Int(ceil(i / 2))
+        fragname = string("readpair_", pairnum)
+        fqread = FASTQ.Record(fragname, seq, qual)
+        current_writer = ifelse(isodd(i), R1W, R2W)
+        write(current_writer, fqread)
         
-        if isodd(i)
-            fragname = string("readpair_", i)
-            fqread = FASTQ.Record(fragname, seq, qual)
-            write(R1W, fqread)
-        else
-            fragname = string("readpair_", i - 1)
-            fqread = FASTQ.Record(fragname, seq, qual)
-            write(R2W, fqread)
-        end
         n += 1
     end
     @info string("- ✔ Wrote ", n, " tagged paired end reads to FASTQ file")
