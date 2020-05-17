@@ -11,7 +11,9 @@ make_reads
 ### Introducing errors
 
 ```@docs
-mark_errors
+edit_substitutions
+FixedProbSubstitutions
+ClearSubstitutions
 ```
 
 ### Generating FASTQ files

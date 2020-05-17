@@ -108,39 +108,25 @@ const posbases = (
     (DNA_A, DNA_C, DNA_G)
 )
 
-mutable struct RandomSubstitutionScatter <: Function
-    errs_per_read::Dict{Int, Int}
-    readidx::Int
-end
+"""
+A simple function object that can be used with [`edit_substitutions`](@ref) or
+[`edit_substitutions!`](@ref).
 
-function RandomSubstitutionScatter(nsubs::Int, nreads::Int)
-    read_idxs = rand(Base.OneTo(nreads), nsubs)
-    errs_per_read = Dict{Int, Int}()
-    for idx in read_idxs
-        errs_per_read[idx] = get(errs_per_read, idx, 0) + 1
-    end
-    return RandomSubstitutionScatter(errs_per_read, 0)
-end
-
-function (f::RandomSubstitutionScatter)(output::Vector{Substitution}, readseq::LongSequence{DNAAlphabet{2}})
-    current_read = f.readidx + 1
-    f.readidx = current_read
-    nerrors = get(f.errs_per_read, current_read, 0)
-    posqueue = Random.shuffle(Base.OneTo(length(readseq)))
-    resize!(output, nerrors)
-    for i in 1:nerrors
-        basepos = posqueue[i]
-        basenuc = reinterpret(UInt8, readseq[basepos])
-        output[i] = Substitution(basepos, rand(posbases[basenuc])) 
-    end
-end
-
+Simply clears all sequencing errors - substitutions - for all reads.
+"""
 struct ClearSubstitutions <: Function end
 
 function (f::ClearSubstitutions)(output::Vector{Substitution}, readseq::LongSequence{DNAAlphabet{2}})
     return empty!(output)
 end
 
+"""
+A simple function object that can be used with [`edit_substitutions`](@ref) or
+[`edit_substitutions!`](@ref).
+
+Randomly applies sequencing errors - substitutions - to all reads according to a
+fixed, uniform, per-base probability.
+"""
 struct FixedProbSubstitutions <: Function
     prob::Float64
 end
@@ -157,6 +143,29 @@ function (f::FixedProbSubstitutions)(output::Vector{Substitution}, readseq::Long
     end
 end
 
+"""
+    edit_substitutions!(f::Function, reads::Reads)
+
+Add or remove sequencing errors to reads in the form of single base substitutions,
+according to so some error generating or deleting function `f`.
+
+!!! note
+    This is the in-place, mutating version of [`edit_substitutions`](@ref), and
+    since Pseudoseq's experted sequencing API is functional, this version is not
+    exported. 
+
+The function provided must be a function that accepts two arguments:
+    1. A vector of Substitution structs, which the function will mutate.
+    2. The nucleotide sequence of the read.
+
+The function needs not return anything, and anything it does return will not be
+used.
+
+Some acceptable functions already provided with Pseudoseq include [`FixedProbSubstitutions`](@ref)
+and [`ClearSubstitutions`](@ref). If you want to develop your own function, their
+implementations provide a simple example of how it can be done. You can of course
+also just create an anonymous function.
+"""
 function edit_substitutions!(f::Function, reads::Reads)
     vs = views(reads)
     subs = substitutions(reads)
@@ -176,6 +185,24 @@ function edit_substitutions!(f::Function, reads::Reads)
     end
 end
 
+"""
+    edit_substitutions(f::Function, reads::Reads)
+
+Add or remove sequencing errors to reads in the form of single base substitutions,
+according to so some error generating or deleting function `f`.
+
+The function provided must be a function that accepts two arguments:
+    1. A vector of Substitution structs, which the function will mutate.
+    2. The nucleotide sequence of the read.
+
+The function needs not return anything, and anything it does return will not be
+used.
+
+Some acceptable functions already provided with Pseudoseq include [`FixedProbSubstitutions`](@ref)
+and [`ClearSubstitutions`](@ref). If you want to develop your own function, their
+implementations provide a simple example of how it can be done. You can of course
+also just create an anonymous function.
+"""
 function edit_substitutions(f::Function, reads::Reads)
     newreads = typeof(reads)(genome(reads), views(reads), copy(substitutions(reads)))
     edit_substitutions!(f, newreads)
@@ -329,4 +356,14 @@ function generate(filename::String, reads::Reads)
     open(FASTQ.Writer, filename) do wtr
         generate(wtr, reads)
     end
+end
+
+function substitution_hist(reads::Reads{Paired,BasicSequencingView})
+    hist = zeros(summarize_lengths(views(reads))[1])
+    for i in Base.OneTo(nreads(reads))
+        for s in get(substitutions(reads), i, Substitution[])
+            hist[s.pos] += 1
+        end
+    end
+    return hist
 end

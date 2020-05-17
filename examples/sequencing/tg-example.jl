@@ -82,9 +82,12 @@ sampledpool = subsample(taggedcutpool, N)
 
 # Now let's make some 250bp tagged paired reads and generate some erroneous
 # positions.
+# We will construct a `FixedProbSubstitutions` function with a per base error
+# probability of 0.001 and pass it to the `edit_substitutions` method. 
 
 tagged_reads = paired_reads(sampledpool, 250)
-tagged_w_errs = mark_errors(tagged_reads, 0.001)
+f = FixedProbSubstitutions(0.001)
+tagged_w_errs = edit_substitutions(f, tagged_reads)
 
 # Output to FASTQ:
 

@@ -175,9 +175,51 @@ sequencing reads, and linked paired-end sequencing reads.
 
 You create a set of reads using the [`make_reads`](@ref) function.
 
-All sequencers have a certain error rate, and so after you've created a set of
-reads, you can use the [`mark_errors`](@ref) function to randomly mark a set of
-bases in your reads that are destined to be errors in the output file.
+At this point in the process, the reads will be perfect. Generating perfect
+reads might be useful for some purposes, such as for education: illustrating 
+assembly processes initially without the complication of errors to aid comprehension.
+It might also be interesting to illustrate the action of a heuristic on data without
+errors cf. data that does have errors. 
+
+In reality, all sequencers have certain error profiles - certain genomic motifs
+can cause different technologies to fail in different ways, and the probability
+of errors can change over time, particularly if the sequencing process involves
+chemical reactions, or if synchronisation is important. Some Illumina sequencers,
+for example, are subject to what is known as the phase-problem.
+
+So how do we create errors?
+
+Pseudoseq currently supports errors in the form of single base pair substitutions.
+
+The reads object contains a Dictionary of (`Integer` => `Vector{Substitution}`)
+pairs, where the integer is the (1 based) index of the read, and the vector of
+substitutions contains the substitutions that will be applied to the sequence of
+the read at read-file generation.
+
+The substitution type Pseudoseq uses is very simple can can be created using a
+base position, nucleotide pair. For example `Substitution(51, DNA_A)` results
+in a subsitution which would replace base 51 of a read with an 'A' nucleotide.
+
+Whilst you could populate and edit this dictionary manually, doing it for every
+read would be tedious.
+
+You can generate substitutions programmatically though using the
+[`edit_substitutions`](@ref) method, which allows you to pass an anonymous
+function or "functor type", which edits the substitutions for each read.
+
+Pseudoseq provides some built in functions for use with [`edit_substitutions`](@ref),
+and more will be added over time. A list with links to their API documentation
+is provided here.
+
+1. [`FixedProbSubstitutions`](@ref)
+2. [`ClearSubstitutions`](@ref)
+
+Please see the API docs for [`edit_substitutions`](@ref) for details of the
+requirements for any functions passed to [`edit_substitutions`](@ref).
+
+If you have any questions about how to model a particular error profile, please
+see the examples section of the documentation, and also don't hesitate to open a
+GitHub Issue describing your particular scenario.
 
 Finally, you use your set of reads to [`generate`](@ref) either an interleaved
 FASTQ file, or two FASTQ files (one for R1 reads, and one for R2 reads).

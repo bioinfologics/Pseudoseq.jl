@@ -69,8 +69,11 @@ pe_reads = paired_reads(sampledpool, 250)
 
 # Now we have some reads, we should mark positions in the reads that are destined
 # to be errors in the output FASTQ.
+# We will construct a `FixedProbSubstitutions` function with a per base error
+# probability of 0.001 and pass it to the `edit_substitutions` method. 
 
-pe_w_errs = mark_errors(pe_reads, 0.001)
+f = FixedProbSubstitutions(0.001)
+pe_w_errs = edit_substitutions(f, pe_reads)
 
 # Now we have some paired end reads and have marked some positions as errors, we
 # can generate FASTQ files.

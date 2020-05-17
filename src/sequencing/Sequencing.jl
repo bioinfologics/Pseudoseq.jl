@@ -14,7 +14,7 @@ export
     unpaired_reads,
     nreads,
     ClearSubstitutions,
-    RandomSubstitutionScatter,
+    FixedProbSubstitutions,
     edit_substitutions,
     generate,
     # Utils
