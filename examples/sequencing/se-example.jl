@@ -98,7 +98,7 @@ pool = Molecules("ecoli-ref.fasta", 5000)
 cutter = fragment(40000)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = unpaired_reads(nothing)
-adderr = mark_errors(0.1)
+adderr = make_substitutions(FixedProbSubstitutions(0.1))
 
 # Next we can construct the pipeline using standard julia function pipelining syntax:
 

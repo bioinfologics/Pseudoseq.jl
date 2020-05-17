@@ -110,7 +110,7 @@ tagger = tag(1000000)
 cutter_b = fragment(700)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = paired_reads(250)
-adderr = mark_errors(0.001)
+adderr = make_substitutions(FixedProbSubstitutions(0.001))
 
 # Next we can construct the pipeline using standard julia function pipelining syntax:
 
