@@ -69,7 +69,7 @@ function sequence(input, output = nothing;
         @info string("- ✔ Created set of ", rdlen === nothing ? "" : string(rdlen, "bp "), "single-end reads")
     end
     
-    reads_w_errs = mark_errors(reads, err)
+    reads_w_errs = edit_substitutions(FixedProbSubstitutions(err), reads)
     @info string("- ✔ Applied sequencing errors at a per-base rate of ", err)
     
     if output !== nothing
