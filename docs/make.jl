@@ -34,7 +34,7 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = haskey(ENV, "GITHUB_ACTIONS")
     ),
-    modules = [Pseudoseq],
+    modules = [Pseudoseq, Pseudoseq.Sequencing],
     sitename = "Pseudoseq.jl",
     doctest = false,
     strict = false,
