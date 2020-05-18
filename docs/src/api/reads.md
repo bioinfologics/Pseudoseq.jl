@@ -8,7 +8,8 @@ CurrentModule = Pseudoseq.Sequencing
 ### Making reads
 
 ```@docs
-make_reads
+paired_reads
+unpaired_reads
 ```
 
 ### Introducing errors
