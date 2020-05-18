@@ -5,19 +5,19 @@
 ### Making reads
 
 ```@docs
-make_reads
+Sequencing.make_reads
 ```
 
 ### Introducing errors
 
 ```@docs
-edit_substitutions
-FixedProbSubstitutions
-ClearSubstitutions
+Sequencing.edit_substitutions
+Sequencing.FixedProbSubstitutions
+Sequencing.ClearSubstitutions
 ```
 
 ### Generating FASTQ files
 
 ```@docs
-generate
+Sequencing.generate
 ```
