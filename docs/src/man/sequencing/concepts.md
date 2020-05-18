@@ -173,7 +173,8 @@ Next, you generate a set of reads from your transformed pool.
 `Pseudoseq` allows you to create paired-end sequencing reads, single-end
 sequencing reads, and linked paired-end sequencing reads.
 
-You create a set of reads using the [`make_reads`](@ref) function.
+You create a set of reads using the [`paired_reads`](@ref) or
+[`unpaired_reads`](@ref) functions.
 
 At this point in the process, the reads will be perfect. Generating perfect
 reads might be useful for some purposes, such as for education: illustrating 
