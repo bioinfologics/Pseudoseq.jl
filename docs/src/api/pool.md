@@ -1,3 +1,6 @@
+```@meta
+CurrentModule = Pseudoseq.Sequencing
+```
 # API: MoleculePool
 
 ## Exported functions
