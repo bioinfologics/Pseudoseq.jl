@@ -57,7 +57,6 @@ makedocs(
                 "Molecule Pool" => "api/pool.md",
                 "Reads" => "api/reads.md",
             ]
-            "Build-a-Genome" => "api/chromosome-blueprint.md"
         ]
     ],
     authors = "Ben J. Ward."
