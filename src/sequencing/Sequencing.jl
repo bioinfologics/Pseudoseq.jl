@@ -16,6 +16,7 @@ export
     ClearSubstitutions,
     FixedProbSubstitutions,
     edit_substitutions,
+    make_substitutions,
     generate,
     # Utils
     needed_sample_size,
