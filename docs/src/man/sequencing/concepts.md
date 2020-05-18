@@ -1,3 +1,7 @@
+```@meta
+CurrentModule = Pseudoseq.Sequencing
+```
+
 # Sequencing: _Core concepts & basic workflow_
 
 `Pseudoseq` abstracts DNA sequencing experiments as sampling processes,
