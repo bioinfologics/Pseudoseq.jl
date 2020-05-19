@@ -1,4 +1,4 @@
-using Documenter, Literate, Pseudoseq
+using Documenter, Literate
 using Pseudoseq.Sequencing
 
 Documenter.post_status(; type = "pending", repo = "github.com/bioinfologics/Pseudoseq.jl.git")
@@ -35,7 +35,7 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = haskey(ENV, "GITHUB_ACTIONS")
     ),
-    modules = [Pseudoseq, Sequencing],
+    modules = [Sequencing],
     sitename = "Pseudoseq.jl",
     doctest = false,
     strict = false,
