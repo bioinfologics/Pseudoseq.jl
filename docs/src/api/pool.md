@@ -16,23 +16,23 @@ Molecules
 #### Fragment
 
 ```@docs
-fragment(p::Pseudoseq.MoleculePool, meansize::Int)
+fragment(p::Molecules, meansize::Int)
 ```
 
 #### Subsampling
 
 ```@docs
-subsample(p::Pseudoseq.MoleculePool, n::Int)
+subsample(p::Molecules, n::Int)
 ```
 
 #### Tagging
 
 ```@docs
-tag(p::Pseudoseq.MoleculePool, ntags::Int)
+tag(p::Molecules, ntags::Int)
 ```
 
 #### Flipping
 
 ```@docs
-flip(p::Pseudoseq.MoleculePool)
+flip(p::Molecules)
 ```
