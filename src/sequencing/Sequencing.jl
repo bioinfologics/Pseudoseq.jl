@@ -1,6 +1,7 @@
 module Sequencing
 
 export
+    # Molecules
     Molecules,
     amplify,
     fragment,
@@ -8,13 +9,20 @@ export
     subsample,
     tag,
     flip,
+    # Reads
     paired_reads,
     unpaired_reads,
-    mark_errors,
+    nreads,
+    ClearSubstitutions,
+    FixedProbSubstitutions,
+    edit_substitutions,
+    make_substitutions,
     generate,
+    # Utils
     needed_sample_size,
     expected_coverage,
     sequence
+    
     
 
 using BioSequences, FASTX, Random

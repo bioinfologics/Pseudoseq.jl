@@ -1,4 +1,4 @@
-using Documenter, Literate, Pseudoseq
+using Pseudoseq, Pseudoseq.Sequencing, Documenter, Literate
 
 Documenter.post_status(; type = "pending", repo = "github.com/bioinfologics/Pseudoseq.jl.git")
 
@@ -34,7 +34,7 @@ makedocs(
     format = Documenter.HTML(
         prettyurls = haskey(ENV, "GITHUB_ACTIONS")
     ),
-    modules = [Pseudoseq],
+    modules = [Pseudoseq, Sequencing],
     sitename = "Pseudoseq.jl",
     doctest = false,
     strict = false,
@@ -57,7 +57,6 @@ makedocs(
                 "Molecule Pool" => "api/pool.md",
                 "Reads" => "api/reads.md",
             ]
-            "Build-a-Genome" => "api/chromosome-blueprint.md"
         ]
     ],
     authors = "Ben J. Ward."

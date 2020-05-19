@@ -33,7 +33,7 @@ end
 @inline Base.length(vs::Views) = length(vs.viewstore)
 @inline Base.eachindex(vs::Views) = Base.OneTo(length(vs))
 
-@inline fragment_lengths(vs::Views) = length.(vs.viewstore)
+
 
 Base.push!(x::Views, y::SequencingView) = push!(x.viewstore, y)
 

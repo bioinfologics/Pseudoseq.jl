@@ -72,9 +72,12 @@ sampledpool = subsample(cutpool, N)
 se_reads = unpaired_reads(sampledpool, nothing)
 
 # Long read sequencer have much higher error rates than short read sequencers
-# so we use a error rate of 0.1.
+# so we use a error rate of 0.1 or roughly speaking an error every 10 bases.
+# We will construct a `FixedProbSubstitutions` function with a per base error
+# probability of 0.1 and pass it to the `edit_substitutions` method. 
 
-se_w_errs = mark_errors(se_reads, 0.1)
+f = FixedProbSubstitutions(0.1)
+se_w_errs = edit_substitutions(f, se_reads)
 
 # Finally produce the ouput FASTQ file.
 
@@ -95,7 +98,7 @@ pool = Molecules("ecoli-ref.fasta", 5000)
 cutter = fragment(40000)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = unpaired_reads(nothing)
-adderr = mark_errors(0.1)
+adderr = make_substitutions(FixedProbSubstitutions(0.1))
 
 # Next we can construct the pipeline using standard julia function pipelining syntax:
 

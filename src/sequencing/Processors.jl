@@ -47,11 +47,11 @@ end
 unpaired_reads(len::T) where {T<:Union{Nothing,Int}} = UnPairedReads(len)
 (ur::UnPairedReads)(p::Molecules) = unpaired_reads(p, ur.len)
 
-struct ErrorMaker
-    rate::Float64
+struct SubstitutionMaker{F<:Function}
+    fun::F
 end
-mark_errors(rate::Float64) = ErrorMaker(rate)
-(em::ErrorMaker)(p::Reads) = mark_errors(p, em.rate)
+make_substitutions(f::F) where {F<:Function} = SubstitutionMaker{F}(f)
+(sm::SubstitutionMaker{F})(p::Reads) where {F<:Function} = edit_substitutions(sm.fun, p)
 
 struct FileGenerator
     filename::String

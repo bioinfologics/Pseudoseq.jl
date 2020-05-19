@@ -82,9 +82,12 @@ sampledpool = subsample(taggedcutpool, N)
 
 # Now let's make some 250bp tagged paired reads and generate some erroneous
 # positions.
+# We will construct a `FixedProbSubstitutions` function with a per base error
+# probability of 0.001 and pass it to the `edit_substitutions` method. 
 
 tagged_reads = paired_reads(sampledpool, 250)
-tagged_w_errs = mark_errors(tagged_reads, 0.001)
+f = FixedProbSubstitutions(0.001)
+tagged_w_errs = edit_substitutions(f, tagged_reads)
 
 # Output to FASTQ:
 
@@ -107,7 +110,7 @@ tagger = tag(1000000)
 cutter_b = fragment(700)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = paired_reads(250)
-adderr = mark_errors(0.001)
+adderr = make_substitutions(FixedProbSubstitutions(0.001))
 
 # Next we can construct the pipeline using standard julia function pipelining syntax:
 

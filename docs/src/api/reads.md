@@ -1,3 +1,6 @@
+```@meta
+CurrentModule = Pseudoseq.Sequencing
+```
 # API: Reads
 
 ## Exported functions
@@ -5,13 +8,16 @@
 ### Making reads
 
 ```@docs
-make_reads
+paired_reads
+unpaired_reads
 ```
 
 ### Introducing errors
 
 ```@docs
-mark_errors
+edit_substitutions
+FixedProbSubstitutions
+ClearSubstitutions
 ```
 
 ### Generating FASTQ files
