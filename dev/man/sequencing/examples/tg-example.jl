@@ -20,7 +20,8 @@ N = div(N, 2) # Divide by 2 as we're doing paired end sequencing.
 sampledpool = subsample(taggedcutpool, N)
 
 tagged_reads = paired_reads(sampledpool, 250)
-tagged_w_errs = mark_errors(tagged_reads, 0.001)
+f = FixedProbSubstitutions(0.001)
+tagged_w_errs = edit_substitutions(f, tagged_reads)
 
 generate("tagged_reads.fastq", tagged_w_errs)
 
@@ -31,7 +32,7 @@ tagger = tag(1000000)
 cutter_b = fragment(700)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = paired_reads(250)
-adderr = mark_errors(0.001)
+adderr = make_substitutions(FixedProbSubstitutions(0.001))
 
 pool |> cutter_a |> tagger |> cutter_b |> sampler |> mkreads |> adderr |> generate("tagged_reads.fastq")
 

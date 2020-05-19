@@ -17,7 +17,8 @@ sampledpool = subsample(cutpool, N)
 
 pe_reads = paired_reads(sampledpool, 250)
 
-pe_w_errs = mark_errors(pe_reads, 0.001)
+f = FixedProbSubstitutions(0.001)
+pe_w_errs = edit_substitutions(f, pe_reads)
 
 generate("pe-reads.fastq", pe_w_errs)
 
@@ -26,7 +27,7 @@ pool = Molecules("ecoli-ref.fasta", 5000)
 cutter = fragment(700)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = paired_reads(250)
-adderr = mark_errors(0.001)
+adderr = make_substitutions(FixedProbSubstitutions(0.001))
 
 pool |> cutter |> sampler |> mkreads |> adderr |> generate("pe-reads.fastq")
 

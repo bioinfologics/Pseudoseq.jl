@@ -16,7 +16,8 @@ sampledpool = subsample(cutpool, N)
 
 se_reads = unpaired_reads(sampledpool, nothing)
 
-se_w_errs = mark_errors(se_reads, 0.1)
+f = FixedProbSubstitutions(0.1)
+se_w_errs = edit_substitutions(f, se_reads)
 
 generate("longreads.fastq", se_w_errs)
 
@@ -25,7 +26,7 @@ pool = Molecules("ecoli-ref.fasta", 5000)
 cutter = fragment(40000)
 sampler = subsample(N) # Remember how to computed N previously.
 mkreads = unpaired_reads(nothing)
-adderr = mark_errors(0.1)
+adderr = make_substitutions(FixedProbSubstitutions(0.1))
 
 pool |> cutter |> sampler |> mkreads |> adderr |> generate("se-reads.fastq")
 
