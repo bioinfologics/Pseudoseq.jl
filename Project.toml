@@ -1,7 +1,7 @@
 name = "Pseudoseq"
 uuid = "5fa9f68e-f4b0-11e8-18b8-fb82dd3c6483"
 authors = ["Ben J. Ward <benjward@protonmail.com>"]
-version = "0.2.0"
+version = "0.3.0"
 
 [deps]
 BioSequences = "7e6ae17a-c86d-528c-b3b9-7f778a29fe59"
