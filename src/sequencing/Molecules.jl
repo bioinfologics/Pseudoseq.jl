@@ -136,6 +136,12 @@ function subsample(p::Molecules, n::Int)
     return np
 end
 
+function subsample(p::Molecules, cov::ExpectedCoverage, readlen)
+    n = needed_sample_size(cov, sum(length.(genome(p)))bp, readlen)
+    return subsample(p, n)
+end
+
+
 """
     tag(u::Molecules{BasicSequencingView}, ntags::Int)
 

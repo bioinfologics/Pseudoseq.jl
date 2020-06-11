@@ -13,7 +13,7 @@ amplify(n::Int) = Amplifier(n)
 struct Fragmenter
     meansize::Int
 end
-fragment(meansize::Int) = Fragmenter(meansize)
+fragment(meansize::SequenceLength) = Fragmenter(meansize.val)
 (f::Fragmenter)(p::Molecules) = fragment(p, f.meansize)
 
 struct Tagger
@@ -22,17 +22,30 @@ end
 tag(ntags::Int) = Tagger(ntags)
 (t::Tagger)(p::Molecules) = tag(p, t.ntags)
 
-struct SubSampler
+struct NSubSampler
     nsamples::Int
 end
-subsample(n::Int) = SubSampler(n)
-(s::SubSampler)(p::Molecules) = subsample(p, s.nsamples)
+subsample(n::Int) = NSubSampler(n)
+(s::NSubSampler)(p::Molecules) = subsample(p, s.nsamples)
+
+struct CovSubSampler{T<:Union{SequenceLength,Tuple{SequenceLength,SequenceLength}}}
+    cov::ExpectedCoverage
+    readlen::T
+end
+subsample(cov::ExpectedCoverage, rlens)  = CovSubSampler{typeof(rlens)}(cov, rlens)
+(s::CovSubSampler{T})(p::Molecules) where {T} = subsample(p, s.cov, s.readlen)
 
 struct Selector{F<:Function}
     f::F
 end
 select(f::Function) = Selector(f)
 (s::Selector{F})(p::Molecules) where {F<:Function} = select(s.f, p)
+
+makereads(len::SequenceLength) = unpaired_reads(len.val)
+makereads() = unpaired_reads(nothing)
+makereads(lena::SequenceLength, lenb::SequenceLength) = paired_reads(lena.val, lenb.val)
+makereads(lens::Tuple{SequenceLength,SequenceLength}) = makereads(lens...)
+
 
 struct PairedReads
     flen::Int
