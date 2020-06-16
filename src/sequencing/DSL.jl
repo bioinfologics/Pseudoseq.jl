@@ -1,8 +1,7 @@
-# Processors
-# ==========
+# DSL
+# ===
 
-# Processors for pipelining
-
+# Types and methods that make up the Pseusoseq DSL API.
 
 struct Amplifier
     n::Int
