@@ -23,7 +23,9 @@ export
     expected_coverage,
     sequence,
     X, x, bp,
-    makereads
+    makereads,
+    
+    coverage_report
 
 
 using BioSequences, FASTX, Random
@@ -57,6 +59,8 @@ function Base.:*(val::Int, rl::SequenceLength)
 end
 
 Base.div(x::SequenceLength, y::SequenceLength) = div(x.val, y.val)
+Base.iterate(x::SequenceLength) = (x, nothing)
+Base.iterate(x::SequenceLength, ::Any) = nothing
 
 function needed_sample_size(coverage::ExpectedCoverage, genome_len::SequenceLength, lens)
     return div(coverage * genome_len, sum(lens))
@@ -70,6 +74,63 @@ include("sequencing_views.jl")
 include("Molecules.jl")
 include("Reads.jl")
 include("DSL.jl")
-include("sequence.jl")
+#include("sequence.jl")
+
+struct CoverageReport
+    genome::Vector{LongSequence{DNAAlphabet{2}}}
+    covs::Vector{Vector{UInt}}
+end
+
+function coverage_report(x)
+    covs = [zeros(UInt, length(g)) for g in genome(x)]
+    vs = views(x)
+    for v in vs
+        c = covs[seqid(v)]
+        @inbounds for i in min(first(v), last(v)):max(first(v), last(v))
+            c[i] = c[i] + 1
+        end
+    end
+    return CoverageReport(genome(x), covs)
+end
+
+function uncovered_positions(cr::Sequencing.CoverageReport, thresh = 0)
+    return [[i for i in eachindex(c) if c[i] <= thresh] for c in cr.covs]
+end
+
+function _summarize_cov(V::Vector{UInt64})
+    min = typemax(UInt64)
+    max = typemin(UInt64)
+    sum = typemin(UInt64)
+    for v in V
+        min = ifelse(v < min, v, min)
+        max = ifelse(v > max, v, max)
+        sum = sum + v
+    end
+    return (min, max, sum)
+end
+
+function summarize(cr::Sequencing.CoverageReport, bychrom = false)
+    stats = [_summarize_cov(c) for c in cr.covs]
+    if bychrom
+        println("Coverage Summary:")
+        for i in eachindex(stats)
+            min, max, total = stats[i]
+            mean = total / length(cr.covs[i])
+            println("Chromosome $i:")
+            println("\tmin: $min")
+            println("\tmean: $mean")
+            println("\tmax: $max")
+        end
+    else
+        min = minimum(x[1] for x in stats)
+        total = sum(x[3] for x in stats)
+        max = maximum(x[2] for x in stats)
+        mean = total / sum(length(x) for x in cr.covs)
+        println("Coverage Summary:")
+        println("\tmin: $min")
+        println("\tmean: $mean")
+        println("\tmax: $max")
+    end
+end
 
 end # module

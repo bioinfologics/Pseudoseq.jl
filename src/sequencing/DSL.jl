@@ -3,11 +3,13 @@
 
 # Types and methods that make up the Pseusoseq DSL API.
 
-struct Amplifier
+struct Amplifier{F<:Function}
+    pred::F
     n::Int
 end
-amplify(n::Int) = Amplifier(n)
-(a::Amplifier)(p::Molecules) = amplify(p, a.n)
+amplify(n::Int) = Amplifier(x -> true, n)
+amplify(pref::Function, n::Int) = Amplifier(pred, n)
+(a::Amplifier)(p::Molecules) = amplify(a.pred, p, a.n)
 
 struct Fragmenter
     meansize::Int
@@ -70,3 +72,10 @@ struct FileGenerator
 end
 generate(filename::String) = FileGenerator(filename)
 (fg::FileGenerator)(r::Reads) = generate(fg.filename, r)
+
+struct FilePairGenerator
+    F1::String
+    F2::String
+end
+generate(F1::String, F2::String) = FilePairGenerator(F1, F2)
+(fg::FilePairGenerator)(r::Reads) = generate(fg.F1, fg.F2, r)

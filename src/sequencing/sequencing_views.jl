@@ -272,7 +272,7 @@ function take_single_ends(vs::Vector{T}, len::Nothing) where {T<:AbstractSequenc
 end
 
 ## Flipping transformation
-
+#=
 function flip_views!(vs::Vector{<:AbstractSequencingView})
     willflip = rand(Bool, length(vs))
     @inbounds for (i, view) in enumerate(vs)
@@ -284,7 +284,7 @@ function flip_views!(vs::Vector{<:AbstractSequencingView})
 end
 
 flip_views(vs::Vector{<:AbstractSequencingView}) = flip_views!(deepcopy(vs))
-
+=#
 # Summarizing functions
 # ---------------------
 

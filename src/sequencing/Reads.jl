@@ -240,6 +240,7 @@ function generate(wtr::FASTQ.Writer, reads::Reads{UnPaired,BasicSequencingView})
         n += 1
     end
     @info string("- ✔ Wrote ", n, " single end reads to FASTQ file")
+    return reads
 end
 
 function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{Paired,BasicSequencingView})
@@ -270,6 +271,7 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{Paired,Basi
         n += 1
     end
     @info string("- ✔ Wrote ", n, " paired end reads to FASTQ file")
+    return reads
 end
 
 function prepare_tags(reads::Reads{Paired,TaggedSequencingView})
@@ -316,6 +318,7 @@ function generate(R1W::FASTQ.Writer, R2W::FASTQ.Writer, reads::Reads{Paired,Tagg
         n += 1
     end
     @info string("- ✔ Wrote ", n, " tagged paired end reads to FASTQ file")
+    return reads
 end
 
 """
@@ -334,6 +337,7 @@ function generate(R1name::String, R2name::String, reads::Reads{Paired,<:Abstract
         close(R1W)
         close(R2W)
     end
+    return reads
 end
 
 generate(wtr::FASTQ.Writer, reads::Reads{Paired,<:AbstractSequencingView}) = generate(wtr, wtr, reads)
@@ -356,6 +360,7 @@ function generate(filename::String, reads::Reads)
     open(FASTQ.Writer, filename) do wtr
         generate(wtr, reads)
     end
+    return reads
 end
 
 function substitution_hist(reads::Reads{Paired,BasicSequencingView})

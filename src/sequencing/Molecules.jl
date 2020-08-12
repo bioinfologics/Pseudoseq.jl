@@ -51,7 +51,25 @@ end
 
 @inline views(u::Molecules) = u.views
 @inline genome(u::Molecules) = u.genome
-@inline nmolecules(u::Molecules) = length(views(u))
+@inline nmolecules(m::Molecules) = length(views(m))
+@inline Base.firstindex(m::Molecules) = 1
+@inline Base.lastindex(m::Molecules) = nmolecules(m)
+@inline Base.eachindex(m::Molecules) = Base.OneTo(lastindex(m))
+@inline Base.eltype(m::Molecules{T}) where {T<:AbstractSequencingView} = Molecule{T}
+@inline Base.length(m::Molecules) = nmolecules(m)
+
+@inline function Base.getindex(m::Molecules{T}, i::Int) where {T<:AbstractSequencingView}
+    @boundscheck begin
+        if i ∉ eachindex(m)
+            throw(BoundsError())
+        end
+    end
+    return Molecule{T}(m, convert(Int, i))
+end
+
+@inline function Base.iterate(m::Molecules, state = firstindex(m))
+    state ∈ eachindex(m) ? (@inbounds m[state], state + 1) : nothing
+end 
 
 function Base.show(io::IO, p::Molecules{T}) where {T<:AbstractSequencingView}
     println(io, "Pool of $(nmolecules(p)) DNA molecules:")
@@ -71,12 +89,97 @@ function Base.show(io::IO, p::Molecules{T}) where {T<:AbstractSequencingView}
     end
 end
 
+struct Molecule{T<:AbstractSequencingView}
+    parent::Molecules{T}
+    idx::Int
+end
+
+@inline genome(m::Molecule) = genome(m.parent)
+@inline Base.length(m::Molecule) = @inbounds length(views(m.parent)[m.idx])
+
+@inline function view(m::Molecule)
+    v = views(m.parent)
+    @inbounds return v[m.idx] # Assume Molecules can't be made with bad idx values.
+end
+
+function flip!(m::Molecule)
+    v = views(m.parent)
+    @inbounds begin
+        v[m.idx] = reverse(v[m.idx])
+    end
+    return m
+end
+
+function amplify!(m::Molecule, n::Int)
+    M = m.parent
+    for _ in 1:n
+        push!(M, m)
+    end
+    return m
+end
+
+function sequence(m::Molecule)
+    return extract_sequence(genome(m.parent), view(m))
+end
+
+function Base.show(io::IO, m::Molecule)
+    v = view(m)
+    println(io, "A ", length(v), "bp DNA molecule")
+    show(io, sequence(m))
+    println(io, "\nOrigin: Haplotype ", seqid(v), ", First bp: ", first(v), ", Last bp: ", last(v))
+end
+
 # Transformations
 # ---------------
 
-function amplify(p::Molecules, n::Int) where {T}
-    np = typeof(p)(genome(p), amplify(views(p), n))
-    return np
+function Base.push!(M::Molecules{T}, m::Molecule{T}) where {T<:AbstractSequencingView}
+    if genome(M) ≢ genome(m)
+        throw(ArgumentError("Can't add molecule: non-equivalent origin genomes"))
+    end
+    push!(views(M), view(m))
+    return M
+end
+
+function Base.deleteat!(M::Molecules, i::Int...)
+    deleteat!(views(M), i)
+    return M
+end
+
+"""
+    flip(p::Molecules)
+
+Create a copy of flipped DNA molecules from some input pool.
+
+The flip function lets you randomly flip some of the molecules in a pool to the
+opposite orientation they are in.
+"""
+function flip(pred::F, M::Molecules) where {F<:Function}
+    M′ = typeof(M)(genome(M), copy(views(M)))
+    return flip!(pred, M′)
+end
+
+function flip!(pred::Function, M::Molecules)
+    @inbounds for i ∈ eachindex(M)
+        m = M[i]
+        if pred(m)
+            flip!(m)
+        end
+    end
+end
+
+function amplify!(pred::Function, M::Molecules, n::Int)
+    for i ∈ eachindex(M)
+        @inbounds m = M[i]
+        if pred(m)
+            amplify!(m, n)
+        end
+    end
+    return M
+end
+
+function amplify(pred::F, M::Molecules, n::Int) where {F<:Function}
+    M′ = typeof(M)(genome(M), copy(views(M)))
+    return amplify!(pred, M′, n)
 end
 
 """
@@ -171,17 +274,7 @@ function tag(p::Molecules{BasicSequencingView}, ntags::Int)
     return np
 end
 
-"""
-    flip(p::Molecules)
 
-Create a copy of flipped DNA molecules from some input pool.
-
-The flip function lets you randomly flip some of the molecules in a pool to the
-opposite orientation they are in.
-"""
-function flip(p::Molecules)
-    return typeof(p)(genome(p), flip_views(views(p)))
-end
 
 function select(fn::Function, p::Molecules)
     np = typeof(p)(genome(p), select(fn, views(p)))
