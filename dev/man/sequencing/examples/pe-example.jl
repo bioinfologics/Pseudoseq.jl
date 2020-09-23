@@ -1,39 +1,24 @@
 using Pseudoseq.Sequencing
 
-sequence("ecoli-ref.fasta", "pe-reads.fastq"; ng = 5000, flen = 700, cov = 50, paired = true, rdlen = 250, err = 0.001)
+m = Molecules("ecoli-ref.fasta")
 
-pool = Molecules("ecoli-ref.fasta", 5000)
+amp = amplify(5000)
 
-cutpool = fragment(pool, 700)
+frag = fragment(700bp)
 
-genome_size = 4639675
-expected_coverage = 50
-read_length = 250
+size_filter = select(x -> 900 >= length(x) >= 450)
 
-N = needed_sample_size(expected_coverage, genome_size, read_length)
-N = div(N, 2) # Divide by 2 as we're doing paired end sequencing.
+ssmpl = subsample(50X, 2 * 250bp)
 
-sampledpool = subsample(cutpool, N)
+readmaker = makereads(2 * 250bp)
 
-pe_reads = paired_reads(sampledpool, 250)
+errmaker = make_substitutions(FixedProbSubstitutions(0.001))
 
-f = FixedProbSubstitutions(0.001)
-pe_w_errs = edit_substitutions(f, pe_reads)
+m |> amp |> frag |> size_filter |> ssmpl |> readmaker |> errmaker |> generate("pe-reads.fastq")
 
-generate("pe-reads.fastq", pe_w_errs)
+my_protocol = errmaker ∘ readmaker ∘ ssmpl ∘ size_filter ∘ frag ∘ amp
 
-pool = Molecules("ecoli-ref.fasta", 5000)
-
-cutter = fragment(700)
-sampler = subsample(N) # Remember how to computed N previously.
-mkreads = paired_reads(250)
-adderr = make_substitutions(FixedProbSubstitutions(0.001))
-
-pool |> cutter |> sampler |> mkreads |> adderr |> generate("pe-reads.fastq")
-
-my_protocol = adderr ∘ mkreads ∘ sampler ∘ cutter
-
-pool |> my_protocol |> generate("pe-reads.fastq")
+m |> my_protocol |> generate("pe-reads.fastq")
 
 # This file was generated using Literate.jl, https://github.com/fredrikekre/Literate.jl
 
