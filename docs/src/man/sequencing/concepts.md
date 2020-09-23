@@ -57,6 +57,14 @@ Here we will describe the different transformations you can apply to a DNA
 molecule pool:
 
 
+### Amplifying molecules
+
+Amplifying a molecule makes more copies of the molecule.
+
+You can do this by 
+
+
+
 ### Fragmenting the pool
 
 In an ideal world, if DNA sequencing machines could start at one end of a

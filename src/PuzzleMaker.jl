@@ -156,7 +156,9 @@ function generate_motif_sequences(ms::MotifStitcher)
     end
     merge!(sequences, ms.fixed_motifs)
     # TODO: Calls rand a lot.
-    for (k, v) in ms.sibling_motifs
+    #for (k, v) in keys(ms.sibling_motifs
+    for k in sort([keys(ms.sibling_motifs)...])
+        v = ms.sibling_motifs[k]
         s = copy(sequences[v.source_motif])
         npoly = Int(ceil(v.poly * length(s)))
         sites = view(Random.randperm(length(s)), 1:npoly)
