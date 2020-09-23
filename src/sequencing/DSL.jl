@@ -14,6 +14,13 @@ amplify(pref::Function, n::Int) = Amplifier(pred, n)
 struct Fragmenter
     meansize::Int
 end
+
+"""
+    fragment(meansize::SequenceLength)
+
+Construct a Fragmenter transform that fragments any `Molecules` passed to it, to
+an average length of `meansize`.
+"""
 fragment(meansize::SequenceLength) = Fragmenter(meansize.val)
 (f::Fragmenter)(p::Molecules) = fragment(p, f.meansize)
 

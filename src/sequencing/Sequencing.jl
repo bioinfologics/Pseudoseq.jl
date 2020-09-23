@@ -74,7 +74,6 @@ include("sequencing_views.jl")
 include("Molecules.jl")
 include("Reads.jl")
 include("DSL.jl")
-#include("sequence.jl")
 
 struct CoverageReport
     genome::Vector{LongSequence{DNAAlphabet{2}}}

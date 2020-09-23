@@ -53,7 +53,6 @@ makedocs(
         ],
         "API" => [
             "Sequencing" => [
-                "sequence" => "api/sequence.md",
                 "Molecule Pool" => "api/pool.md",
                 "Reads" => "api/reads.md",
             ]

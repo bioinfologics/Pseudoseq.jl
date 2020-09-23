@@ -11,12 +11,19 @@ CurrentModule = Pseudoseq.Sequencing
 Molecules
 ```
 
-### Molecule pool transformations
+### Transformations
+
+#### Amplify
+
+```@docs
+amplify
+```
 
 #### Fragment
 
 ```@docs
 fragment(p::Molecules, meansize::Int)
+fragment(meansize::SequenceLength)
 ```
 
 #### Subsampling

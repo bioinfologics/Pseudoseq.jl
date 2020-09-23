@@ -64,8 +64,7 @@ Amplifying a molecule makes more copies of the molecule.
 You can do this by 
 
 
-
-### Fragmenting the pool
+### Fragmenting molecules
 
 In an ideal world, if DNA sequencing machines could start at one end of a
 molecule and read the sequence all the way to the end with reasonable accuracy
@@ -82,7 +81,7 @@ the full size of a chromosome molecule.
 A common step in any DNA sequencing experiment, therefore, is to fragment or
 shear the DNA molecules that are present in the pool.
 
-This is achieved in `Pseudoseq` with the [`fragment`](@ref) function.
+This is achieved in `Pseudoseq` with the [`fragment`](@ref) transformation.
 
 !!! tip
     You can visualise this process like so:
@@ -106,6 +105,8 @@ This is achieved in `Pseudoseq` with the [`fragment`](@ref) function.
     4999. CGGAC TTGAATA GCCCAAAGGTTT CGACACGA TCACGACACAT AAATTG GCGGACTTG AATAGC
     5000. CGGACTTGAA TAGCCCA AAGGTTTCGA CACGATCAC GACACA TAAATTGGCGG ACTTGAAT AGC
     ```
+
+
 
 
 ### Subsampling molecules from a pool
@@ -147,19 +148,24 @@ with a genome size of 4639675bp:
 Remembering that you get two reads from one DNA molecule with paired-end sequencing,
 you know to subsample ``927935 / 2 = 463967`` DNA molecules from a pool.
 
-!!! tip
-    Pseudoseq provides a helper function that assists in this type of calculation:
-    
-    ```julia
-    genome_size = 4639675
-    expected_coverage = 50
-    read_length = 250
-    
-    N = needed_sample_size(expected_coverage, genome_size, readlength)
-    
-    # Divide by 2 as we're doing paired end sequencing.
-    div(N, 2)
-    ```
+
+Pseudoseq provides a helper function that assists in this type of calculation:
+
+```julia
+genome_size = 4639675
+expected_coverage = 50
+read_length = 250
+
+N = needed_sample_size(expected_coverage, genome_size, readlength)
+
+# Divide by 2 as we're doing paired end sequencing.
+div(N, 2)
+```
+
+However, you will be pleased to know that in many instances you will not have to
+do this calculation yourself!
+
+
 
 
 ### Tagging molecules in a pool
