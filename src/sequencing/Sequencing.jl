@@ -24,8 +24,9 @@ export
     sequence,
     X, x, bp,
     makereads,
-    
-    coverage_report
+    coverage_report,
+    uncovered_positions,
+    uncovered_regions
 
 
 using BioSequences, FASTX, Random
@@ -92,25 +93,28 @@ function coverage_report(x)
     return CoverageReport(genome(x), covs)
 end
 
-function uncovered_positions(cr::Sequencing.CoverageReport, thresh = 0)
+function uncovered_positions(cr::CoverageReport, thresh = 0)
     return [[i for i in eachindex(c) if c[i] < thresh] for c in cr.covs]
 end
 
-function uncovered_regions(cr::Sequencing.CoverageReport, thresh = 0)
+function uncovered_regions(cr::CoverageReport, thresh = 0)
     upos = uncovered_positions(cr, thresh)
     out = [Vector{UnitRange}() for i in 1:length(upos)]
     for i in eachindex(upos)
         v = upos[i]
         o = out[i]
-        start = stop = first(v)
-        for j in 2:lastindex(v)
-            vj = v[j]
-            if vj == stop + 1
-                stop = vj
-            else
-                push!(o, start:stop)
-                start = stop = vj
+        if !isempty(v)
+            start = stop = first(v)
+            for j in 2:lastindex(v)
+                vj = v[j]
+                if vj == stop + 1
+                    stop = vj
+                else
+                    push!(o, start:stop)
+                    start = stop = vj
+                end
             end
+            push!(o, start:stop)
         end
     end
     return out

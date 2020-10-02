@@ -66,6 +66,12 @@ const TaggedViews = Vector{TaggedSequencingView}
     return ifelse(isfwd(x), last(x) - first(x) + 1, first(x) - last(x) + 1)
 end
 
+@inline Base.maximum(x::AbstractSequencingView) = max(first(x), last(x))
+@inline Base.minimum(x::AbstractSequencingView) = min(first(x), last(x))
+
+@inline Base.UnitRange(x::AbstractSequencingView) = minimum(x):maximum(x)
+@inline Base.convert(::Type{Base.UnitRange}, x::AbstractSequencingView) = Base.UnitRange(x)
+
 @inline Base.firstindex(x::AbstractSequencingView) = 1
 @inline Base.lastindex(x::AbstractSequencingView) = length(x)
 @inline window(x::AbstractSequencingView) = first(x):last(x)
